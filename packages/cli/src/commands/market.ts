@@ -35,6 +35,19 @@ export async function handleMarketCommand(cli: CliParsed, run: ToolRunner): Prom
         endTime: f.endTime ? Number(f.endTime) : undefined,
       });
       break;
+    case "ichimoku":
+      result = await run("market_get_ichimoku", {
+        symbol: f.symbol,
+        interval: f.interval ?? f.bar ?? "1h",
+        limit: f.limit ? Number(f.limit) : undefined,
+        endTime: f.endTime ? Number(f.endTime) : undefined,
+        tenkanPeriod: f.tenkan ? Number(f.tenkan) : undefined,
+        kijunPeriod: f.kijun ? Number(f.kijun) : undefined,
+        senkouBPeriod: f.senkouB ? Number(f.senkouB) : undefined,
+        displacement: f.displacement ? Number(f.displacement) : undefined,
+        seriesLength: f.series ? Number(f.series) : undefined,
+      });
+      break;
     case "book-ticker":
       result = await run("market_get_book_ticker", { symbol: f.symbol });
       break;
@@ -72,7 +85,7 @@ export async function handleMarketCommand(cli: CliParsed, run: ToolRunner): Prom
       result = await run("market_get_risk_limits", { symbol: f.symbol });
       break;
     default:
-      process.stdout.write(`Unknown market subcommand: ${cli.subcommand}\nAvailable: time, info, ticker, ticker-24hr, depth, trades, klines, candles, book-ticker, mark-price, funding-rate, funding-rate-history, open-interest, index, contract-ticker, contract-ticker-price, long-short-ratio, insurance-fund, risk-limits\n`);
+      process.stdout.write(`Unknown market subcommand: ${cli.subcommand}\nAvailable: time, info, ticker, ticker-24hr, depth, trades, klines, candles, ichimoku, book-ticker, mark-price, funding-rate, funding-rate-history, open-interest, index, contract-ticker, contract-ticker-price, long-short-ratio, insurance-fund, risk-limits\n`);
       return;
   }
 

@@ -16,3 +16,5 @@ export { TradeLogger } from "./utils/logger.js";
 export type { LogLevel, LogEntry } from "./utils/logger.js";
 export { runSetup, printSetupUsage, getConfigPath, SUPPORTED_CLIENTS } from "./setup.js";
 export type { ClientId, SetupOptions } from "./setup.js";
+export { computeIchimoku, parseCandles, DEFAULT_ICHIMOKU_PARAMS } from "./indicators/ichimoku.js";
+export type { Candle, IchimokuParams, IchimokuPoint, IchimokuResult, IchimokuSignals } from "./indicators/ichimoku.js";
