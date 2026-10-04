@@ -1,14 +1,18 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="-6 -6 76 76" role="img" aria-label="Tika — TikAlgo AI assistant">
   <title>Tika</title>
-  <circle cx="32" cy="32" r="34" fill="none" stroke="#FF7A1A" stroke-width="2.4" opacity=".9"><animate attributeName="r" values="32.5;36.5;32.5" dur="1.2s" repeatCount="indefinite"/><animate attributeName="opacity" values=".9;.15;.9" dur="1.2s" repeatCount="indefinite"/></circle>
-  <circle cx="32" cy="32" r="32" fill="#0A1712"/>
-  <path d="M32 19.5 V13" stroke="#FFFFFF" stroke-width="2.6" stroke-linecap="round"/>
-  <circle cx="32" cy="11" r="3.8" fill="#FF7A1A"/>
-  <rect x="13" y="28.5" width="4" height="9" rx="2" fill="#FFFFFF"/>
-  <rect x="47" y="28.5" width="4" height="9" rx="2" fill="#FFFFFF"/>
-  <rect x="16.5" y="19.5" width="31" height="27" rx="9.5" fill="#FFFFFF"/>
-  <rect x="23.6" y="27" width="4.6" height="7" rx="2.3" fill="#0A1712"/>
-  <rect x="35.8" y="27" width="4.6" height="7" rx="2.3" fill="#0A1712"/>
-  <path d="M26.5 38 L30.5 41.2 L38 36.2" fill="none" stroke="#1FA81F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-  <circle cx="32" cy="11" r="3.8" fill="#FF7A1A"><animate attributeName="r" values="3.8;4.8;3.8" dur="0.6s" repeatCount="indefinite"/></circle>
+  <rect x="-3.5" y="-3.5" width="71" height="71" rx="15.5" fill="none" stroke="#FF7A1A" stroke-width="2.4"><animate attributeName="opacity" values="1;.2;1" dur="1.2s" repeatCount="indefinite"/></rect>
+  <clipPath id="fr"><rect width="64" height="64" rx="12.8"/></clipPath>
+  <rect width="64" height="64" rx="12.8" fill="#0A1712"/>
+  <g clip-path="url(#fr)">
+    <path d="M11 66 Q11 44 32 44 Q53 44 53 66 Z" fill="#3DDC2F"/>
+    <circle cx="32" cy="27" r="11.5" fill="#FFFFFF"/>
+    <path d="M19.5 27 Q19.5 13 32 13 Q44.5 13 44.5 27" fill="none" stroke="#3DDC2F" stroke-width="2.6" stroke-linecap="round"/>
+    <rect x="17.2" y="24" width="4.6" height="8" rx="2.3" fill="#3DDC2F"/>
+    <rect x="42.2" y="24" width="4.6" height="8" rx="2.3" fill="#3DDC2F"/>
+    <path d="M44.5 31 Q44.5 37 38.5 37.5" fill="none" stroke="#3DDC2F" stroke-width="2" stroke-linecap="round"/>
+    <circle cx="27.8" cy="26.5" r="1.7" fill="#0A1712"/>
+    <circle cx="36.2" cy="26.5" r="1.7" fill="#0A1712"/>
+    <path d="M27.8 30.6 Q28.8 33.4 31 33.4 Q33.8 33.2 35.6 30.4" fill="none" stroke="#1FA81F" stroke-width="2.1" stroke-linecap="round"/>
+    <circle cx="37.6" cy="37.6" r="2.6" fill="#FF7A1A"><animate attributeName="r" values="2.6;3.6;2.6" dur="0.6s" repeatCount="indefinite"/></circle>
+  </g>
 </svg>

@@ -1,15 +1,15 @@
-# TikAlgo — Logo & Brand Assets (v6)
+# TikAlgo — Logo & Brand Assets (v7)
 
-**Concept — AI × Trading monogram:** the letters **t i** followed by a **slanted green k** — a tall left
-arm leaning right (to the height of the *t*) and a right arm rising at 45° to x-height, meeting in a
-sharp point on the baseline. It reads as the **k** of *tikalgo*, an **up-trend**, and an
-**approved-signal check**. The dot of the *i* is the **orange AI node**. Everything sits in a
-**rounded square** (corner radius = 20% of the side).
+**Concept — AI × Trading monogram:** the letters **t i** followed by a **green k**: a near-vertical
+left arm rising to the height of the *t*, a **small flat base** at the corner (like the foot of a
+7), and a right arm that **curves** up to x-height. It reads as the **k** of *tikalgo*, an
+**up-trend**, and an **approved-signal check**. The dot of the *i* is the **orange AI node**.
+Everything sits in a **rounded square** (corner radius = 20% of the side).
 
 **Typeface:** [Space Grotesk](https://fonts.google.com/specimen/Space+Grotesk) SemiBold (600) —
 SIL Open Font License 1.1 (free for commercial use, incl. logos). Letters are converted to
-vector outlines (no font needed at runtime). The k/tick is a custom geometric shape matched to the
-font's stem width (left arm 12°, right arm 45°).
+vector outlines (no font needed at runtime). The k is custom geometry matched to the font's stem width: left arm 5°,
+foot 0.35 × stem, right arm a constant-width quadratic curve.
 
 ## Variants
 | File | Description | Use |
@@ -30,8 +30,9 @@ font's stem width (left arm 12°, right arm 45°).
 | `png/tikalgo-logo*.png`, `png/tikalgo-wordmark*.png` | Raster logos (transparent) | Docs, slides |
 
 ## Tika — AI assistant avatar (`tika/`)
-A minimal friendly robot built from brand elements: **orange antenna node** (AI), **green
-check-smile** (the logo's tick), white head on the brand dark circle.
+A blend of the **logo** and a **person**: the same rounded dark square as the logo, a minimal
+human bust in brand green with a white face, a **green headset** (assistant), the **orange AI
+node** as the headset microphone (the logo's i-dot), and a smile drawn with the logo's curve.
 
 | File | State |
 |---|---|
