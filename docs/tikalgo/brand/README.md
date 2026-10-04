@@ -1,9 +1,13 @@
-# TikAlgo — Logo & Brand Assets (v3)
+# TikAlgo — Logo & Brand Assets (v4)
 
-**Concept — AI × Trading, minimal:** one **green rising price line** ending in an **orange AI
-node** — the market move and the AI signal in a single gesture. The wordmark is a geometric
-lowercase **tikalgo** drawn as pure SVG strokes (no font dependency), in a single color
-(white on dark, ink on light); the dot of the *i* is the same **orange AI node**.
+**Concept — AI × Trading, modern & minimal:** a bold **phosphor-green tile** with a single dark
+**rising price line** that ends in an **orange AI node** — market move + AI signal in one gesture.
+The wordmark is lowercase **tikalgo** set in **Sora SemiBold (600)**, converted to vector outlines
+(no font needed at runtime), single color, with the dot of the *i* in the same **orange**.
+
+**Typeface:** [Sora](https://fonts.google.com/specimen/Sora) — SIL Open Font License 1.1
+(free for commercial use, including logos). Use Sora for brand headings; UI text per the Design
+System (Inter/Geist, Persian Peyda/IRANSansX).
 
 | File | Use |
 |---|---|
@@ -21,9 +25,9 @@ lowercase **tikalgo** drawn as pure SVG strokes (no font dependency), in a singl
 ## Colors
 | Token | Hex | Role |
 |---|---|---|
-| `--brand-bg` | `#0A1712` | Deep green-black: icon background, dark theme base |
+| `--brand-bg` | `#0A1712` | Deep green-black: price line in the mark, dark theme base |
 | `--brand-white` | `#FFFFFF` | Wordmark on dark |
-| `--brand-green` | `#3DDC2F` | Phosphor green: price line in the mark, up/profit on dark |
+| `--brand-green` | `#3DDC2F` | Phosphor green: logo tile, up/profit on dark |
 | `--brand-green-dark` | `#1FA81F` | Green on light backgrounds (better contrast) |
 | `--brand-ink` | `#0A1712` | Wordmark on light |
 | `--brand-orange` | `#FF7A1A` | AI node / signal accent (i-dot, mark dot) — use sparingly |
