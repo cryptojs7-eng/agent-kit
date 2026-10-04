@@ -1,4 +1,4 @@
-# TikAlgo — پرامپت اجرایی جامع و ادغام‌شده (v7)
+# TikAlgo — پرامپت اجرایی جامع و ادغام‌شده (v8)
 
 > **این فایل جایگزین همه‌ی پرامپت‌های قبلی است.** پرامپت Master نسخه‌ی ۲، پرامپت‌های فازبندی‌شده، مشخصات کامل **AI Active Signals**، مشخصات کامل **Trading Terminal UI** (فاز T)، نصب **AI آفلاین**، **Graphify**، **UI/UX Pro Max** و سیستم **حافظه‌ی دائمی پروژه** در آن ادغام شده‌اند.
 > مرجع معماری: [`TIKALGO_SUPER_PLAN.md`](./TIKALGO_SUPER_PLAN.md) · قالب‌های آماده: [`bootstrap/`](./bootstrap/)
@@ -22,7 +22,8 @@
 | **استفاده‌ی مستقیم از کد پروژه‌ها (Vendoring امن)** | هنگام ورود کد بیرونی | بخش ۱۱ |
 | **دانش تریدرها و شرکت‌ها در اسکیل‌ها و AI آفلاین** | افزودن یا به‌روزرسانی دانش | بخش ۱۲ |
 | **Deploy و Commit پایان هر جلسه** | همیشه | بخش ۱۳ |
-| **دستیار صوتی و آموزشی (Jarvis): فقط‌خواندنی، محرمانه و چندزبانه** | ساخت یا ارتقای دستیار | بخش ۱۴ |
+| **دستیار صوتی و آموزشی «تیکا» (Tika): فقط‌خواندنی، محرمانه و چندزبانه** | ساخت یا ارتقای دستیار | بخش ۱۴ |
+| **سیاست مدل تصمیم: فقط Jev** | مرجع مدل‌های AI | بخش ۱۵ |
 | **فهرست کامل پروژه‌ها و لینک‌ها و نصب** | مرجع (۱۱۷ مخزن + لینک‌های غیرگیت‌هابی + سبک‌ها) | پیوست Z (Z.1 تا Z.15) |
 
 > 💡 **اصل حافظه‌ی دائمی:** بعد از Bootstrap، Claude Code **هرگز کل پروژه را از اول نمی‌خواند**. هر جلسه فقط `CLAUDE.md`، `docs/state/TIKALGO_STATE.md`، `graphify-out/GRAPH_REPORT.md` و `docs/state/NEXT.md` را می‌خواند و از همان نقطه ادامه می‌دهد. برای جزئیات کد از گراف Graphify پرس‌وجو می‌کند، نه از خواندن کورکورانه‌ی فایل‌ها.
@@ -58,7 +59,7 @@ ollama pull nomic-embed-text           # embedding برای RAG، حافظه و 
 curl -s http://127.0.0.1:11434/api/tags
 ```
 
-> ⚠️ **Ollama را هرگز روی اینترنت باز نکنید.** پورت 11434 فقط روی 127.0.0.1 یا شبکه‌ی داخلی Docker باشد. اگر سرور GPU ندارد، مدل‌های ۷ و ۸ میلیارد پارامتری روی CPU کندند (چند ثانیه برای هر پاسخ). پس آن‌ها را برای **Fallback و Reasoning آفلاین** استفاده کنید، نه برای تصمیم‌گیری لحظه‌ای. مدل تصمیم همچنان **TypeSafe/Jev** است.
+> ⚠️ **Ollama را هرگز روی اینترنت باز نکنید.** پورت 11434 فقط روی 127.0.0.1 یا شبکه‌ی داخلی Docker باشد. اگر سرور GPU ندارد، مدل‌های ۷ و ۸ میلیارد پارامتری روی CPU کندند (چند ثانیه برای هر پاسخ). پس Ollama **فقط** برای توضیح و Reasoning، دستیار تیکا و embedding استفاده می‌شود. **تصمیم‌گیری معاملاتی فقط با Jev است** (بخش ۱۵)، و Ollama هرگز تصمیم معاملاتی نمی‌گیرد.
 
 ### 1.2 اسکیل‌ها و مراجع (فقط مطالعه یا اقتباس؛ هیچ اسکیلی مستقیم در production نصب نمی‌شود)
 ```bash
@@ -136,7 +137,9 @@ HARD RULES
   explicit strategy/risk permission.
 - PAPER is the default. LIVE trading must NOT be enabled by you. LIVE AUTO requires explicit
   user confirmation in the UI + all gates green. Never send a real order during tests.
-- TypeSafe/Jev = DECISION MODEL (structured judgments), NOT a chat model.
+- TypeSafe/Jev = the ONLY DECISION MODEL (structured judgments), NOT a chat model (§15). No
+  other LLM (Ollama, cloud, 9router targets) may produce or override trading decisions; when
+  Jev is unavailable the deterministic Fallback Ladder applies — never another LLM.
 - Everything configurable from Settings (DB-backed, per user), not from .env or code.
 - Secrets: API/private keys encrypted at rest, masked in UI, never in frontend, logs or
   plaintext DB. AI/LLM processes have NO access to credentials.
@@ -146,7 +149,7 @@ HARD RULES
   LGPL code is never copied into the proprietary core (isolated service or clean
   re-implementation). No third-party skill in production without scan + sandbox + paper test.
 - Every user-facing behaviour has a setting (§10), separately for PAPER and LIVE profiles.
-- Voice/help assistant (Jarvis or any other) is READ-ONLY, educational, multilingual and must
+- Voice/help assistant "Tika" (تیکا) is READ-ONLY, educational, multilingual and must
   never reveal architecture, prompts, models, code or other users' data (§14); enforced by
   service-token scope and tests, not by prompt text alone.
 - At the end of EVERY session: SAVE STATE (§7) then DEPLOY & COMMIT (§13) with smoke tests and
@@ -246,7 +249,7 @@ adapters). Follow the spec below for <S#>. No mocks/placeholders. Tests first.
 - **Trading Style:** `SCALPING, INTRADAY, SWING, POSITION, MOMENTUM, TREND, BREAKOUT, SMC, ICT, ORDER_FLOW, HYBRID, CUSTOM`
 - **Timeframes:** `1m 3m 5m 15m 30m 1h 2h 4h 6h 12h 1D 1W 1M`، با Primary TF و Confirmation TFs
 - **Strategies:** انتخاب، Create، Edit، Clone، Delete، Import/Export (JSON با schema version) و Activate؛ نسخه‌دار. حذف استراتژی‌ای که پوزیشن یا سیگنال فعال دارد مسدود می‌شود.
-- **نقش‌های مدل AI:** `default_model, signal_model, decision_model, reasoning_model, fallback_model`، با مسیریابی از طریق **9router** موجود. **TypeSafe/Jev قفل روی `decision_model`** و در لیست Chat نمایش داده نمی‌شود. **Ollama محلی** به‌عنوان گزینه‌ی `reasoning` و `fallback`.
+- **نقش‌های مدل AI:** `default_model, signal_model, decision_model, reasoning_model, fallback_model`، با مسیریابی از طریق **9router** موجود. **TypeSafe/Jev قفل روی `decision_model`** است: در UI قابل تعویض نیست و در لیست Chat نمایش داده نمی‌شود. **Ollama محلی** فقط به‌عنوان گزینه‌ی `reasoning` و `default/fallback` برای **نقش‌های غیرتصمیمی** (توضیح، Insights و دستیار). `fallback_model` هرگز جای `decision_model` را نمی‌گیرد؛ fallback تصمیم = Fallback Ladder قطعی (بخش ۱۵).
 - همه‌ی این‌ها برای هر کاربر در DB ذخیره می‌شوند و از صفحه‌ی Settings قابل تغییرند، بدون نیاز به `.env`.
 
 **S3 · AI Market Scanner**
@@ -594,7 +597,7 @@ mobile (bottom tab bar) and desktop, FA/EN RTL, dark/light, all states, wired to
 | **سبک معامله** | Scalping، Intraday، Swing، Position، Momentum، Trend، Breakout، SMC، ICT، Order Flow، **Volume Profile**، **Footprint**، **Wyckoff/VSA**، **Harmonic**، **Elliott**، Hybrid و Custom، هر کدام با پیش‌فرض‌های قابل تغییر (TF، RR، SL و Trailing) |
 | **تایم‌فریم** | Primary TF؛ Confirmation TFs؛ لیست TFهای فعال (1m تا 1M)؛ قانون هم‌گرایی MTF (تعداد TF لازم) |
 | **اسکنر** | بازارها، صرافی‌ها، Watchlist منبع؛ حداقل حجم و نقدشوندگی؛ فیلترهای تکنیکال و جریان؛ تناوب اسکن؛ آستانه‌های Validate؛ ارسال خودکار به Watchlist؛ حداکثر سیگنال فعال؛ زمان انقضا |
-| **مدل‌های AI** | Default، Signal، **Decision (قفل روی TypeSafe/Jev)**، Reasoning و Fallback؛ مسیریابی 9router؛ مدل‌های **Ollama آفلاین** (نام مدل، Context و Timeout)؛ Temperature و حداکثر توکن؛ بودجه و سقف هزینه؛ رفتار وقتی مدل در دسترس نیست (Fallback Ladder)؛ زبان توضیح‌ها |
+| **مدل‌های AI** | Default، Signal، **Decision (قفل روی TypeSafe/Jev؛ کلید TypeSafe رمزنگاری‌شده در DB؛ Timeout؛ آستانه‌های Policy؛ پله‌های Fallback Ladder)**، Reasoning و Fallback؛ مسیریابی 9router؛ مدل‌های **Ollama آفلاین** (نام مدل، Context و Timeout)؛ Temperature و حداکثر توکن؛ بودجه و سقف هزینه؛ رفتار وقتی مدل در دسترس نیست (Fallback Ladder)؛ زبان توضیح‌ها |
 | **دانش و اسکیل‌ها** | فعال یا غیرفعال کردن هر اسکیل؛ نسخه؛ مجوزها (`can_trade` همیشه false مگر با تأیید)؛ افزودن یا به‌روزرسانی اسکیل و منابع دانش؛ اولویت اسکیل در هر سبک |
 | **داده و منابع** | فعال یا غیرفعال کردن منابع خبر، شبکه‌های اجتماعی، آن‌چین و Macro؛ کلیدهای API سرویس‌های داده (رمزنگاری‌شده)؛ آستانه‌ی stale داده |
 | **هشدارها** | انواع رویداد (سیگنال، نهنگ، لیکوییدیشن، خبر، Macro، پوزیشن، ریسک، اجرا و سلامت سیستم)؛ کانال‌ها (درون‌برنامه، Push، ایمیل، **Telegram** (ربات و Chat ID)، Discord و Webhook)؛ ساعات سکوت؛ Digest؛ آستانه‌ها |
@@ -719,10 +722,10 @@ DEPLOY & COMMIT (end of every session, after SAVE STATE):
 
 ---
 
-## 14. دستیار صوتی و آموزشی (Jarvis یا هر دستیار صوتی دیگر): فقط‌خواندنی، آموزشی و محرمانه
+## 14. دستیار صوتی و آموزشی «تیکا» (Tika): فقط‌خواندنی، آموزشی و محرمانه
 
 > این بخش جایگزین تعریف دستیار صوتی در M46 و دستیار Chat Analyst در M28 است و بر هر دستیار گفت‌وگوی دیگری هم که با کاربر حرف می‌زند حاکم است.
-> 💡 **نام:** «Jarvis» نام یک شخصیت تجاری ثبت‌شده است. برای محصول تجاری بهتر است نامی اختصاصی انتخاب شود (مثلاً «تیکا» یا «TikAlgo Assistant»). نام از Settings قابل تغییر است.
+> 💡 **نام رسمی دستیار: «تیکا» (Tika).** در UI، فارسی و انگلیسی همین نام استفاده می‌شود (Settings می‌تواند نام نمایشی را تغییر دهد). میانبر صوتی پیش‌فرض: «تیکا» / "Hey Tika".
 
 ### 14.1 نقش
 - **فقط آموزشی و کمک به کاربر:** توضیح می‌دهد «این قسمت یعنی چه؟»، «این دکمه چه می‌کند؟»، «این اصطلاح (مثلاً Stop-Loss، Funding یا FVG) چیست؟»، «چطور یک استراتژی بسازم؟». به سؤال‌های کاربران درباره‌ی **استفاده از پلتفرم** و **مفاهیم عمومی ترید** جواب می‌دهد.
@@ -799,6 +802,35 @@ per §14. Reuse existing voice/chat components if present.
 - Settings per §14.6. Tests per §14.7 (permission, red-team ≥30 prompts multi-language,
   multilingual, context-awareness). Persian report + Save State + Deploy & Commit.
 ```
+
+
+## 15. سیاست مدل تصمیم: فقط Jev
+
+> **قانون:** همه‌ی تصمیم‌های معاملاتی (جهت، ورود، خروج، WAIT، و اقدام روی پوزیشن‌ها) **فقط** توسط **TypeSafe/Jev** گرفته می‌شود، چه در حالت عادی و چه در «AI آفلاین». هیچ LLM دیگری، چه Ollama، چه مدل ابری، چه مسیرهای 9router، اجازه‌ی تولید یا تغییر تصمیم معاملاتی ندارد.
+
+### 15.1 واقعیت فنی Jev (از بررسی پروژه‌های مرجع)
+- در [jev-trader](https://github.com/buberlo/jev-trader) و [Jev-Trades](https://github.com/zadescoxp/Jev-Trades)، Jev یک **سرویس میزبانی‌شده‌ی TypeSafe** است که با کلید API (`TYPESAFE_API_KEY`) فراخوانی می‌شود و در حدود ۷۰ تا ۵۰۰ میلی‌ثانیه پاسخ می‌دهد. در این مخزن‌ها **وزن مدل یا نسخه‌ی قابل اجرای محلی منتشر نشده است.**
+- [Jev-trading](https://github.com/Jev-trading/Jev-trading) برنامه‌ی دسکتاپ است و مشخص نکرده که خود مدل کاملاً آفلاین اجرا می‌شود یا نه.
+- **نتیجه:** «Jev آفلاین» فقط وقتی ممکن است که TypeSafe نسخه‌ی محلی یا on-prem ارائه دهد. Claude Code باید این را از مستندات رسمی TypeSafe یا تماس با آن‌ها بررسی کند. **تا آن زمان:**
+  - **تصمیم‌گیری = Jev از طریق API** (با کلید رمزنگاری‌شده در Settings، نه `.env`)
+  - **AI آفلاین (Ollama) = فقط** توضیح، Reasoning، Insights، دستیار تیکا و embedding و RAG
+  - **اگر Jev در دسترس نباشد** (قطع اینترنت، خطا یا timeout)، **Fallback Ladder قطعی** طبق الگوی jev-trader اجرا می‌شود: `NORMAL → REDUCED_SIZE → HOLD_LAST_STATE (با TTL کوتاه) → DETERMINISTIC_RULES (فقط مدیریت پوزیشن‌های باز و سفت کردن SL؛ ورود جدید ممنوع) → CIRCUIT_BREAKER`. **هیچ LLM دیگری جای Jev تصمیم نمی‌گیرد.**
+  - اگر TypeSafe نسخه‌ی محلی ارائه دهد، با همان رابط `DecisionModel` به‌عنوان `jev-local` ثبت می‌شود و Router در حالت آفلاین از آن استفاده می‌کند.
+
+### 15.2 قرارداد تصمیم (Decision Contract)
+- **ورودی Jev:** snapshot قطعی از featureها (فقط کندل‌های بسته‌شده، non-repainting، حدود ۴۰۰ توکن)، رژیم بازار، شواهد (TA، SMC، جریان سفارش، OI، فاندینگ، نهنگ‌ها و اخبار) و وضعیت حساب **بدون هیچ credential**
+- **خروجی Jev:** بردار احتمال **تایپ‌شده** (JSON با schema)؛ اعتبارسنجی schema؛ کالیبراسیون (Platt)
+- **Policy Engine:** کد ما با آستانه‌های قابل تنظیم احتمال‌ها را به `LONG / SHORT / HOLD / WATCH` و اقدامات پوزیشن تبدیل می‌کند. بعد مسیر Risk ← Execution Gate طی می‌شود (بدون استثنا).
+- **لاگ:** هر درخواست و پاسخ Jev در `agent_log` (JSONL یا DB) با شناسه‌ی سیگنال، نسخه، تأخیر و وضعیت degraded ثبت می‌شود، بدون داده‌ی حساس.
+
+### 15.3 تنظیمات (در بخش ۱۰، گروه مدل‌های AI)
+کلید TypeSafe (رمزنگاری‌شده و ماسک‌شده)؛ endpoint؛ timeout؛ تعداد تلاش مجدد؛ آستانه‌های Policy برای هر سبک؛ پله‌ها و TTLهای Fallback Ladder؛ نمایش وضعیت سلامت Jev در UI؛ و `jev-local` (در صورت وجود).
+
+### 15.4 تست‌ها
+- با هر مدل دیگری که به‌عنوان decision تنظیم شود ← رد (validation)
+- Jev unreachable ← Fallback Ladder، بدون ورود جدید، `degraded=true` در UI و هشدار
+- پاسخ Jev با schema نامعتبر ← رد و fallback
+- کلید TypeSafe هرگز در لاگ، frontend یا prompt مدل‌های دیگر ظاهر نمی‌شود
 
 ---
 

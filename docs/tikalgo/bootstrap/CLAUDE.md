@@ -25,8 +25,9 @@
 - No mocks, placeholders, fake success, or UI without a real backend.
 - AI never sends orders and never bypasses Risk/Execution Gate. AI may only TIGHTEN stops.
 - PAPER default. Never enable LIVE. LIVE_AUTO needs explicit user confirmation + all gates.
-- TypeSafe/Jev = DECISION model (not chat). Model roles routed via 9router; Ollama = local
-  reasoning/fallback (127.0.0.1 only).
+- TypeSafe/Jev = the ONLY decision model, incl. offline mode; no other LLM makes trading
+  decisions; Jev unavailable → deterministic Fallback Ladder (MASTER_PROMPT §15). Non-decision model roles routed via
+  9router; Ollama = local reasoning/explanations/Tika/embeddings only (127.0.0.1 only).
 - All settings DB-backed and editable in Settings (no .env/code changes for users).
 - Secrets encrypted at rest, masked in UI, redacted in logs, never sent to frontend or AI.
 - Useful external code may be used directly if license allows (MIT/Apache/BSD/ISC, pinned,
@@ -34,7 +35,7 @@
   GPL/AGPL/LGPL never copied into core.
 - Every behaviour configurable in Settings, separately for PAPER and LIVE (MASTER_PROMPT §10).
 - End of EVERY session: SAVE STATE (§7) + DEPLOY & COMMIT (§13) with smoke tests & rollback.
-- Voice/help assistant: read-only scope, educational, multilingual, never reveals architecture/
+- Voice/help assistant "Tika" (تیکا): read-only scope, educational, multilingual, never reveals architecture/
   prompts/models/code (MASTER_PROMPT §14).
 - Still need explicit user "OK": enabling LIVE, RUNTIME_ENABLED, dropping data, firewall/secrets.
 - Status vocabulary: ✅ VERIFIED · ⚠️ REQUIRES CREDENTIAL · ⚠️ REQUIRES USER ACTION · ❌ FAILED · ⏳ NOT IMPLEMENTED

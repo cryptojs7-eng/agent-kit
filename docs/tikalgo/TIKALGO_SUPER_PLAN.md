@@ -397,6 +397,7 @@ Local Model Gateway ── Ollama ── llama.cpp ── vLLM (در صورت و
 ```
 - **Model Registry:** `model_id, provider, version, quantization, context, capabilities, latency, cost, benchmark, active`
 - مدل AI قابل تعویض است **بدون تغییر منطق معامله**. Router وظایف سبک را به مدل محلی و تحلیل عمیق را به مدل ابری می‌فرستد.
+- ⚠️ **به‌روز شده:** **مدل تصمیم معاملاتی فقط TypeSafe/Jev است** (حتی در حالت آفلاین). مدل‌های محلی و ابری دیگر فقط برای توضیح، Reasoning، دستیار و RAG استفاده می‌شوند. جزئیات در بخش ۱۵ از `TIKALGO_MASTER_PROMPT.md`.
 - **مراجع:** [Ollama](https://github.com/ollama/ollama) · [llama.cpp](https://github.com/ggml-org/llama.cpp) · [vLLM](https://github.com/vllm-project/vllm) · [MLflow](https://github.com/mlflow/mlflow) · [Qlib](https://github.com/microsoft/qlib) · [FinRL](https://github.com/AI4Finance-Foundation/FinRL)
 
 ### M27 · Skills System 🧩
@@ -515,7 +516,7 @@ Indicator: inputs · timeframe · calculate() · outputs · warmup · non_repain
 - **مراجع:** [BTCPay Server](https://github.com/btcpayserver/btcpayserver) · [XPayLabs](https://awesome.ecosyste.ms/projects/github.com%2Fyan253319066%2FXPayLabs-docker)
 
 ### M46 · Voice Assistant 🎙
-> ⚠️ **به‌روز شده:** دستیار صوتی فقط‌خواندنی، آموزشی، چندزبانه و محرمانه است. هیچ عملیات معاملاتی یا تنظیماتی انجام نمی‌دهد و معماری را فاش نمی‌کند. مشخصات کامل در بخش ۱۴ از `TIKALGO_MASTER_PROMPT.md`.
+> ⚠️ **به‌روز شده:** دستیار صوتی «تیکا» فقط‌خواندنی، آموزشی، چندزبانه و محرمانه است. هیچ عملیات معاملاتی یا تنظیماتی انجام نمی‌دهد و معماری را فاش نمی‌کند. مشخصات کامل در بخش ۱۴ از `TIKALGO_MASTER_PROMPT.md`.
 - STT و TTS، راهنمای وابسته به صفحه، Onboarding و آموزش، به فارسی و انگلیسی
 - **مراجع:** [pipecat](https://github.com/pipecat-ai/pipecat) · [livekit/agents](https://github.com/livekit/agents) · [faster-whisper](https://github.com/SYSTRAN/faster-whisper)
 
