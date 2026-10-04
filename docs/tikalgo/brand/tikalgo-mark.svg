@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="256" height="256" role="img" aria-label="tikalgo">
+  <title>tikalgo</title>
+  <rect width="64" height="64" rx="14" fill="#0B0E11"/>
+  <g fill="none" stroke="#EAECEF" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M26 12 V40 Q26 50 36 50"/>
+    <path d="M17 24 H35"/>
+  </g>
+  <rect x="40" y="13" width="10" height="10" rx="2.4" fill="#F0B90B"/>
+</svg>

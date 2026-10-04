@@ -1,4 +1,4 @@
-# TikAlgo — پرامپت اجرایی جامع و ادغام‌شده (v8)
+# TikAlgo — پرامپت اجرایی جامع و ادغام‌شده (v9)
 
 > **این فایل جایگزین همه‌ی پرامپت‌های قبلی است.** پرامپت Master نسخه‌ی ۲، پرامپت‌های فازبندی‌شده، مشخصات کامل **AI Active Signals**، مشخصات کامل **Trading Terminal UI** (فاز T)، نصب **AI آفلاین**، **Graphify**، **UI/UX Pro Max** و سیستم **حافظه‌ی دائمی پروژه** در آن ادغام شده‌اند.
 > مرجع معماری: [`TIKALGO_SUPER_PLAN.md`](./TIKALGO_SUPER_PLAN.md) · قالب‌های آماده: [`bootstrap/`](./bootstrap/)
@@ -353,6 +353,7 @@ RULES:
 - **خروجی:** `docs/state/FRONTEND_AUDIT_FA.md` و جدول «ویجت ← API یا WS موجود ← کمبود Backend»
 
 **T1 · App Shell (چارچوب برنامه)**
+- **لوگوی رسمی TIKALGO** از `docs/tikalgo/brand/` (راهنما: `brand/README.md`): در هدر نسخه‌ی `tikalgo-logo-currentcolor.svg` به‌صورت inline (هماهنگ با تم تیره و روشن) و در حالت جمع‌شده‌ی سایدبار و موبایل `tikalgo-mark.svg`؛ favicon (SVG و PNG)، apple-touch-icon و آیکون‌های PWA (۱۹۲ و ۵۱۲) در manifest؛ همچنین در صفحه‌ی Login و اسکلت بارگذاری. لوگوهای قبلی پروژه با این لوگو **جایگزین** می‌شوند (همه‌ی ارجاع‌ها به‌روز شوند).
 - Header و Sidebar ثابت و قابل جمع شدن
 - **کلیک روی لوگوی TIKALGO** یک Menu/Command Menu باز می‌کند که شامل میانبر همه‌ی ماژول‌ها (Icon + Label) و دسترسی به Settings است
 - Global Search، Command Palette (⌘K / Ctrl+K)، Quick Actions، Favorites و «آخرین بازارهای مشاهده‌شده»

@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-6 -4 179 64" width="358" height="128" role="img" aria-label="tikalgo">
+  <title>tikalgo</title>
+  <g style="color:#EAECEF">
+  <g fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+    <!-- t -->
+    <path d="M6 6 V33 Q6 40 13 40"/>
+    <path d="M0 16 H14"/>
+    <!-- i (stem) -->
+    <path d="M24 16 V40"/>
+    <!-- k -->
+    <path d="M35 4 V40"/>
+    <path d="M49 16 L37 29"/>
+    <path d="M41 25 L51 40"/>
+    <!-- a -->
+    <circle cx="73" cy="28" r="12"/>
+    <path d="M85 16 V40"/>
+    <!-- l -->
+    <path d="M97 4 V40"/>
+    <!-- g -->
+    <circle cx="121" cy="28" r="12"/>
+    <path d="M133 16 V44 Q133 54 123 54 H113"/>
+    <!-- o -->
+    <circle cx="155" cy="28" r="12"/>
+  </g>
+  <!-- accent: dot of the i, as a rising "signal" square -->
+  <rect x="20.5" y="2.5" width="7" height="7" rx="1.6" fill="#F0B90B"/>
+  </g>
+</svg>
