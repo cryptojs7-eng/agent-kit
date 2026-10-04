@@ -773,6 +773,9 @@ gantt
 |---|---|---|---|
 | [Graphify](https://graphify.com/integrations/claude-code) | گراف دانش کد برای مدیریت پروژه | `uv tool install graphifyy && graphify install` | ✅ |
 | [UI/UX Pro Max](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill) | سیستم طراحی و UI | `/plugin marketplace add nextlevelbuilder/ui-ux-pro-max-skill` | ✅ |
+| [Ollama](https://github.com/ollama/ollama) (AI آفلاین) | Reasoning و Fallback محلی + embedding | `curl -fsSL https://ollama.com/install.sh \| sh` و بعد `ollama pull qwen2.5:7b-instruct` و `nomic-embed-text` (فقط روی 127.0.0.1) | ✅ |
+| [jev-trader](https://github.com/buberlo/jev-trader) · [Jev-Trades](https://github.com/zadescoxp/Jev-Trades) · [Jev-trading](https://github.com/Jev-trading/Jev-trading) | الگوی TypeSafe/Jev به‌عنوان Decision Model | فقط مرجع (MIT/Apache) | 🔍 |
+| [alpha-scanner](https://github.com/naimkatiman/alpha-scanner) · [AI-trader](https://github.com/Manjussha/AI-trader) | الگوی اسکنر MTF، confluence و پایش SL/TP | فقط مرجع (MIT) | 🔍 |
 | [claude-trading-skills](https://github.com/agiprolabs/claude-trading-skills) | ۶۷ اسکیل ترید | `git clone` و کپی انتخابی | 🔍 |
 | [agent-trading-skills](https://cdn.jsdelivr.net/gh/SKE-Labs/agent-trading-skills@main/README.md) | ۵۶ اسکیل | `git clone` | 🔍 |
 | [bybit-exchange/skills](https://github.com/bybit-exchange/skills) | الگوی SKILL.md صرافی (MIT) | مرجع؛ ⚠️ مکانیزم به‌روزرسانی خودکار راه دور دارد | 🔍 |
