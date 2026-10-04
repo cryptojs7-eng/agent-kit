@@ -26,6 +26,7 @@
 | Recovery / Reconciliation | | ⏳ | |
 | Journal / Performance | | ⏳ | |
 | Settings (DB-backed) | | ⏳ | |
+| Terminal UI (Shell/Home/Terminal/Markets/AI Center) | | ⏳ | |
 | Security (encrypted keys) | | ⏳ | |
 
 ## Credentials / user actions needed

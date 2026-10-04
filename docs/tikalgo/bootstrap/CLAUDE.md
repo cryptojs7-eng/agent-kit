@@ -14,7 +14,8 @@
 
 ## References
 - Architecture: `docs/TIKALGO_SUPER_PLAN.md` (modules M01–M50, phases, gates, DoD)
-- Prompts & specs: `docs/TIKALGO_MASTER_PROMPT.md` (AI Active Signals S1–S14 in §5)
+- Prompts & specs: `docs/TIKALGO_MASTER_PROMPT.md` (AI Active Signals S1–S14 in §5, Terminal UI T0–T11 in §5T)
+- Backend gaps found by UI work: `docs/state/BACKEND_GAPS.md`
 - Audit: `docs/state/AUDIT_REPORT_FA.md` · Plan: `docs/state/UPGRADE_PLAN_FA.md`
 - Module map: `docs/state/MODULE_MAP.md` · Decisions: `docs/state/DECISIONS.md`
 - External pattern references (read-only, outside repo): `/root/tikalgo-refs/`
