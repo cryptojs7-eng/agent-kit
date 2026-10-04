@@ -1,17 +1,15 @@
-# TikAlgo — Logo & Brand Assets (v2)
+# TikAlgo — Logo & Brand Assets (v3)
 
-**Concept — AI × Trading:** a solid **green price line** runs through white **neural-network
-nodes** (with faint synapse links behind it), then continues as a **dotted orange forecast** that
-ends in an arrow: *the market's past (green) → the AI's prediction (orange)*.
-The wordmark is a minimal geometric lowercase **tikalgo**, drawn as pure SVG strokes (no font
-dependency): **tik** in white/ink, **algo** in phosphor green, and the dot of the *i* is an
-**orange signal square** — the same orange as the AI forecast in the mark.
+**Concept — AI × Trading, minimal:** one **green rising price line** ending in an **orange AI
+node** — the market move and the AI signal in a single gesture. The wordmark is a geometric
+lowercase **tikalgo** drawn as pure SVG strokes (no font dependency), in a single color
+(white on dark, ink on light); the dot of the *i* is the same **orange AI node**.
 
 | File | Use |
 |---|---|
 | `tikalgo-logo-on-dark.svg` | Primary horizontal logo (mark + wordmark) on dark backgrounds |
 | `tikalgo-logo.svg` | Horizontal logo on light backgrounds |
-| `tikalgo-logo-currentcolor.svg` | UI component: "tik" inherits CSS `color` (theme-aware) |
+| `tikalgo-logo-currentcolor.svg` | UI component: wordmark inherits CSS `color` (theme-aware) |
 | `tikalgo-wordmark-on-dark.svg` / `tikalgo-wordmark.svg` | Wordmark only |
 | `tikalgo-mark.svg` | App icon, avatar, collapsed sidebar, Tika assistant avatar |
 | `favicon.svg` | Browser favicon (same as mark) |
@@ -24,10 +22,11 @@ dependency): **tik** in white/ink, **algo** in phosphor green, and the dot of th
 | Token | Hex | Role |
 |---|---|---|
 | `--brand-bg` | `#0A1712` | Deep green-black: icon background, dark theme base |
-| `--brand-white` | `#FFFFFF` | Wordmark "tik" on dark, neural nodes |
-| `--brand-green` | `#3DDC2F` | Phosphor green: "algo" + price line on dark backgrounds |
+| `--brand-white` | `#FFFFFF` | Wordmark on dark |
+| `--brand-green` | `#3DDC2F` | Phosphor green: price line in the mark, up/profit on dark |
 | `--brand-green-dark` | `#1FA81F` | Green on light backgrounds (better contrast) |
-| `--brand-orange` | `#FF7A1A` | AI / forecast / signal accent — use sparingly |
+| `--brand-ink` | `#0A1712` | Wordmark on light |
+| `--brand-orange` | `#FF7A1A` | AI node / signal accent (i-dot, mark dot) — use sparingly |
 | `--down` | `#F6465D` | Loss / down (semantic, not a brand color) |
 
 Semantic use in the product: **up/profit = brand green**, **down/loss = `#F6465D`**,
@@ -37,7 +36,7 @@ Semantic use in the product: **up/profit = brand green**, **down/loss = `#F6465D
 - Clear space around the logo ≥ height of the letter **o**. Minimum width: 96 px (horizontal
   logo), 72 px (wordmark), 16 px (mark).
 - Always lowercase `tikalgo`. Do not stretch, rotate, outline, add shadows/gradients, or swap
-  the green/orange roles.
+  the green/orange roles; keep the wordmark single-color.
 - In the terminal header use `tikalgo-logo-currentcolor.svg` inline so it follows the theme.
 - Clicking the logo opens the Command Menu (MASTER_PROMPT §5T, T1).
 
