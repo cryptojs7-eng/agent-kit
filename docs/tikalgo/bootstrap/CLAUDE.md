@@ -29,6 +29,10 @@
   reasoning/fallback (127.0.0.1 only).
 - All settings DB-backed and editable in Settings (no .env/code changes for users).
 - Secrets encrypted at rest, masked in UI, redacted in logs, never sent to frontend or AI.
-- License check before adopting external code; freqtrade (GPL) = ideas only.
-- Destructive/production actions require explicit user "OK".
+- Useful external code may be used directly if license allows (MIT/Apache/BSD/ISC, pinned,
+  vendored with LICENSE in third_party/) after the security protocol (MASTER_PROMPT §11);
+  GPL/AGPL/LGPL never copied into core.
+- Every behaviour configurable in Settings, separately for PAPER and LIVE (MASTER_PROMPT §10).
+- End of EVERY session: SAVE STATE (§7) + DEPLOY & COMMIT (§13) with smoke tests & rollback.
+- Still need explicit user "OK": enabling LIVE, RUNTIME_ENABLED, dropping data, firewall/secrets.
 - Status vocabulary: ✅ VERIFIED · ⚠️ REQUIRES CREDENTIAL · ⚠️ REQUIRES USER ACTION · ❌ FAILED · ⏳ NOT IMPLEMENTED

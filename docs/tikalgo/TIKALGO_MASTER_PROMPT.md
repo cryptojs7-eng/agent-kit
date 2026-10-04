@@ -1,4 +1,4 @@
-# TikAlgo — پرامپت اجرایی جامع و ادغام‌شده (v5)
+# TikAlgo — پرامپت اجرایی جامع و ادغام‌شده (v6)
 
 > **این فایل جایگزین همه‌ی پرامپت‌های قبلی است.** پرامپت Master نسخه‌ی ۲، پرامپت‌های فازبندی‌شده، مشخصات کامل **AI Active Signals**، مشخصات کامل **Trading Terminal UI** (فاز T)، نصب **AI آفلاین**، **Graphify**، **UI/UX Pro Max** و سیستم **حافظه‌ی دائمی پروژه** در آن ادغام شده‌اند.
 > مرجع معماری: [`TIKALGO_SUPER_PLAN.md`](./TIKALGO_SUPER_PLAN.md) · قالب‌های آماده: [`bootstrap/`](./bootstrap/)
@@ -17,7 +17,12 @@
 | **فاز T: Trading Terminal UI** (T0 تا T11) | هر بار یک زیرفاز؛ T6 بعد از S1 تا S10 | بخش ۵T |
 | **فاز D به بعد: ابرپروژه** | هر بار یک فاز | بخش ۶ |
 | **پایان هر جلسه** | همیشه | بخش ۷ (Save State) |
-| **فهرست کامل پروژه‌های گیت‌هاب و نصب** | مرجع (۱۰۱ مخزن) | پیوست Z |
+| **کاتالوگ صرافی‌ها و بروکرها** | مرجع کانکتورها | بخش ۹ |
+| **کاتالوگ کامل تنظیمات (PAPER و LIVE)** | مرجع Settings | بخش ۱۰ |
+| **استفاده‌ی مستقیم از کد پروژه‌ها (Vendoring امن)** | هنگام ورود کد بیرونی | بخش ۱۱ |
+| **دانش تریدرها و شرکت‌ها در اسکیل‌ها و AI آفلاین** | افزودن یا به‌روزرسانی دانش | بخش ۱۲ |
+| **Deploy و Commit پایان هر جلسه** | همیشه | بخش ۱۳ |
+| **فهرست کامل پروژه‌ها و لینک‌ها و نصب** | مرجع (۱۱۷ مخزن + لینک‌های غیرگیت‌هابی + سبک‌ها) | پیوست Z (Z.1 تا Z.15) |
 
 > 💡 **اصل حافظه‌ی دائمی:** بعد از Bootstrap، Claude Code **هرگز کل پروژه را از اول نمی‌خواند**. هر جلسه فقط `CLAUDE.md`، `docs/state/TIKALGO_STATE.md`، `graphify-out/GRAPH_REPORT.md` و `docs/state/NEXT.md` را می‌خواند و از همان نقطه ادامه می‌دهد. برای جزئیات کد از گراف Graphify پرس‌وجو می‌کند، نه از خواندن کورکورانه‌ی فایل‌ها.
 
@@ -134,11 +139,16 @@ HARD RULES
 - Everything configurable from Settings (DB-backed, per user), not from .env or code.
 - Secrets: API/private keys encrypted at rest, masked in UI, never in frontend, logs or
   plaintext DB. AI/LLM processes have NO access to credentials.
-- External code: license check first; MIT/Apache adapt with attribution; GPL (freqtrade)
-  ideas only; isolate LGPL/AGPL. No third-party skill in production without scan + sandbox +
-  paper test + user approval.
-- Destructive or production actions (deploy, DB drop/migration on prod, RUNTIME_ENABLED,
-  firewall/secrets changes) need explicit user "OK".
+- External code: if a project/skill is genuinely useful, USE ITS CODE directly when the
+  license allows (MIT/Apache/BSD/ISC: pinned dependency or vendored into third_party/ with
+  LICENSE/NOTICE, pinned SHA, MANIFEST entry) after the security protocol in §11. GPL/AGPL/
+  LGPL code is never copied into the proprietary core (isolated service or clean
+  re-implementation). No third-party skill in production without scan + sandbox + paper test.
+- Every user-facing behaviour has a setting (§10), separately for PAPER and LIVE profiles.
+- At the end of EVERY session: SAVE STATE (§7) then DEPLOY & COMMIT (§13) with smoke tests and
+  automatic rollback.
+- Still require explicit user "OK": enabling LIVE trading, RUNTIME_ENABLED, dropping data,
+  firewall/secrets changes.
 
 WORKING METHOD
 1) Restate scope, files to touch (via Graphify), risks, test plan.
@@ -448,7 +458,9 @@ SAVE STATE. Before ending:
    append docs/state/CHANGELOG_AI.md (date, phase, files changed, migrations, tests + results),
    append docs/state/DECISIONS.md (any architectural decision).
 3) Commit docs/state + code changes with a clear message (no secrets).
-4) Give me a short Persian summary: done / verified / blocked / next.
+4) Run DEPLOY & COMMIT (§13): push, staging → smoke tests → production → smoke tests,
+   automatic rollback on failure.
+5) Give me a short Persian summary: done / verified / deployed version / blocked / next.
 ```
 
 ---
@@ -474,6 +486,231 @@ Persian report + Save State.
 Using UI/UX Pro Max and docs/design/DESIGN_SYSTEM.md, design then implement <screen> for
 mobile (bottom tab bar) and desktop, FA/EN RTL, dark/light, all states, wired to real APIs only.
 ```
+
+---
+
+## 9. کاتالوگ کامل صرافی‌ها و بروکرها (Connector Catalog)
+
+> **قاعده‌ی کانکتور:** هر Venue فقط وقتی «قابل معامله» علامت می‌خورد که قابلیت‌هایش با تست واقعی تأیید شده باشد (رابط `VenueCapabilities` در Super Plan بخش 5.4). ترتیب پیاده‌سازی بر اساس ستون «اولویت» است.
+> **مسیر اتصال:** `ccxt` یعنی از طریق CCXT (شناسه‌ی CCXT داده شده)؛ `native` یعنی SDK یا API اختصاصی، وقتی اطلاعات بیشتری می‌دهد؛ `MT5` یعنی از طریق MT5 Bridge (Wine + RPyC یا REST). قبل از پیاده‌سازی، وجود شناسه در نسخه‌ی نصب‌شده‌ی CCXT را با `ccxt.exchanges` بررسی کنید.
+
+### 9.1 صرافی‌های متمرکز کریپتو (CEX: Spot و Futures)
+| Venue | مسیر اتصال | Spot | Futures | اولویت | یادداشت |
+|---|---|---|---|---|---|
+| Binance | `ccxt: binance / binanceusdm / binancecoinm` + native WS | ✔ | ✔ | P0 | لیکوییدیشن (forceOrder)، OI و فاندینگ |
+| Bybit | `ccxt: bybit` + native v5 | ✔ | ✔ | P0 | |
+| OKX | `ccxt: okx` | ✔ | ✔ | P0 | |
+| Bitget | `ccxt: bitget` | ✔ | ✔ | P0 | |
+| **LBank** | `ccxt: lbank` + native futures | ✔ | ✔ | **P0** | مسیر کامل live برای Futures (اولویت فایل معماری) |
+| **Toobit** | native (`agent-kit`: MCP و CLI) | ✔ | ✔ | **P0** | ابزارهای آماده + ایچیموکو |
+| XT.com | `ccxt: xt` | ✔ | ✔ | P1 | |
+| KuCoin | `ccxt: kucoin / kucoinfutures` | ✔ | ✔ | P1 | |
+| Gate | `ccxt: gate` | ✔ | ✔ | P1 | |
+| MEXC | `ccxt: mexc` | ✔ | ✔ | P1 | |
+| HTX (Huobi) | `ccxt: htx` | ✔ | ✔ | P1 | |
+| BingX | `ccxt: bingx` | ✔ | ✔ | P1 | |
+| Phemex | `ccxt: phemex` | ✔ | ✔ | P2 | |
+| BitMart | `ccxt: bitmart` | ✔ | ✔ | P2 | |
+| WOO X | `ccxt: woo` | ✔ | ✔ | P2 | |
+| Crypto.com | `ccxt: cryptocom` | ✔ | ✔ | P2 | |
+| Coinbase (Advanced) | `ccxt: coinbase` | ✔ | ⚠ محدود | P2 | |
+| Kraken | `ccxt: kraken / krakenfutures` | ✔ | ✔ | P2 | |
+| Bitfinex | `ccxt: bitfinex` | ✔ | ✔ | P2 | |
+| Bitstamp | `ccxt: bitstamp` | ✔ | — | P2 | |
+| Deribit | `ccxt: deribit` | — | ✔ + آپشن | P2 | داده‌ی آپشن و نوسان ضمنی |
+| Upbit | `ccxt: upbit` | ✔ | — | P2 | داده‌ی بازار کره |
+
+**صرافی‌های ایرانی** (برای کاربران داخل؛ API و قوانین هر کدام جداگانه بررسی شود؛ ممکن است در CCXT نباشند و کانکتور native لازم داشته باشند):
+| Venue | مسیر | اولویت |
+|---|---|---|
+| نوبیتکس (Nobitex) | native REST/WS | P1 |
+| والکس (Wallex) | native | P1 |
+| رمزینکس (Ramzinex) | native | P2 |
+| بیت‌پین (Bitpin) | native | P2 |
+| تبدیل (Tabdeal) | native | P2 |
+
+### 9.2 صرافی‌های غیرمتمرکز (DEX، Perp DEX و Aggregator)
+| Venue | مسیر | نوع | اولویت |
+|---|---|---|---|
+| **Hyperliquid** | native: `hyperliquid-python-sdk` (+ `ccxt: hyperliquid`) | Perp + Spot | **P0** (live + Whale Engine) |
+| dYdX v4 | native SDK | Perp | P2 |
+| GMX | قراردادهای هوشمند (web3) | Perp | P2 |
+| Aster | API یا native | Perp | P2 |
+| Uniswap | web3 / SDK | AMM | P2 |
+| PancakeSwap | web3 | AMM (BSC) | P2 |
+| Jupiter (Solana) | API | Aggregator | P2 |
+| 1inch / 0x | API | Aggregator | P2 |
+
+> برای DEX کلید خصوصی **هرگز** روی سرور و به‌صورت plaintext ذخیره نمی‌شود. یکی از این دو راه: کیف‌پول API یا Agent Wallet (مثل Agent Wallet در Hyperliquid با دسترسی محدود و بدون برداشت)، یا امضا در سمت کاربر (WalletConnect).
+
+### 9.3 فارکس، فلزات و CFD (بروکرها)
+| بروکر یا پلتفرم | مسیر اتصال | بازارها | اولویت |
+|---|---|---|---|
+| **هر بروکر MT5** (مثل IC Markets، Exness، XM، Pepperstone، FxPro، RoboForex، Alpari، LiteFinance، Tickmill، FBS، Admirals، Vantage) | `MT5` Bridge | فارکس، طلا و نقره، شاخص‌ها، نفت | **P0** |
+| بروکرهای MT4 | پل MT4 (EA + ZMQ/REST) | فارکس و فلزات | P2 |
+| OANDA | native REST v20 (`oandapyV20`) | فارکس، فلزات و CFD | P1 |
+| cTrader (Spotware Open API؛ مثل IC Markets و Pepperstone) | native Open API | فارکس و CFD | P1 |
+| Interactive Brokers | native (`ib_async`) | فارکس، فلزات، سهام، فیوچرز و آپشن | P1 |
+| FXCM | native REST / ForexConnect | فارکس و CFD | P2 |
+| Saxo Bank | OpenAPI | چندبازاره | P2 |
+| IG | REST/Streaming API | CFD | P2 |
+| FIX (بروکرهای نهادی) | QuickFIX | — | P2 |
+
+### 9.4 سهام آمریکا
+| بروکر | مسیر | اولویت |
+|---|---|---|
+| Alpaca | native (`alpaca-py`) + Paper رسمی | P1 |
+| Interactive Brokers | native (`ib_async`) | P1 |
+| Charles Schwab (Trader API) | native REST | P2 |
+| Tradier | native REST | P2 |
+| TradeStation | native REST | P2 |
+| Webull (OpenAPI) | native | P2 |
+
+### 9.5 داده‌ی فلزات و کالاها بدون بروکر
+- XAUUSD و XAGUSD از MT5، OANDA، IBKR یا Saxo
+- طلای توکنی (PAXG و XAUT) از صرافی‌های کریپتو
+- داده‌ی کلان (FRED و OpenBB) برای روند طلا، نفت و DXY
+
+---
+
+## 10. کاتالوگ کامل تنظیمات کاربر (همه‌چیز قابل تنظیم؛ جدا برای PAPER و LIVE)
+
+> **قاعده:** همه‌ی تنظیمات در DB برای هر کاربر ذخیره می‌شوند و از Settings قابل تغییرند، بدون نیاز به `.env` یا تغییر کد. **هر کاربر دو پروفایل کاملاً جدا دارد: PAPER و LIVE.** همه‌ی تنظیمات معاملاتی برای هر پروفایل مستقل‌اند و یک دکمه‌ی «کپی از PAPER به LIVE» دارند که با تأیید اجرا می‌شود.
+> هر تغییر در پروفایل LIVE یک **رکورد Audit** دارد و اگر ریسک را افزایش دهد، **تأیید دومرحله‌ای** می‌خواهد. همه‌ی تنظیمات **Import/Export (JSON نسخه‌دار)** و **Reset به پیش‌فرض** دارند. سقف‌های سراسری (Hard Limits) که مدیر سیستم تعیین می‌کند، **هرگز** با تنظیمات کاربر شکسته نمی‌شوند.
+
+| گروه | تنظیمات (همه قابل ویرایش در UI) |
+|---|---|
+| **حساب و اتصال‌ها** | افزودن، ویرایش، غیرفعال یا حذف Exchange/Broker/Wallet؛ کلید API (رمزنگاری‌شده و ماسک‌شده)؛ تست اتصال؛ بررسی مجوزها (Trade بله، Withdraw خیر)؛ IP whitelist؛ زیرحساب؛ حساب پیش‌فرض برای هر بازار؛ تفکیک حساب‌های PAPER و LIVE |
+| **حالت معامله** | Account Mode (PAPER/LIVE)؛ AI Mode (OFF، SIGNAL_ONLY، AI_CONFIRMATION، SEMI_AUTO، PAPER_AUTO، LIVE_AUTO)؛ موجودی اولیه و ارز پایه‌ی Paper Wallet؛ ریست Paper؛ شبیه‌سازی کارمزد، لغزش و تأخیر در Paper؛ وضعیت Gateهای LIVE |
+| **مدیریت ریسک** | ریسک هر معامله (درصد یا مبلغ ثابت)؛ سقف ضرر روزانه، هفتگی و ماهانه؛ Max Drawdown؛ سقف تعداد پوزیشن کل و برای هر نماد؛ سقف اکسپوژر کل، هر نماد، بخش و کلاس دارایی؛ سقف اهرم کل و برای هر بازار؛ سقف همبستگی؛ سقف notional هر سفارش؛ حداقل RR؛ حداقل Confidence؛ حداکثر اسپرد و لغزش مجاز؛ توقف خودکار قبل و بعد از خبرهای مهم (بازه‌ی دقیقه)؛ ساعات مجاز معامله و Session؛ Protections (Cooldown بعد از ضرر، StoplossGuard، توقف بعد از N ضرر متوالی)؛ Kill Switch دستی؛ رفتار Kill Switch (بستن همه یا فقط توقف ورود جدید) |
+| **اندازه‌ی پوزیشن** | روش: ثابت، درصد ریسک، Kelly کسری (ضریب)، Volatility Target یا ATR؛ لحاظ کارمزد و لغزش؛ گرد کردن طبق limitهای صرافی؛ حداقل و حداکثر اندازه |
+| **سفارش و اجرا** | نوع سفارش پیش‌فرض (Market، Limit، Stop یا Post-only)؛ Reduce-only؛ Time-in-force؛ حالت مارجین (Cross/Isolated)؛ حالت پوزیشن (One-way/Hedge)؛ سفارش شرطی؛ تلاش مجدد و Timeout؛ Slippage guard؛ انتخاب Venue (دستی یا Smart Router) |
+| **مدیریت پوزیشن** | درصد بستن در TP1، TP2 و TP3؛ Breakeven (بعد از TP1، بعد از X·R، یا با offset)؛ نوع Trailing (FIXED، ATR با ضریب، STRUCTURE، BREAKEVEN_THEN_TRAIL، AI_SUGGESTED_RISK_VALIDATED)؛ فاصله‌ی شروع Trailing؛ Stop روی خود صرافی؛ خروج زمانی (Time stop)؛ اجازه‌ی Partial Close به AI؛ تناوب AI Position Review؛ اجازه‌ی DCA یا افزودن به پوزیشن (پیش‌فرض خاموش) |
+| **استراتژی‌ها** | انتخاب، ایجاد، ویرایش، Clone، حذف، Import/Export و فعال‌سازی؛ پارامترها؛ نسخه‌ها؛ بازار، نماد و تایم‌فریم مجاز؛ وزن در پرتفوی چنداستراتژی؛ وضعیت (draft، backtested، paper یا live) |
+| **سبک معامله** | Scalping، Intraday، Swing، Position، Momentum، Trend، Breakout، SMC، ICT، Order Flow، **Volume Profile**، **Footprint**، **Wyckoff/VSA**، **Harmonic**، **Elliott**، Hybrid و Custom، هر کدام با پیش‌فرض‌های قابل تغییر (TF، RR، SL و Trailing) |
+| **تایم‌فریم** | Primary TF؛ Confirmation TFs؛ لیست TFهای فعال (1m تا 1M)؛ قانون هم‌گرایی MTF (تعداد TF لازم) |
+| **اسکنر** | بازارها، صرافی‌ها، Watchlist منبع؛ حداقل حجم و نقدشوندگی؛ فیلترهای تکنیکال و جریان؛ تناوب اسکن؛ آستانه‌های Validate؛ ارسال خودکار به Watchlist؛ حداکثر سیگنال فعال؛ زمان انقضا |
+| **مدل‌های AI** | Default، Signal، **Decision (قفل روی TypeSafe/Jev)**، Reasoning و Fallback؛ مسیریابی 9router؛ مدل‌های **Ollama آفلاین** (نام مدل، Context و Timeout)؛ Temperature و حداکثر توکن؛ بودجه و سقف هزینه؛ رفتار وقتی مدل در دسترس نیست (Fallback Ladder)؛ زبان توضیح‌ها |
+| **دانش و اسکیل‌ها** | فعال یا غیرفعال کردن هر اسکیل؛ نسخه؛ مجوزها (`can_trade` همیشه false مگر با تأیید)؛ افزودن یا به‌روزرسانی اسکیل و منابع دانش؛ اولویت اسکیل در هر سبک |
+| **داده و منابع** | فعال یا غیرفعال کردن منابع خبر، شبکه‌های اجتماعی، آن‌چین و Macro؛ کلیدهای API سرویس‌های داده (رمزنگاری‌شده)؛ آستانه‌ی stale داده |
+| **هشدارها** | انواع رویداد (سیگنال، نهنگ، لیکوییدیشن، خبر، Macro، پوزیشن، ریسک، اجرا و سلامت سیستم)؛ کانال‌ها (درون‌برنامه، Push، ایمیل، **Telegram** (ربات و Chat ID)، Discord و Webhook)؛ ساعات سکوت؛ Digest؛ آستانه‌ها |
+| **نمایش** | زبان (فارسی یا انگلیسی)؛ تم (تیره یا روشن)؛ منطقه‌ی زمانی؛ فرمت عدد و تاریخ؛ اعداد فارسی؛ چیدمان ترمینال؛ ستون‌های جدول‌ها؛ حالت مبتدی یا حرفه‌ای؛ چگالی UI |
+| **امنیت** | 2FA و Passkey؛ نشست‌های فعال و خروج از همه؛ IP whitelist حساب؛ رمز عبور برای عملیات حساس؛ لاگ ورود و فعالیت؛ چرخش کلیدها |
+| **ژورنال و گزارش** | ثبت خودکار؛ برچسب‌ها؛ اسکرین‌شات خودکار نمودار؛ زمان‌بندی گزارش‌های دوره‌ای و ارسال آن‌ها |
+
+**ابزارهای عمومی تنظیمات:** جست‌وجو در تنظیمات؛ نمایش «تفاوت با پیش‌فرض»؛ تاریخچه‌ی تغییرات با Undo؛ پیش‌نمایش اثر تنظیمات ریسک (مثلاً «با این تنظیم، حداکثر ضرر روزانه X دلار است»)؛ و دکمه‌ی «تست و اعتبارسنجی تنظیمات».
+
+---
+
+## 11. استفاده‌ی مستقیم از کد پروژه‌ها و اسکیل‌ها (Vendoring امن)
+
+> خواسته‌ی شما: «اگر پروژه‌ها و اسکیل‌ها واقعاً مفیدند، عیناً کدشان را استفاده کنید، با حفظ امنیت.» این کار **مجاز است، با رعایت لایسنس و امنیت**.
+
+**کد با لایسنس MIT، Apache-2.0، BSD یا ISC: استفاده‌ی مستقیم مجاز است**
+- از طریق پکیج (`pip` یا `npm`)، یا کپی در `third_party/<name>/` همراه با **فایل LICENSE و NOTICE اصلی**، **SHA کامیت ثابت**، و ثبت در `third_party/MANIFEST.md` (نام، لینک، لایسنس، SHA، تاریخ، تغییرات ما)
+
+**کد GPL، AGPL یا LGPL** (مثل freqtrade، OctoBot، backtrader، backtesting.py، nautilus و EA31337)
+- کپی در هسته‌ی تجاری بسته **مجاز نیست**، چون الزام می‌کند کل کد تیک‌الگو منتشر شود
+- **دو راه قانونی:**
+  1. اجرا به‌صورت **سرویس جدا** (مثلاً کانتینر جدا با ارتباط از راه API، که با ادعای حقوقی مشخص و بعد از مشورت حقوقی انجام می‌شود)
+  2. **پیاده‌سازی تمیز ایده** با کد خودمان
+
+**لایسنس نامعلوم (❓)**
+- تا مشخص شدن لایسنس، فقط برای مطالعه استفاده می‌شود
+
+**پروتکل امنیتی قبل از ورود هر کد یا اسکیل:**
+1. بررسی و `pip-audit` یا `npm audit`
+2. اسکن secret با gitleaks
+3. بررسی دستی بخش‌های شبکه، فایل و اجرای دستور
+4. حذف کد تله‌متری یا به‌روزرسانی خودکار از راه دور (مثل اسکیل Bybit)
+5. اجرای تست‌ها در sandbox
+6. اجرای paper
+7. ثبت در `DECISIONS.md`
+
+**پرامپت:**
+```text
+VENDOR "<repo>" (pin commit SHA). Check license: if MIT/Apache/BSD/ISC → vendor into
+third_party/<name>/ with LICENSE/NOTICE + MANIFEST entry, or add as pinned dependency; if
+GPL/AGPL/LGPL → do NOT copy into core; propose isolated service or clean re-implementation.
+Run security protocol (audit, gitleaks, manual review of network/fs/exec, remove remote
+auto-update/telemetry), wrap behind our interfaces + feature flag, add tests, paper-test.
+Persian report + Save State.
+```
+
+---
+
+## 12. دانش تریدرها و شرکت‌های حرفه‌ای در اسکیل‌ها و AI آفلاین (قابل افزودن و به‌روزرسانی)
+
+### 12.1 بسته‌های دانش (Knowledge Skills)
+**ساختار:**
+```
+skills/knowledge/<pack>/
+  SKILL.md        # خلاصه‌ی روش، قوانین قابل اجرا، شرایط کاربرد و ضدشرایط
+  rules.yaml      # قوانین قطعی قابل بک‌تست
+  sources.md      # منابع (کتاب، مقاله یا وب‌سایت) با ارجاع؛ فقط خلاصه و برداشت خودمان
+  eval/           # دیتاست و نتایج بک‌تست و paper
+  manifest.json   # version, license, can_trade=false
+```
+
+**بسته‌های اولیه** (خلاصه‌ی روش‌های شناخته‌شده، **نه کپی متن کتاب‌ها**):
+| بسته | منبع دانش |
+|---|---|
+| wyckoff-vsa | روش Wyckoff و Volume Spread Analysis |
+| market-profile-volume-profile | Market Profile (Steidlmayer)، POC و Value Area |
+| order-flow-footprint | Delta، CVD، Absorption و Imbalance |
+| ict-smc | Order Block، FVG، نقدینگی و Kill Zones |
+| price-action | ساختار بازار، کندل‌ها و سطوح |
+| trend-following-turtle | سیستم‌های شکست و روندی (Turtle، Donchian) |
+| momentum-growth | روش‌های رشد و مومنتوم (CAN SLIM و SEPA، به‌صورت خلاصه) |
+| stage-analysis | تحلیل مراحل بازار (Weinstein) |
+| elder-triple-screen | سیستم سه‌صفحه‌ای |
+| elliott-harmonic | الیوت و الگوهای هارمونیک |
+| macro-intermarket | روابط بین‌بازاری، DXY، بازده اوراق، طلا و نفت |
+| risk-kelly-sizing | مدیریت ریسک، Kelly و Volatility Targeting |
+| quant-factors | فاکتورها (Momentum، Value، Carry و Low-Vol) از **مقالات عمومی** شرکت‌های تحقیقاتی کوانت (مثل AQR و Man Group) و ادبیات دانشگاهی |
+| legendary-traders | فلسفه و پرسش‌های کلیدی تریدرهای مشهور (Livermore، Soros، Buffett، Simons)؛ الگو: [trading-skills](https://github.com/VictorVVedtion/trading-skills) |
+
+> ⚖️ **کپی‌رایت:** متن کامل کتاب‌ها یا گزارش‌های پولی را وارد سیستم نکنید. فقط خلاصه، قوانین استخراج‌شده و ارجاع، یا منابع با مجوز عمومی (مقاله‌های آزاد و مستندات رسمی) قابل استفاده‌اند.
+
+### 12.2 اتصال به AI آفلاین (RAG محلی)
+- embedding محلی با `nomic-embed-text` از طریق Ollama ← ذخیره در **pgvector** ← بازیابی دانش مرتبط با «سبک + رژیم + نماد» قبل از هر تصمیم Reasoning
+- **Jev همچنان Decision Model است.** دانش به‌عنوان **شاهد و زمینه** به Reasoning model و Critic داده می‌شود، نه به‌عنوان دستور معامله.
+- درس‌های ژورنال خودمان هم در همین حافظه ذخیره و بازیابی می‌شوند (M25).
+
+### 12.3 افزودن و به‌روزرسانی دانش و اسکیل (از UI)
+- **Settings → Skills & Knowledge:** آپلود یا ویرایش بسته (Markdown و YAML)، نسخه‌ی جدید، مقایسه‌ی نسخه‌ها (diff) و Rollback
+- **چرخه‌ی ارتقا:** `draft → indexed → backtested → paper → approved`. فقط نسخه‌ی approved در تصمیم‌ها استفاده می‌شود.
+- **افزودن مدل جدید:** ثبت در Model Registry (Ollama یا ابری)، بنچمارک روی دیتاست ارزیابی، و ارتقا فقط با تأیید
+- **پرامپت:**
+```text
+ADD/UPDATE KNOWLEDGE PACK "<name>": create/update skills/knowledge/<name>/ (SKILL.md, rules.yaml,
+sources.md with citations — summaries only, no copyrighted full text, manifest can_trade=false),
+embed into pgvector via local Ollama embeddings, backtest rules.yaml where applicable, run paper
+evaluation, show diff vs previous version, and require my approval to activate. Persian report.
+```
+
+---
+
+## 13. استقرار و کامیت در پایان هر جلسه (اجباری)
+
+> طبق خواسته‌ی شما: **هر جلسه بعد از اتمام کار، کامیت و دیپلوی می‌شود.**
+
+```text
+DEPLOY & COMMIT (end of every session, after SAVE STATE):
+1) Gates: all tests, build, typecheck and lint green; DB migrations reviewed and backward-
+   compatible; no secrets in diff (gitleaks).
+2) Backup: DB snapshot + current image tags recorded (for rollback).
+3) Commit with a clear message and push to the project repository/branch.
+4) Deploy: build images → deploy to STAGING → smoke tests (health endpoints, login → terminal,
+   paper order path) → deploy to PRODUCTION with the same images → post-deploy smoke tests.
+5) If any smoke test fails: automatic rollback to the previous images (and migration rollback
+   if safe), then report.
+6) NEVER as part of deploy: enable LIVE trading, set RUNTIME_ENABLED, change firewall/secrets,
+   or drop data — those still need my explicit "OK".
+7) Persian report: commit hash, deployed version, smoke-test results, rollback status.
+```
+
+---
 
 ---
 
@@ -688,4 +925,104 @@ while read u; do
   [ "$code" = "200" ] || echo "$code $u"
 done
 # هر خطی که چاپ شود یعنی لینک باید بررسی یا جایگزین شود
+```
+
+### Z.14 لینک‌های غیرگیت‌هابی (از همه‌ی فهرست‌های قبلی)
+
+| منبع | کاربرد |
+|---|---|
+| [MetaTrader5 (PyPI)](https://pypi.org/project/MetaTrader5/) | API رسمی پایتون MT5 |
+| [metatrader-ai (PyPI)](https://pypi.org/project/metatrader-ai/1.2.1/) | دستیار AI متاتریدر با بیش از ۲۰ اندیکاتور 🔍 |
+| [AI-Driven MT5 Bot (Contra)](https://contra.com/community/sJFcZrr7-automate-forex-trading-with-ai-driven-meta-trader) | معماری XGBoost + LSTM + SMC روی MT5 |
+| [EA31337 / topic mt5](https://scriptagc.wasmer.app/https_github_com/topics/mt5) | فهرست پروژه‌های MT5 |
+| [موضوع news-sentiment در گیت‌هاب](https://github.com/topics/news-sentiment) | فهرست پروژه‌های احساسات خبر |
+| [Hybrid News Sentiment Engine (arXiv)](https://arxiv.org/pdf/2606.03457) | مقاله‌ی موتور احساسات خبری |
+| [OpenBB/FRED (Autonomous Econ)](https://autonomousecon.substack.com/p/this-little-known-python-package) | راهنمای OpenBB برای داده‌ی Macro |
+| [fredpy](https://github.com/letsgoexploring/fredpy) | داده‌های FRED |
+| [fedfred](https://pypi.org/project/fedfred/) | کلاینت مدرن FRED (async و کش) |
+| [mostlyrightmd-economy](https://pypi.org/project/mostlyrightmd-economy/) | CPI، NFP، GDP و تقویم انتشار 🔍 |
+| [openbb-fred](https://pypi.org/project/openbb-fred/1.0.0rc0) | افزونه‌ی FRED برای OpenBB |
+| [TA-Lib Python docs](https://docsearch.algolia.com/mcp/docs/repo/ta-lib/ta-lib-python) | مستندات TA-Lib |
+| [ta-lib skill](https://claudeskills.info/skills/agiprolabs/claude-trading-skills/ta-lib/) | اسکیل TA-Lib |
+| [sentiment-analysis skill](https://claudeskills.info/skills/agiprolabs/claude-trading-skills/sentiment-analysis/) | اسکیل تحلیل احساسات |
+| [News Sentiment AI Blueprint](https://tripolskypetr-backtest-kit-docs.static.hf.space/documents/article_06_ai_strategy_blueprint.html) | الگوی استراتژی خبری با AI |
+| [Forex Factory Calendar dataset (HuggingFace)](https://huggingface.co/datasets/Tropstan/Forex_Factory_Calendar/blob/main/README.md) | داده‌ی تاریخی تقویم اقتصادی |
+| [ForexFactory scraper (Apify)](https://apify.com/xtracto/forexfactory-calendar) | اسکرپر ابری تقویم (پولی) |
+| [FinRobot (neurohive)](https://neurohive.io/en/state-of-the-art/finrobot-open-source-multi-agent-framework-for-automated-equity-research/) | معرفی FinRobot |
+| [FinRobot paper (arXiv)](https://arxiv.org/html/2411.08804v1) | مقاله‌ی FinRobot |
+| [FinMem paper](https://arxiv.org/pdf/2311.13743) | حافظه‌ی لایه‌ای ایجنت |
+| [LLM Trading Agents Survey](https://arxiv.org/pdf/2408.06361) | مرور ایجنت‌های LLM |
+| [TradingGroup (arXiv)](https://arxiv.org/html/2508.17565v1) | Self-reflection |
+| [Best AI Trading Agents 2026](https://pinggy.io/blog/best_ai_trading_agents/) | مرور ایجنت‌ها |
+| [The 5 GitHub Repos Rewriting How AI Trades Money](https://themenonlab.blog/blog/ai-finance-github-repos-march-2026) | مرور مخزن‌ها |
+| [Vibe-Trading SMC skill](https://tessl.io/registry/skills/github/HKUDS/Vibe-Trading/smc/review) | اسکیل SMC |
+| [Vibe-Trading social-media-intelligence](https://tessl.io/registry/skills/github/HKUDS/Vibe-Trading/social-media-intelligence) | اسکیل هوش شبکه‌های اجتماعی |
+| [Vibe-Trading elliott-wave skill](https://tessl.io/registry/skills/github/HKUDS/Vibe-Trading/elliott-wave) | اسکیل الیوت |
+| [OpenMobius-skill](https://agentskill.work/en/skills/MobiusQuant/OpenMobius-skill) | ICT/SMC |
+| [agent-trading-skills README](https://cdn.jsdelivr.net/gh/SKE-Labs/agent-trading-skills@main/README.md) | ۵۶ اسکیل |
+| [kukapay trading-strategist](https://claudemarketplaces.com/skills/kukapay/crypto-skills/trading-strategist) | اسکیل استراتژیست |
+| [senpi autonomous-trading](https://claudemarketplaces.com/skills/senpi-ai/senpi-skills/autonomous-trading) | اسکیل ترید خودکار |
+| [monitoring-whale-activity skill](https://claudeskills.info/skills/jeremylongshore/claude-code-plugins-plus-skills/monitoring-whale-activity/) | نهنگ‌ها |
+| [whale-alert-monitor skill](https://claudeskills.info/skills/aAAaqwq/AGI-Super-Team/whale-alert-monitor/) | هشدار نهنگ |
+| [Hyperliquid whale tracking (Dwellir)](https://www.dwellir.com/guides/hyperliquid-whale-tracking) | راهنمای پایتون |
+| [Hyperliquid tracker (Chainstack)](https://chainstack.com/hyperliquid-on-chain-activity-tracker-build-your-own-telegram-bot/amp/) | ربات تلگرام نهنگ |
+| [Hyperliquid whales MCP](https://www.getdrio.com/mcp/io-github-br0ski777-hyperliquid-whales) | MCP نهنگ‌ها |
+| [Hyperliquid API guide 2026](https://onekey.so/blog/ecosystem/hyperliquid-api-getting-started-2026/) | راهنمای API |
+| [elliott-wave-engine skill (tradecraft)](https://www.skills.sh/mahmoud20138/tradecraft/elliott-wave-engine) | اسکیل الیوت 🔍 |
+| [terminalskills trading-agents](https://www.skills.sh/terminalskills/skills/trading-agents) | اسکیل ایجنت ترید 🔍 |
+| [Bybit trading skill](https://skills.sh/bybit-exchange/skills/bybit-trading) | ⚠ به‌روزرسانی خودکار از راه دور |
+| [Graphify × Claude Code](https://graphify.com/integrations/claude-code) | حافظه‌ی پروژه |
+| [UI/UX Pro Max docs](https://www.mintlify.com/nextlevelbuilder/ui-ux-pro-max-skill/platforms/claude-code) | سیستم طراحی |
+| QuorumTrading | رأی‌گیری ایجنت‌های تکنیکال، فاندامنتال و احساسات (AGPL ⚠؛ لینک دقیق در جست‌وجو پیدا نشد) |
+
+### Z.15 سبک‌های معاملاتی و استراتژی‌های جدید (Volume Profile، Footprint و...)
+
+| # | پروژه | سبک | لایسنس | نصب |
+|---|---|---|---|---|
+| 102 | [bfolkens/py-market-profile](https://github.com/bfolkens/py-market-profile) | **Volume Profile و Market Profile (TPO)**: POC، Value Area، Initial Balance و HVN/LVN | BSD ✔ | `pip install marketprofile` ([docs](https://marketprofile.readthedocs.io/)) |
+| 103 | [murtazayusuf/OrderflowChart](https://github.com/murtazayusuf/OrderflowChart) | **Footprint Chart** (bid، ask، delta در هر قیمت) با plotly | ❓ | clone→refs |
+| 104 | [Vandoriz/MT5-OrderFlow-Footprint-Engine](https://github.com/Vandoriz/MT5-OrderFlow-Footprint-Engine) | **Footprint و Order Flow روی MT5**: imbalance، delta cluster و absorption | ❓ | clone→refs |
+| 105 | [nazmiefearmutcu/flowmap](https://github.com/nazmiefearmutcu/flowmap) | **Liquidity Heatmap، DOM و Time & Sales** (WebGL2) برای کریپتو و سهام | ❓ | clone→refs |
+| 106 | [nssanta/quant-order-book](https://github.com/nssanta/quant-order-book) | Heatmap اوردربوک با ۵۰۰۰ سطح (Binance، OKX و Bybit) | ❓ | clone→refs |
+| 107 | [niall-oc/pyharmonics](https://github.com/niall-oc/pyharmonics) | **الگوهای هارمونیک** | ❓ | `pip install pyharmonics` |
+| 108 | [taew (PyPI)](https://pypi.org/project/taew/) | **امواج الیوت** (پیاده‌سازی پایتونی بر اساس یک مقاله) | ❓ | `pip install taew` |
+| 109 | [freqtrade/freqtrade-strategies](https://github.com/freqtrade/freqtrade-strategies) | مجموعه‌ی رسمی استراتژی‌های نمونه | GPL-3.0 ⚠ | مرجع |
+| 110 | [iterativv/NostalgiaForInfinity](https://github.com/iterativv/NostalgiaForInfinity) | استراتژی پرطرفدار freqtrade (NFIX) | GPL-3.0 ⚠ | مرجع |
+| 111 | [OnChainVibe/freqtrade-strategies](https://github.com/OnChainVibe/freqtrade-strategies) | مجموعه‌ی استراتژی‌ها | ❓ | مرجع |
+| 112 | [paperswithbacktest/awesome-systematic-trading](https://github.com/paperswithbacktest/awesome-systematic-trading) | بیش از ۴۰ استراتژی توصیف‌شده، ۹۷ کتابخانه و ۵۵ کتاب | ❓ | مرجع |
+| 113 | [wangzhe3224/awesome-systematic-trading](https://github.com/wangzhe3224/awesome-systematic-trading) | فهرست ابزارهای ترید سیستماتیک | ❓ | مرجع |
+| 114 | [wilsonfreitas/awesome-quant](https://github.com/wilsonfreitas/awesome-quant) | فهرست جامع کتابخانه‌های کوانت | ❓ | مرجع |
+| 115 | [LLMQuant/awesome-trading-agents](https://github.com/LLMQuant/awesome-trading-agents) | ایجنت‌ها، MCPها و اسکیل‌های ترید | ❓ | مرجع |
+| 116 | [VictorVVedtion/trading-skills](https://github.com/VictorVVedtion/trading-skills) | اسکیل‌های دانش تریدرهای مشهور (Livermore، Soros، Buffett و Simons) | ❓ | clone→refs |
+| 117 | [llmquant/quant-wiki](https://docsearch.algolia.com/mcp/docs/repo/llmquant/quant-wiki) | پایگاه دانش کوانت (چینی) | ❓ | مرجع |
+
+**نصب و کلون مراجع سبک‌ها:**
+```bash
+pip install marketprofile pyharmonics taew      # بعد از بررسی لایسنس (❓)
+cd /root/tikalgo-refs
+for r in bfolkens/py-market-profile murtazayusuf/OrderflowChart Vandoriz/MT5-OrderFlow-Footprint-Engine \
+  nazmiefearmutcu/flowmap nssanta/quant-order-book niall-oc/pyharmonics freqtrade/freqtrade-strategies \
+  iterativv/NostalgiaForInfinity paperswithbacktest/awesome-systematic-trading \
+  LLMQuant/awesome-trading-agents VictorVVedtion/trading-skills ; do
+  git clone --depth 1 "https://github.com/$r" "$(echo $r | tr / _)" || echo "FAILED: $r"
+done
+```
+
+**منطق سبک‌هایی که کتابخانه‌ی پایتونی معتبر ندارند** (از اسکریپت‌های متن‌باز TradingView؛ فقط منطق، کد Pine کپی نشود):
+- **Wyckoff و VSA:** [Volume Climax Detector](https://www.tradingview.com/script/bV5x4Wxe-Volume-Climax-Detector-AGPro-Series/) (Z-Score حجم، Spread و Close Location) · [Wyckoff + VSA](https://www.tradingview.com/script/wFtWIbNb)
+- **Footprint:** [Footprint (TradingView)](https://www.tradingview.com/script/X9edevPd/) · [Order Flow docs (LuxAlgo)](https://docs.luxalgo.com/llms.mdx/docs/charts/order-flow/introduction/content.md)
+- **TPO:** [TPOLib](https://www.tradingview.com/script/XeSvtb5w-TPOLib/)
+- **هارمونیک:** [Harmonic Pattern Detector](https://jp.tradingview.com/script/jmsP8DC6-Harmonic-Pattern-Detector/)
+
+**پرامپت افزودن سبک:**
+```text
+ADD TRADING STYLE "<Volume Profile|Footprint|Wyckoff-VSA|Harmonic|Elliott|...>":
+1) Implement the indicator/engine as a non-repainting worker on closed candles (and on
+   trades/orderbook for footprint/order-flow), reusing vendored libs (marketprofile,
+   pyharmonics, taew) where license allows, or clean re-implementation from documented logic.
+2) Expose its scores to the Scanner (§5 S3) and as overlays on the terminal chart (POC/VAH/VAL,
+   footprint cells, delta, imbalance, harmonic PRZ, wave labels).
+3) Add the style to Settings → Trading Styles with editable defaults (TFs, RR, SL, trailing).
+4) Add a knowledge pack in skills/knowledge/ (§12) and a backtest/paper evaluation.
+Persian report + Save State + Deploy & Commit.
 ```
