@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Tika — TikAlgo AI assistant">
+  <title>Tika</title>
+  <circle cx="32" cy="32" r="32" fill="#0A1712"/>
+  <path d="M32 19.5 V13" stroke="#FFFFFF" stroke-width="2.6" stroke-linecap="round"/>
+  <circle cx="32" cy="11" r="3.8" fill="#FF7A1A"/>
+  <rect x="13" y="28.5" width="4" height="9" rx="2" fill="#FFFFFF"/>
+  <rect x="47" y="28.5" width="4" height="9" rx="2" fill="#FFFFFF"/>
+  <rect x="16.5" y="19.5" width="31" height="27" rx="9.5" fill="#FFFFFF"/>
+  <rect x="23.6" y="27" width="4.6" height="7" rx="2.3" fill="#0A1712"/>
+  <rect x="35.8" y="27" width="4.6" height="7" rx="2.3" fill="#0A1712"/>
+  <path d="M26.5 38 L30.5 41.2 L38 36.2" fill="none" stroke="#1FA81F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+
+</svg>

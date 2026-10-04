@@ -1,14 +1,15 @@
-# TikAlgo — Logo & Brand Assets (v5)
+# TikAlgo — Logo & Brand Assets (v6)
 
-**Concept — AI × Trading monogram:** the letters **t i** followed by a **rising tick** — it reads
-as the **k** of *tikalgo* and, at the same time, as an **up-trend / "approved signal" check**.
-The dot of the *i* is the **orange AI node**. Everything sits in a **sharp-cornered square**
-(no rounded corners) for a precise, institutional feel.
+**Concept — AI × Trading monogram:** the letters **t i** followed by a **slanted green k** — a tall left
+arm leaning right (to the height of the *t*) and a right arm rising at 45° to x-height, meeting in a
+sharp point on the baseline. It reads as the **k** of *tikalgo*, an **up-trend**, and an
+**approved-signal check**. The dot of the *i* is the **orange AI node**. Everything sits in a
+**rounded square** (corner radius = 20% of the side).
 
 **Typeface:** [Space Grotesk](https://fonts.google.com/specimen/Space+Grotesk) SemiBold (600) —
 SIL Open Font License 1.1 (free for commercial use, incl. logos). Letters are converted to
-vector outlines (no font needed at runtime). The tick is a custom geometric shape matched to the
-font's stem width and x-height, with a flat base on the baseline.
+vector outlines (no font needed at runtime). The k/tick is a custom geometric shape matched to the
+font's stem width (left arm 12°, right arm 45°).
 
 ## Variants
 | File | Description | Use |
@@ -28,6 +29,21 @@ font's stem width and x-height, with a flat base on the baseline.
 | `png/mark-green-512.png`, `png/mark-light-512.png` | Alternate marks | Social / print |
 | `png/tikalgo-logo*.png`, `png/tikalgo-wordmark*.png` | Raster logos (transparent) | Docs, slides |
 
+## Tika — AI assistant avatar (`tika/`)
+A minimal friendly robot built from brand elements: **orange antenna node** (AI), **green
+check-smile** (the logo's tick), white head on the brand dark circle.
+
+| File | State |
+|---|---|
+| `tika/tika-avatar.svg` ⭐ | Default / idle |
+| `tika/tika-avatar-listening.svg` | Listening (green ring) — mic active |
+| `tika/tika-avatar-thinking.svg` | Thinking (orange eyes) — generating an answer |
+| `tika/tika-avatar-speaking.svg` | Speaking (animated orange pulse ring + antenna; SVG/SMIL) |
+| `tika/png/*.png` | 512/256/128/64 px exports |
+
+Respect `prefers-reduced-motion`: show the static listening/thinking files instead of the
+animated speaking file when reduced motion is requested.
+
 ## Colors
 | Token | Hex | Role |
 |---|---|---|
@@ -39,7 +55,7 @@ font's stem width and x-height, with a flat base on the baseline.
 | `--down` | `#F6465D` | Loss / down (semantic) |
 
 ## Rules
-- Square stays **sharp-cornered**; do not round, rotate, stretch, outline, shadow or gradient.
+- Keep the 20% corner radius; do not rotate, stretch, outline, shadow or gradient.
 - Clear space ≥ 25% of the square's width on all sides. Minimum size: 16 px (mark), 120 px wide (horizontal logo).
 - Always lowercase `tikalgo`. Keep the orange dot orange in every variant.
 - In the terminal header use `tikalgo-logo-currentcolor.svg` inline; clicking it opens the Command Menu (MASTER_PROMPT §5T, T1).
