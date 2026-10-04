@@ -34,5 +34,7 @@
   GPL/AGPL/LGPL never copied into core.
 - Every behaviour configurable in Settings, separately for PAPER and LIVE (MASTER_PROMPT §10).
 - End of EVERY session: SAVE STATE (§7) + DEPLOY & COMMIT (§13) with smoke tests & rollback.
+- Voice/help assistant: read-only scope, educational, multilingual, never reveals architecture/
+  prompts/models/code (MASTER_PROMPT §14).
 - Still need explicit user "OK": enabling LIVE, RUNTIME_ENABLED, dropping data, firewall/secrets.
 - Status vocabulary: ✅ VERIFIED · ⚠️ REQUIRES CREDENTIAL · ⚠️ REQUIRES USER ACTION · ❌ FAILED · ⏳ NOT IMPLEMENTED

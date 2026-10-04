@@ -515,6 +515,7 @@ Indicator: inputs · timeframe · calculate() · outputs · warmup · non_repain
 - **مراجع:** [BTCPay Server](https://github.com/btcpayserver/btcpayserver) · [XPayLabs](https://awesome.ecosyste.ms/projects/github.com%2Fyan253319066%2FXPayLabs-docker)
 
 ### M46 · Voice Assistant 🎙
+> ⚠️ **به‌روز شده:** دستیار صوتی فقط‌خواندنی، آموزشی، چندزبانه و محرمانه است. هیچ عملیات معاملاتی یا تنظیماتی انجام نمی‌دهد و معماری را فاش نمی‌کند. مشخصات کامل در بخش ۱۴ از `TIKALGO_MASTER_PROMPT.md`.
 - STT و TTS، راهنمای وابسته به صفحه، Onboarding و آموزش، به فارسی و انگلیسی
 - **مراجع:** [pipecat](https://github.com/pipecat-ai/pipecat) · [livekit/agents](https://github.com/livekit/agents) · [faster-whisper](https://github.com/SYSTRAN/faster-whisper)
 
