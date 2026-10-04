@@ -1,4 +1,4 @@
-# TikAlgo — پرامپت اجرایی جامع و ادغام‌شده (v9)
+# TikAlgo — پرامپت اجرایی جامع و ادغام‌شده (v10)
 
 > **این فایل جایگزین همه‌ی پرامپت‌های قبلی است.** پرامپت Master نسخه‌ی ۲، پرامپت‌های فازبندی‌شده، مشخصات کامل **AI Active Signals**، مشخصات کامل **Trading Terminal UI** (فاز T)، نصب **AI آفلاین**، **Graphify**، **UI/UX Pro Max** و سیستم **حافظه‌ی دائمی پروژه** در آن ادغام شده‌اند.
 > مرجع معماری: [`TIKALGO_SUPER_PLAN.md`](./TIKALGO_SUPER_PLAN.md) · قالب‌های آماده: [`bootstrap/`](./bootstrap/)
@@ -23,7 +23,7 @@
 | **دانش تریدرها و شرکت‌ها در اسکیل‌ها و AI آفلاین** | افزودن یا به‌روزرسانی دانش | بخش ۱۲ |
 | **Deploy و Commit پایان هر جلسه** | همیشه | بخش ۱۳ |
 | **دستیار صوتی و آموزشی «تیکا» (Tika): فقط‌خواندنی، محرمانه و چندزبانه** | ساخت یا ارتقای دستیار | بخش ۱۴ |
-| **سیاست مدل تصمیم: فقط Jev** | مرجع مدل‌های AI | بخش ۱۵ |
+| **مدل‌های تصمیم: Jev + مدل‌های آفلاین و ابری (قابل انتخاب)** | مرجع مدل‌های AI | بخش ۱۵ |
 | **فهرست کامل پروژه‌ها و لینک‌ها و نصب** | مرجع (۱۱۷ مخزن + لینک‌های غیرگیت‌هابی + سبک‌ها) | پیوست Z (Z.1 تا Z.15) |
 
 > 💡 **اصل حافظه‌ی دائمی:** بعد از Bootstrap، Claude Code **هرگز کل پروژه را از اول نمی‌خواند**. هر جلسه فقط `CLAUDE.md`، `docs/state/TIKALGO_STATE.md`، `graphify-out/GRAPH_REPORT.md` و `docs/state/NEXT.md` را می‌خواند و از همان نقطه ادامه می‌دهد. برای جزئیات کد از گراف Graphify پرس‌وجو می‌کند، نه از خواندن کورکورانه‌ی فایل‌ها.
@@ -59,7 +59,7 @@ ollama pull nomic-embed-text           # embedding برای RAG، حافظه و 
 curl -s http://127.0.0.1:11434/api/tags
 ```
 
-> ⚠️ **Ollama را هرگز روی اینترنت باز نکنید.** پورت 11434 فقط روی 127.0.0.1 یا شبکه‌ی داخلی Docker باشد. اگر سرور GPU ندارد، مدل‌های ۷ و ۸ میلیارد پارامتری روی CPU کندند (چند ثانیه برای هر پاسخ). پس Ollama **فقط** برای توضیح و Reasoning، دستیار تیکا و embedding استفاده می‌شود. **تصمیم‌گیری معاملاتی فقط با Jev است** (بخش ۱۵)، و Ollama هرگز تصمیم معاملاتی نمی‌گیرد.
+> ⚠️ **Ollama را هرگز روی اینترنت باز نکنید.** پورت 11434 فقط روی 127.0.0.1 یا شبکه‌ی داخلی Docker باشد. اگر سرور GPU ندارد، مدل‌های ۷ و ۸ میلیارد پارامتری روی CPU کندند (چند ثانیه برای هر پاسخ). مدل‌های Ollama هم برای توضیح، Reasoning، دستیار تیکا و embedding استفاده می‌شوند و هم **می‌توانند به‌عنوان مدل تصمیم آفلاین** انتخاب شوند (بخش ۱۵). برای تصمیم لحظه‌ای روی CPU، مدل کوچک‌تر یا timeout مناسب تنظیم کنید. Jev یکی از گزینه‌های تصمیم است.
 
 ### 1.2 اسکیل‌ها و مراجع (فقط مطالعه یا اقتباس؛ هیچ اسکیلی مستقیم در production نصب نمی‌شود)
 ```bash
@@ -137,9 +137,13 @@ HARD RULES
   explicit strategy/risk permission.
 - PAPER is the default. LIVE trading must NOT be enabled by you. LIVE AUTO requires explicit
   user confirmation in the UI + all gates green. Never send a real order during tests.
-- TypeSafe/Jev = the ONLY DECISION MODEL (structured judgments), NOT a chat model (§15). No
-  other LLM (Ollama, cloud, 9router targets) may produce or override trading decisions; when
-  Jev is unavailable the deterministic Fallback Ladder applies — never another LLM.
+- Decision models are PLUGGABLE (§15): TypeSafe/Jev is one of the supported DECISION models
+  (default; a decision model, not a chat model), alongside local/offline models (Ollama,
+  llama.cpp, vLLM) and cloud models via 9router. The user selects the decision model and an
+  ordered fallback chain in Settings. Every decision model only returns schema-validated
+  structured decisions and goes through Policy → Risk → Execution Gate; a model must pass
+  backtest + paper evaluation before it can be used for LIVE. Chain exhausted → deterministic
+  Fallback Ladder.
 - Everything configurable from Settings (DB-backed, per user), not from .env or code.
 - Secrets: API/private keys encrypted at rest, masked in UI, never in frontend, logs or
   plaintext DB. AI/LLM processes have NO access to credentials.
@@ -249,14 +253,14 @@ adapters). Follow the spec below for <S#>. No mocks/placeholders. Tests first.
 - **Trading Style:** `SCALPING, INTRADAY, SWING, POSITION, MOMENTUM, TREND, BREAKOUT, SMC, ICT, ORDER_FLOW, HYBRID, CUSTOM`
 - **Timeframes:** `1m 3m 5m 15m 30m 1h 2h 4h 6h 12h 1D 1W 1M`، با Primary TF و Confirmation TFs
 - **Strategies:** انتخاب، Create، Edit، Clone، Delete، Import/Export (JSON با schema version) و Activate؛ نسخه‌دار. حذف استراتژی‌ای که پوزیشن یا سیگنال فعال دارد مسدود می‌شود.
-- **نقش‌های مدل AI:** `default_model, signal_model, decision_model, reasoning_model, fallback_model`، با مسیریابی از طریق **9router** موجود. **TypeSafe/Jev قفل روی `decision_model`** است: در UI قابل تعویض نیست و در لیست Chat نمایش داده نمی‌شود. **Ollama محلی** فقط به‌عنوان گزینه‌ی `reasoning` و `default/fallback` برای **نقش‌های غیرتصمیمی** (توضیح، Insights و دستیار). `fallback_model` هرگز جای `decision_model` را نمی‌گیرد؛ fallback تصمیم = Fallback Ladder قطعی (بخش ۱۵).
+- **نقش‌های مدل AI:** `default_model, signal_model, decision_model, reasoning_model, fallback_model`، با مسیریابی از طریق **9router** موجود. **`decision_model` قابل انتخاب است:** TypeSafe/Jev (پیش‌فرض)، مدل‌های **آفلاین** Ollama، llama.cpp یا vLLM، یا مدل‌های ابری از طریق 9router؛ همراه با **زنجیره‌ی fallback تصمیم** به ترتیب دلخواه کاربر (مثلاً Jev ← مدل محلی ← قواعد قطعی). Jev در لیست Chat نمایش داده نمی‌شود. فقط مدل‌هایی در لیست تصمیم ظاهر می‌شوند که در Model Registry ثبت و ارزیابی شده‌اند (بخش ۱۵).
 - همه‌ی این‌ها برای هر کاربر در DB ذخیره می‌شوند و از صفحه‌ی Settings قابل تغییرند، بدون نیاز به `.env`.
 
 **S3 · AI Market Scanner**
-- اتصال اسکنر موجود به pipeline واقعی: داده‌ی بازار ← featureهای قطعی (فقط کندل‌های بسته‌شده، non-repainting) ← snapshot ← **Jev (decision)** ← Policy با آستانه‌ها ← خروجی `LONG / SHORT / HOLD / WATCH`، همراه با reasoning (توضیح از reasoning model، با fallback قاعده‌محور)
+- اتصال اسکنر موجود به pipeline واقعی: داده‌ی بازار ← featureهای قطعی (فقط کندل‌های بسته‌شده، non-repainting) ← snapshot ← **Decision Model انتخاب‌شده (پیش‌فرض Jev؛ یا مدل آفلاین یا ابری طبق بخش ۱۵)** ← Policy با آستانه‌ها ← خروجی `LONG / SHORT / HOLD / WATCH`، همراه با reasoning (توضیح از reasoning model، با fallback قاعده‌محور)
 - **فیلترها:** market، exchange، symbol، timeframe، style، strategy، model، حداقل confidence، حداقل RR و حداکثر risk
 - سیگنال‌هایی که از آستانه‌ی Validation عبور کنند **خودکار به AI Signal Watchlist** می‌روند (`VALIDATED → WATCHLIST`)
-- **Fallback Ladder:** وقتی Jev در دسترس نیست، به حالت قاعده‌محور می‌رود و `degraded=true` ثبت و نمایش داده می‌شود
+- **Fallback:** وقتی مدل تصمیم در دسترس نیست، مدل بعدی زنجیره (بخش ۱۵) و در نهایت حالت قاعده‌محور اجرا می‌شود؛ `degraded=true` ثبت و نمایش داده می‌شود
 
 **S4 · AI Signal Watchlist**
 - **عملیات:** `ADD, REMOVE, PIN, MUTE, SNOOZE(until), APPROVE(→READY), REJECT(→REJECTED), TRADE(→Execution Gate)`
@@ -598,7 +602,7 @@ mobile (bottom tab bar) and desktop, FA/EN RTL, dark/light, all states, wired to
 | **سبک معامله** | Scalping، Intraday، Swing، Position، Momentum، Trend، Breakout، SMC، ICT، Order Flow، **Volume Profile**، **Footprint**، **Wyckoff/VSA**، **Harmonic**، **Elliott**، Hybrid و Custom، هر کدام با پیش‌فرض‌های قابل تغییر (TF، RR، SL و Trailing) |
 | **تایم‌فریم** | Primary TF؛ Confirmation TFs؛ لیست TFهای فعال (1m تا 1M)؛ قانون هم‌گرایی MTF (تعداد TF لازم) |
 | **اسکنر** | بازارها، صرافی‌ها، Watchlist منبع؛ حداقل حجم و نقدشوندگی؛ فیلترهای تکنیکال و جریان؛ تناوب اسکن؛ آستانه‌های Validate؛ ارسال خودکار به Watchlist؛ حداکثر سیگنال فعال؛ زمان انقضا |
-| **مدل‌های AI** | Default، Signal، **Decision (قفل روی TypeSafe/Jev؛ کلید TypeSafe رمزنگاری‌شده در DB؛ Timeout؛ آستانه‌های Policy؛ پله‌های Fallback Ladder)**، Reasoning و Fallback؛ مسیریابی 9router؛ مدل‌های **Ollama آفلاین** (نام مدل، Context و Timeout)؛ Temperature و حداکثر توکن؛ بودجه و سقف هزینه؛ رفتار وقتی مدل در دسترس نیست (Fallback Ladder)؛ زبان توضیح‌ها |
+| **مدل‌های AI** | Default، Signal، **Decision (انتخاب مدل: Jev، آفلاین یا ابری؛ زنجیره‌ی fallback؛ مدل جدا برای PAPER و LIVE؛ کلیدها رمزنگاری‌شده در DB؛ Timeout؛ آستانه‌های Policy؛ پله‌های Fallback Ladder)**، Reasoning و Fallback؛ مسیریابی 9router؛ مدل‌های **Ollama آفلاین** (نام مدل، Context و Timeout)؛ Temperature و حداکثر توکن؛ بودجه و سقف هزینه؛ رفتار وقتی مدل در دسترس نیست (Fallback Ladder)؛ زبان توضیح‌ها |
 | **دانش و اسکیل‌ها** | فعال یا غیرفعال کردن هر اسکیل؛ نسخه؛ مجوزها (`can_trade` همیشه false مگر با تأیید)؛ افزودن یا به‌روزرسانی اسکیل و منابع دانش؛ اولویت اسکیل در هر سبک |
 | **داده و منابع** | فعال یا غیرفعال کردن منابع خبر، شبکه‌های اجتماعی، آن‌چین و Macro؛ کلیدهای API سرویس‌های داده (رمزنگاری‌شده)؛ آستانه‌ی stale داده |
 | **هشدارها** | انواع رویداد (سیگنال، نهنگ، لیکوییدیشن، خبر، Macro، پوزیشن، ریسک، اجرا و سلامت سیستم)؛ کانال‌ها (درون‌برنامه، Push، ایمیل، **Telegram** (ربات و Chat ID)، Discord و Webhook)؛ ساعات سکوت؛ Digest؛ آستانه‌ها |
@@ -683,7 +687,7 @@ skills/knowledge/<pack>/
 
 ### 12.2 اتصال به AI آفلاین (RAG محلی)
 - embedding محلی با `nomic-embed-text` از طریق Ollama ← ذخیره در **pgvector** ← بازیابی دانش مرتبط با «سبک + رژیم + نماد» قبل از هر تصمیم Reasoning
-- **Jev همچنان Decision Model است.** دانش به‌عنوان **شاهد و زمینه** به Reasoning model و Critic داده می‌شود، نه به‌عنوان دستور معامله.
+- **مدل تصمیم همان مدل انتخاب‌شده در بخش ۱۵ است (Jev، آفلاین یا ابری).** دانش به‌عنوان **شاهد و زمینه** به Reasoning model و Critic داده می‌شود، نه به‌عنوان دستور معامله.
 - درس‌های ژورنال خودمان هم در همین حافظه ذخیره و بازیابی می‌شوند (M25).
 
 ### 12.3 افزودن و به‌روزرسانی دانش و اسکیل (از UI)
@@ -805,33 +809,51 @@ per §14. Reuse existing voice/chat components if present.
 ```
 
 
-## 15. سیاست مدل تصمیم: فقط Jev
+## 15. مدل‌های تصمیم: Jev + مدل‌های آفلاین و ابری (قابل انتخاب و قابل افزودن)
 
-> **قانون:** همه‌ی تصمیم‌های معاملاتی (جهت، ورود، خروج، WAIT، و اقدام روی پوزیشن‌ها) **فقط** توسط **TypeSafe/Jev** گرفته می‌شود، چه در حالت عادی و چه در «AI آفلاین». هیچ LLM دیگری، چه Ollama، چه مدل ابری، چه مسیرهای 9router، اجازه‌ی تولید یا تغییر تصمیم معاملاتی ندارد.
+> **قاعده:** تصمیم‌گیری معاملاتی **قابل اتصال به چند مدل** است. **TypeSafe/Jev یکی از مدل‌های تصمیم** است (پیش‌فرض)، در کنار مدل‌های **آفلاین** (Ollama، llama.cpp و vLLM) و مدل‌های **ابری** (از طریق 9router). کاربر از Settings مدل تصمیم و ترتیب fallback را انتخاب می‌کند. مدل‌های جدید از طریق Model Registry اضافه می‌شوند.
+> **ثابت برای همه‌ی مدل‌ها:** هیچ مدلی مستقیم سفارش نمی‌دهد. خروجی همه‌ی مدل‌ها **تصمیم ساختاریافته** است که از Policy، Risk و Execution Gate عبور می‌کند.
 
-### 15.1 واقعیت فنی Jev (از بررسی پروژه‌های مرجع)
-- در [jev-trader](https://github.com/buberlo/jev-trader) و [Jev-Trades](https://github.com/zadescoxp/Jev-Trades)، Jev یک **سرویس میزبانی‌شده‌ی TypeSafe** است که با کلید API (`TYPESAFE_API_KEY`) فراخوانی می‌شود و در حدود ۷۰ تا ۵۰۰ میلی‌ثانیه پاسخ می‌دهد. در این مخزن‌ها **وزن مدل یا نسخه‌ی قابل اجرای محلی منتشر نشده است.**
-- [Jev-trading](https://github.com/Jev-trading/Jev-trading) برنامه‌ی دسکتاپ است و مشخص نکرده که خود مدل کاملاً آفلاین اجرا می‌شود یا نه.
-- **نتیجه:** «Jev آفلاین» فقط وقتی ممکن است که TypeSafe نسخه‌ی محلی یا on-prem ارائه دهد. Claude Code باید این را از مستندات رسمی TypeSafe یا تماس با آن‌ها بررسی کند. **تا آن زمان:**
-  - **تصمیم‌گیری = Jev از طریق API** (با کلید رمزنگاری‌شده در Settings، نه `.env`)
-  - **AI آفلاین (Ollama) = فقط** توضیح، Reasoning، Insights، دستیار تیکا و embedding و RAG
-  - **اگر Jev در دسترس نباشد** (قطع اینترنت، خطا یا timeout)، **Fallback Ladder قطعی** طبق الگوی jev-trader اجرا می‌شود: `NORMAL → REDUCED_SIZE → HOLD_LAST_STATE (با TTL کوتاه) → DETERMINISTIC_RULES (فقط مدیریت پوزیشن‌های باز و سفت کردن SL؛ ورود جدید ممنوع) → CIRCUIT_BREAKER`. **هیچ LLM دیگری جای Jev تصمیم نمی‌گیرد.**
-  - اگر TypeSafe نسخه‌ی محلی ارائه دهد، با همان رابط `DecisionModel` به‌عنوان `jev-local` ثبت می‌شود و Router در حالت آفلاین از آن استفاده می‌کند.
+### 15.1 مدل‌های تصمیم پشتیبانی‌شده
+| مدل | نوع | آنلاین یا آفلاین | یادداشت |
+|---|---|---|---|
+| **TypeSafe/Jev** | Decision model تخصصی (بردار احتمال تایپ‌شده) | **آنلاین (API)** | پیش‌فرض. در [jev-trader](https://github.com/buberlo/jev-trader) و [Jev-Trades](https://github.com/zadescoxp/Jev-Trades) به‌صورت سرویس TypeSafe با کلید API (`TYPESAFE_API_KEY`) استفاده شده است. اگر TypeSafe نسخه‌ی on-prem بدهد، با نام `jev-local` اضافه می‌شود. |
+| **Ollama** (مثل Qwen2.5 یا Llama 3.1) | LLM عمومی با خروجی JSON طبق schema | **آفلاین** | تصمیم‌گیری بدون اینترنت و بدون هزینه‌ی API؛ روی CPU کندتر است |
+| **llama.cpp و vLLM** | LLM محلی | **آفلاین** | vLLM برای سرور دارای GPU |
+| **مدل‌های ابری از طریق 9router** (مثل Claude یا مدل‌های OpenRouter) | LLM عمومی | آنلاین | برای Reasoning عمیق یا به‌عنوان مدل تصمیم |
+| **مدل ML کلاسیک** (LightGBM یا مدل‌های Qlib، آموزش‌دیده روی داده‌ی خودمان) | Classifier یا Regressor | **آفلاین** | سریع، قطعی و قابل بک‌تست کامل |
+| **قواعد قطعی (Deterministic Rules)** | بدون مدل | آفلاین | آخرین پله‌ی fallback |
 
-### 15.2 قرارداد تصمیم (Decision Contract)
-- **ورودی Jev:** snapshot قطعی از featureها (فقط کندل‌های بسته‌شده، non-repainting، حدود ۴۰۰ توکن)، رژیم بازار، شواهد (TA، SMC، جریان سفارش، OI، فاندینگ، نهنگ‌ها و اخبار) و وضعیت حساب **بدون هیچ credential**
-- **خروجی Jev:** بردار احتمال **تایپ‌شده** (JSON با schema)؛ اعتبارسنجی schema؛ کالیبراسیون (Platt)
-- **Policy Engine:** کد ما با آستانه‌های قابل تنظیم احتمال‌ها را به `LONG / SHORT / HOLD / WATCH` و اقدامات پوزیشن تبدیل می‌کند. بعد مسیر Risk ← Execution Gate طی می‌شود (بدون استثنا).
-- **لاگ:** هر درخواست و پاسخ Jev در `agent_log` (JSONL یا DB) با شناسه‌ی سیگنال، نسخه، تأخیر و وضعیت degraded ثبت می‌شود، بدون داده‌ی حساس.
+### 15.2 انتخاب و زنجیره‌ی fallback (از Settings)
+- برای هر کاربر و **جداگانه برای PAPER و LIVE**: `decision_model` اصلی، به‌علاوه‌ی **زنجیره‌ی fallback** به ترتیب دلخواه. نمونه‌ها:
+  - آنلاین: `Jev → Ollama(qwen2.5) → Deterministic`
+  - کاملاً آفلاین: `Ollama(qwen2.5) → LightGBM → Deterministic`
+- امکان **حالت Ensemble یا رأی‌گیری** (اختیاری): چند مدل نظر می‌دهند و Policy با قاعده‌ی تعریف‌شده ترکیب می‌کند (مثلاً اکثریت یا حداقل confidence).
+- وقتی همه‌ی مدل‌های زنجیره در دسترس نیستند، **Fallback Ladder قطعی** اجرا می‌شود: `REDUCED_SIZE → HOLD_LAST_STATE (با TTL) → DETERMINISTIC_RULES (فقط مدیریت پوزیشن‌های باز و سفت کردن SL؛ ورود جدید ممنوع) → CIRCUIT_BREAKER`
+- **برای LIVE** فقط مدل‌هایی قابل انتخاب‌اند که وضعیت `approved_for_live` دارند (۱۵.۴).
 
-### 15.3 تنظیمات (در بخش ۱۰، گروه مدل‌های AI)
-کلید TypeSafe (رمزنگاری‌شده و ماسک‌شده)؛ endpoint؛ timeout؛ تعداد تلاش مجدد؛ آستانه‌های Policy برای هر سبک؛ پله‌ها و TTLهای Fallback Ladder؛ نمایش وضعیت سلامت Jev در UI؛ و `jev-local` (در صورت وجود).
+### 15.3 قرارداد تصمیم (یکسان برای همه‌ی مدل‌ها)
+- **ورودی:** snapshot قطعی از featureها (فقط کندل‌های بسته‌شده، non-repainting، حدود ۴۰۰ توکن)، رژیم، شواهد (TA، SMC، جریان سفارش، OI، فاندینگ، نهنگ‌ها و اخبار) و وضعیت حساب **بدون هیچ credential**
+- **خروجی:** JSON تایپ‌شده (direction probabilities، confidence، entry zone، invalidation و reasoning کوتاه) که با **schema validation** بررسی می‌شود. پاسخ نامعتبر رد می‌شود و پله‌ی بعدی زنجیره اجرا می‌شود.
+- برای LLMهای عمومی: **structured output / JSON mode** و temperature پایین
+- **کالیبراسیون** confidence برای هر مدل (Platt یا Isotonic) روی نتایج ژورنال
+- **Policy Engine** (کد ما) احتمال‌ها را با آستانه‌های قابل تنظیم به `LONG / SHORT / HOLD / WATCH` و اقدامات پوزیشن تبدیل می‌کند، و بعد Risk ← Execution Gate
+- **لاگ:** مدل، نسخه، تأخیر، پله‌ی زنجیره، وضعیت degraded، ورودی و خروجی (بدون داده‌ی حساس)
 
-### 15.4 تست‌ها
-- با هر مدل دیگری که به‌عنوان decision تنظیم شود ← رد (validation)
-- Jev unreachable ← Fallback Ladder، بدون ورود جدید، `degraded=true` در UI و هشدار
-- پاسخ Jev با schema نامعتبر ← رد و fallback
-- کلید TypeSafe هرگز در لاگ، frontend یا prompt مدل‌های دیگر ظاهر نمی‌شود
+### 15.4 افزودن مدل جدید و ارتقا (Model Registry)
+- **ثبت:** `model_id، provider (typesafe | ollama | llamacpp | vllm | 9router | ml)، version، offline: bool، latency، cost، capabilities، status`
+- **چرخه‌ی وضعیت:** `registered → benchmarked (روی دیتاست ارزیابی و بک‌تست) → paper_approved → approved_for_live`. هر ارتقا تأیید کاربر یا مدیر لازم دارد.
+- **مقایسه‌ی مدل‌ها:** دقت جهت، Expectancy، کالیبراسیون، تأخیر و هزینه، در یک داشبورد
+
+### 15.5 تنظیمات (در بخش ۱۰، گروه مدل‌های AI)
+مدل تصمیم و زنجیره‌ی fallback (جدا برای PAPER و LIVE)؛ حالت Ensemble؛ کلید TypeSafe و کلیدهای ابری (رمزنگاری‌شده و ماسک‌شده)؛ endpoint و مدل‌های Ollama؛ timeout و retry؛ آستانه‌های Policy برای هر سبک؛ پله‌ها و TTLهای Fallback Ladder؛ نمایش سلامت و تأخیر هر مدل در UI.
+
+### 15.6 تست‌ها
+- انتخاب مدل بدون `approved_for_live` برای LIVE ← رد
+- مدل اول در دسترس نیست ← رفتن به مدل بعدی زنجیره، با `degraded=true` در UI؛ همه‌ی مدل‌ها در دسترس نیستند ← Fallback Ladder و بدون ورود جدید
+- خروجی با schema نامعتبر ← رد و رفتن به پله‌ی بعد
+- **تست کاملاً آفلاین:** با اینترنت قطع، مسیر سیگنال تا سفارش PAPER با مدل محلی کار می‌کند
+- هیچ کلیدی در لاگ، frontend یا prompt مدل‌ها ظاهر نمی‌شود
 
 ---
 
