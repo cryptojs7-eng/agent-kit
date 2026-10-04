@@ -1,48 +1,48 @@
-# TikAlgo — Logo & Brand Assets (v4)
+# TikAlgo — Logo & Brand Assets (v5)
 
-**Concept — AI × Trading, modern & minimal:** a bold **phosphor-green tile** with a single dark
-**rising price line** that ends in an **orange AI node** — market move + AI signal in one gesture.
-The wordmark is lowercase **tikalgo** set in **Sora SemiBold (600)**, converted to vector outlines
-(no font needed at runtime), single color, with the dot of the *i* in the same **orange**.
+**Concept — AI × Trading monogram:** the letters **t i** followed by a **rising tick** — it reads
+as the **k** of *tikalgo* and, at the same time, as an **up-trend / "approved signal" check**.
+The dot of the *i* is the **orange AI node**. Everything sits in a **sharp-cornered square**
+(no rounded corners) for a precise, institutional feel.
 
-**Typeface:** [Sora](https://fonts.google.com/specimen/Sora) — SIL Open Font License 1.1
-(free for commercial use, including logos). Use Sora for brand headings; UI text per the Design
-System (Inter/Geist, Persian Peyda/IRANSansX).
+**Typeface:** [Space Grotesk](https://fonts.google.com/specimen/Space+Grotesk) SemiBold (600) —
+SIL Open Font License 1.1 (free for commercial use, incl. logos). Letters are converted to
+vector outlines (no font needed at runtime). The tick is a custom geometric shape matched to the
+font's stem width and x-height, with a flat base on the baseline.
 
-| File | Use |
-|---|---|
-| `tikalgo-logo-on-dark.svg` | Primary horizontal logo (mark + wordmark) on dark backgrounds |
-| `tikalgo-logo.svg` | Horizontal logo on light backgrounds |
-| `tikalgo-logo-currentcolor.svg` | UI component: wordmark inherits CSS `color` (theme-aware) |
-| `tikalgo-wordmark-on-dark.svg` / `tikalgo-wordmark.svg` | Wordmark only |
-| `tikalgo-mark.svg` | App icon, avatar, collapsed sidebar, Tika assistant avatar |
-| `favicon.svg` | Browser favicon (same as mark) |
-| `png/icon-192.png`, `png/icon-512.png` | PWA manifest icons |
-| `png/apple-touch-icon.png` | iOS home-screen icon (180×180) |
-| `png/favicon-32.png` | Legacy favicon |
-| `png/tikalgo-logo*.png`, `png/tikalgo-wordmark*.png` | Raster logos (transparent) |
+## Variants
+| File | Description | Use |
+|---|---|---|
+| `tikalgo-mark.svg` ⭐ | Dark square · white **ti** · **green** tick · orange dot | **Primary** icon, favicon, app icon, Tika avatar |
+| `tikalgo-mark-dark-mono.svg` | Dark square · all white · orange dot | Single-color contexts on dark |
+| `tikalgo-mark-green.svg` | Green square · dark glyphs · orange dot | Marketing, social avatars, high-impact |
+| `tikalgo-mark-light.svg` | White square + dark frame · dark **ti** · green tick | Light backgrounds, print |
+| `tikalgo-mark-light-mono.svg` | White square + dark frame · all dark · orange dot | Documents, single-color print |
+| `tikalgo-logo.svg` | Primary mark + dark wordmark | Horizontal logo on light |
+| `tikalgo-logo-on-dark.svg` | Framed mark + white wordmark | Horizontal logo on dark (header) |
+| `tikalgo-logo-currentcolor.svg` | Wordmark inherits CSS `color` | Theme-aware UI header |
+| `tikalgo-wordmark.svg` / `-on-dark.svg` | **tikalgo** only, orange i-dot | Text-only placements |
+| `favicon.svg` | = primary mark | Browser favicon |
+| `png/icon-192.png`, `png/icon-512.png` | Primary mark | PWA manifest |
+| `png/apple-touch-icon.png`, `png/favicon-32.png` | Primary mark | iOS / legacy favicon |
+| `png/mark-green-512.png`, `png/mark-light-512.png` | Alternate marks | Social / print |
+| `png/tikalgo-logo*.png`, `png/tikalgo-wordmark*.png` | Raster logos (transparent) | Docs, slides |
 
 ## Colors
 | Token | Hex | Role |
 |---|---|---|
-| `--brand-bg` | `#0A1712` | Deep green-black: price line in the mark, dark theme base |
-| `--brand-white` | `#FFFFFF` | Wordmark on dark |
-| `--brand-green` | `#3DDC2F` | Phosphor green: logo tile, up/profit on dark |
-| `--brand-green-dark` | `#1FA81F` | Green on light backgrounds (better contrast) |
-| `--brand-ink` | `#0A1712` | Wordmark on light |
-| `--brand-orange` | `#FF7A1A` | AI node / signal accent (i-dot, mark dot) — use sparingly |
-| `--down` | `#F6465D` | Loss / down (semantic, not a brand color) |
-
-Semantic use in the product: **up/profit = brand green**, **down/loss = `#F6465D`**,
-**AI elements & highlights = orange**.
+| `--brand-bg` | `#0A1712` | Deep green-black: mark square, dark theme base |
+| `--brand-white` | `#FFFFFF` | Glyphs on dark |
+| `--brand-green` | `#3DDC2F` | Phosphor green: tick (trend), green mark, up/profit on dark |
+| `--brand-green-dark` | `#1FA81F` | Green on light backgrounds |
+| `--brand-orange` | `#FF7A1A` | AI node (i-dot) and AI highlights — use sparingly |
+| `--down` | `#F6465D` | Loss / down (semantic) |
 
 ## Rules
-- Clear space around the logo ≥ height of the letter **o**. Minimum width: 96 px (horizontal
-  logo), 72 px (wordmark), 16 px (mark).
-- Always lowercase `tikalgo`. Do not stretch, rotate, outline, add shadows/gradients, or swap
-  the green/orange roles; keep the wordmark single-color.
-- In the terminal header use `tikalgo-logo-currentcolor.svg` inline so it follows the theme.
-- Clicking the logo opens the Command Menu (MASTER_PROMPT §5T, T1).
+- Square stays **sharp-cornered**; do not round, rotate, stretch, outline, shadow or gradient.
+- Clear space ≥ 25% of the square's width on all sides. Minimum size: 16 px (mark), 120 px wide (horizontal logo).
+- Always lowercase `tikalgo`. Keep the orange dot orange in every variant.
+- In the terminal header use `tikalgo-logo-currentcolor.svg` inline; clicking it opens the Command Menu (MASTER_PROMPT §5T, T1).
 
 ## Install into the TikAlgo frontend (done by Claude Code in T1)
 ```bash
