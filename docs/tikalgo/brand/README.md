@@ -1,4 +1,4 @@
-# TikAlgo — Logo & Brand Assets (v7)
+# TikAlgo — Logo & Brand Assets (v8)
 
 **Concept — AI × Trading monogram:** the letters **t i** followed by a **green k**: a near-vertical
 left arm rising to the height of the *t*, a **small flat base** at the corner (like the foot of a
@@ -9,7 +9,7 @@ Everything sits in a **rounded square** (corner radius = 20% of the side).
 **Typeface:** [Space Grotesk](https://fonts.google.com/specimen/Space+Grotesk) SemiBold (600) —
 SIL Open Font License 1.1 (free for commercial use, incl. logos). Letters are converted to
 vector outlines (no font needed at runtime). The k is custom geometry matched to the font's stem width: left arm 5°,
-foot 0.35 × stem, right arm a constant-width quadratic curve.
+foot 0.3 × stem, right arm a narrow constant-width quadratic curve.
 
 ## Variants
 | File | Description | Use |
@@ -30,9 +30,9 @@ foot 0.35 × stem, right arm a constant-width quadratic curve.
 | `png/tikalgo-logo*.png`, `png/tikalgo-wordmark*.png` | Raster logos (transparent) | Docs, slides |
 
 ## Tika — AI assistant avatar (`tika/`)
-A blend of the **logo** and a **person**: the same rounded dark square as the logo, a minimal
-human bust in brand green with a white face, a **green headset** (assistant), the **orange AI
-node** as the headset microphone (the logo's i-dot), and a smile drawn with the logo's curve.
+A natural, friendly person in the logo's rounded dark square: warm skin tone, dark hair,
+eyebrows, nose and a natural smile; a green brand shirt with collar, a **green headset**
+(assistant) and the **orange AI node** as the microphone (the logo's i-dot).
 
 | File | State |
 |---|---|
