@@ -1,33 +1,44 @@
-# TikAlgo — Logo & Brand Assets
+# TikAlgo — Logo & Brand Assets (v2)
 
-Minimal geometric wordmark **tikalgo** (lowercase, English) drawn as pure SVG strokes — no font
-dependency, crisp at any size. The **yellow square** (dot of the *i*) is the brand accent: a
-"signal" point. The app mark reuses the wordmark's **t** + accent square.
+**Concept — AI × Trading:** a solid **green price line** runs through white **neural-network
+nodes** (with faint synapse links behind it), then continues as a **dotted orange forecast** that
+ends in an arrow: *the market's past (green) → the AI's prediction (orange)*.
+The wordmark is a minimal geometric lowercase **tikalgo**, drawn as pure SVG strokes (no font
+dependency): **tik** in white/ink, **algo** in phosphor green, and the dot of the *i* is an
+**orange signal square** — the same orange as the AI forecast in the mark.
 
 | File | Use |
 |---|---|
-| `tikalgo-logo.svg` | Wordmark on light backgrounds |
-| `tikalgo-logo-on-dark.svg` | Wordmark on dark backgrounds |
-| `tikalgo-logo-currentcolor.svg` | UI component: letters inherit CSS `color` (theme-aware); accent stays yellow |
-| `tikalgo-mark.svg` | App icon / avatar / header compact logo |
+| `tikalgo-logo-on-dark.svg` | Primary horizontal logo (mark + wordmark) on dark backgrounds |
+| `tikalgo-logo.svg` | Horizontal logo on light backgrounds |
+| `tikalgo-logo-currentcolor.svg` | UI component: "tik" inherits CSS `color` (theme-aware) |
+| `tikalgo-wordmark-on-dark.svg` / `tikalgo-wordmark.svg` | Wordmark only |
+| `tikalgo-mark.svg` | App icon, avatar, collapsed sidebar, Tika assistant avatar |
 | `favicon.svg` | Browser favicon (same as mark) |
-| `tikalgo-mark-bars-alt.svg` | Alternative mark (rising bars) — not primary |
 | `png/icon-192.png`, `png/icon-512.png` | PWA manifest icons |
 | `png/apple-touch-icon.png` | iOS home-screen icon (180×180) |
 | `png/favicon-32.png` | Legacy favicon |
-| `png/tikalgo-logo*.png` | Raster wordmarks (1074×384, transparent) |
+| `png/tikalgo-logo*.png`, `png/tikalgo-wordmark*.png` | Raster logos (transparent) |
 
 ## Colors
 | Token | Hex | Role |
 |---|---|---|
-| `--brand-ink` | `#0B0E11` | Wordmark on light, icon background |
-| `--brand-paper` | `#EAECEF` | Wordmark on dark, icon glyph |
-| `--brand-accent` | `#F0B90B` | Accent square (signal) — use sparingly |
+| `--brand-bg` | `#0A1712` | Deep green-black: icon background, dark theme base |
+| `--brand-white` | `#FFFFFF` | Wordmark "tik" on dark, neural nodes |
+| `--brand-green` | `#3DDC2F` | Phosphor green: "algo" + price line on dark backgrounds |
+| `--brand-green-dark` | `#1FA81F` | Green on light backgrounds (better contrast) |
+| `--brand-orange` | `#FF7A1A` | AI / forecast / signal accent — use sparingly |
+| `--down` | `#F6465D` | Loss / down (semantic, not a brand color) |
+
+Semantic use in the product: **up/profit = brand green**, **down/loss = `#F6465D`**,
+**AI elements & highlights = orange**.
 
 ## Rules
-- Clear space around the wordmark ≥ height of the letter **o**. Minimum width: 72 px (wordmark), 16 px (mark).
-- Always lowercase `tikalgo`. Do not stretch, rotate, outline, add shadows, or recolor the accent.
-- In the terminal header use `tikalgo-logo-currentcolor.svg` inline so it follows the dark/light theme.
+- Clear space around the logo ≥ height of the letter **o**. Minimum width: 96 px (horizontal
+  logo), 72 px (wordmark), 16 px (mark).
+- Always lowercase `tikalgo`. Do not stretch, rotate, outline, add shadows/gradients, or swap
+  the green/orange roles.
+- In the terminal header use `tikalgo-logo-currentcolor.svg` inline so it follows the theme.
 - Clicking the logo opens the Command Menu (MASTER_PROMPT §5T, T1).
 
 ## Install into the TikAlgo frontend (done by Claude Code in T1)
@@ -37,11 +48,13 @@ cp docs/tikalgo/brand/favicon.svg                 web/public/favicon.svg
 cp docs/tikalgo/brand/png/favicon-32.png          web/public/favicon-32.png
 cp docs/tikalgo/brand/png/apple-touch-icon.png    web/public/apple-touch-icon.png
 cp docs/tikalgo/brand/png/icon-192.png docs/tikalgo/brand/png/icon-512.png web/public/
-cp docs/tikalgo/brand/tikalgo-logo*.svg docs/tikalgo/brand/tikalgo-mark.svg web/public/brand/
+mkdir -p web/public/brand && cp docs/tikalgo/brand/*.svg web/public/brand/
 ```
 ```html
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/favicon-32.png" sizes="32x32">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#0A1712">
 ```
-PWA `manifest.json`: icons `icon-192.png` (192×192) and `icon-512.png` (512×512), `theme_color` `#0B0E11`.
+PWA `manifest.json`: icons `icon-192.png` (192×192) and `icon-512.png` (512×512),
+`theme_color` / `background_color` `#0A1712`.

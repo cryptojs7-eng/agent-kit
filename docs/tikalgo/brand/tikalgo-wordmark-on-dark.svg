@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-6 -4 179 64" role="img" aria-label="tikalgo">
+  <title>tikalgo</title>
+  <g fill="none" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+    <g stroke="#FFFFFF">
+      <path d="M6 6 V33 Q6 40 13 40"/><path d="M0 16 H14"/>
+      <path d="M24 16 V40"/>
+      <path d="M35 4 V40"/><path d="M49 16 L37 29"/><path d="M41 25 L51 40"/>
+    </g>
+    <g stroke="#3DDC2F">
+      <circle cx="73" cy="28" r="12"/><path d="M85 16 V40"/>
+      <path d="M97 4 V40"/>
+      <circle cx="121" cy="28" r="12"/><path d="M133 16 V44 Q133 54 123 54 H113"/>
+      <circle cx="155" cy="28" r="12"/>
+    </g>
+  </g>
+  <rect x="20.5" y="2.5" width="7" height="7" rx="1.6" fill="#FF7A1A"/>
+</svg>

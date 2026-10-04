@@ -576,7 +576,7 @@ npm install -g uipro-cli
 ```
 **جریان کار UI در هر ماژول:**
 1. Claude Code با اسکیل UI/UX Pro Max **Design System** تیک‌الگو را تولید یا به‌روز می‌کند: `docs/design/DESIGN_SYSTEM.md` و توکن‌ها در `tailwind.config` و CSS variables
-2. **قوانین ثابت برند:** مینیمال SaaS؛ فونت فارسی Peyda یا IRANSansX (پشتیبان: Vazirmatn) و انگلیسی Inter یا Geist؛ اعداد tabular؛ RTL کامل؛ تم تیره و روشن؛ رنگ‌های فعلی سبک بایننس (`#0b0e11`، `#f0b90b`، `#0ecb81`، `#f6465d`) به‌عنوان پایه
+2. **قوانین ثابت برند:** مینیمال SaaS؛ فونت فارسی Peyda یا IRANSansX (پشتیبان: Vazirmatn) و انگلیسی Inter یا Geist؛ اعداد tabular؛ RTL کامل؛ تم تیره و روشن؛ پالت رسمی برند TIKALGO (از `brand/README.md`): سفید `#FFFFFF`، سبز فسفری `#3DDC2F` (روی تیره) و `#1FA81F` (روی روشن)، نارنجی `#FF7A1A` (رنگ AI و تأکید)، زمینه‌ی تیره `#0A1712`. رنگ‌های معنایی: سود و صعود = سبز برند؛ ضرر و نزول = `#F6465D`؛ هشدار = نارنجی
 3. برای هر صفحه: Wireframe، بعد کامپوننت، بعد همه‌ی حالت‌ها (loading، empty، error)، بعد چک‌لیست دسترس‌پذیری (WCAG 2.2 AA)
 4. موبایل: نوار پایین ثابت، safe-area و هدف لمسی ≥ ۴۴px
 - **مرجع:** [ui-ux-pro-max-skill](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill) · [راهنمای Claude Code](https://www.mintlify.com/nextlevelbuilder/ui-ux-pro-max-skill/platforms/claude-code)
