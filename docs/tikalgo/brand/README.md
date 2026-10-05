@@ -38,9 +38,10 @@ Monogram letter corners are **softly rounded** (vector opening, r = 3.5 at 100-u
 ## Tika — AI assistant avatar (`tika/`)
 **Tika is a woman.** A young, elegant professional drawn in a natural (semi-realistic, not
 cartoon) style on a **white rounded square** (thin `#E2E7E4` edge so it stays visible on white
-pages): **loose, voluminous curly blonde hair** falling to the shoulders, soft skin shading and
-contouring, **elongated almond eyes** with green irises and a subtle wing, **long tapered brows**,
-**full, elongated lips**. Natural sloping shoulders in a **black suit** with notched lapels, a
+pages): **loose, natural wavy-curly blonde hair** drawn as hundreds of fine strands with a side part,
+falling past the shoulders; natural face proportions with soft volumetric shading (temples,
+cheekbones, jaw, nose) and highlights; **elongated almond eyes** with green irises and a subtle wing, **long tapered brows**,
+**full, elongated lips**. Natural body form (tapered neck, sloping shoulders, rounded shoulder line) in a **black suit** with notched lapels, a
 **white shirt** and a **green tie**. On the heart side, the **tikalgo lettering alone in 3D gold**
 (no badge or background). She wears the **green headset** (assistant) with the **orange AI node**
 as the microphone (the logo's i-dot).
@@ -51,12 +52,13 @@ as the microphone (the logo's i-dot).
 | `tika/tika-avatar-listening.svg` | Listening (green ring) — mic active |
 | `tika/tika-avatar-thinking.svg` | Thinking (orange eyes) — generating an answer |
 | `tika/tika-avatar-speaking.svg` | Speaking (animated orange ring + pulsing mic; SVG/SMIL) |
-| `tika/png/*.png` | 512/256/128/64 px exports |
+| `tika/png/*.png` | 512/256/128/64 px exports — prefer these ≤ 128 px (the strand SVG is ~420 KB) |
 
 Respect `prefers-reduced-motion`: show the static listening/thinking files instead of the
 animated speaking file when reduced motion is requested.
 
-Alternate personas (optional, selectable in Settings → Tika → Avatar): `tika/alt/blonde-bob/`
+Alternate personas (optional, selectable in Settings → Tika → Avatar): `tika/alt/curly/` (stylized
+curls), `tika/alt/blonde-bob/`
 (dark background, gold badge), `tika/alt/dark-hair/` (long dark hair, green jacket), `tika/alt/male/` and `tika/alt/poirot/`
 (small curled mustache + bow tie).
 
