@@ -36,12 +36,14 @@ Monogram letter corners are **softly rounded** (vector opening, r = 3.5 at 100-u
 | `png/tikalgo-logo*.png`, `png/tikalgo-wordmark*.png` | Raster logos (transparent) | Docs, slides |
 
 ## Tika — AI assistant avatar (`tika/`)
-**Tika is a woman.** A young, elegant professional in the logo's rounded dark square:
-**medium-length (shoulder) blonde hair** with a soft fringe, **elongated almond eyes** with winged
-liner and green irises, **long arched brows**, **full, elongated lips**, light blush. She wears a
-**black suit** with a **white shirt** and a slim black tie, and a **3D gold tikalgo pin** (the
-monogram engraved in a gold badge) on the chest over the heart. She wears the **green headset**
-(assistant) with the **orange AI node** as the microphone (the logo's i-dot).
+**Tika is a woman.** A young, elegant professional drawn in a natural (semi-realistic, not
+cartoon) style on a **white rounded square** (thin `#E2E7E4` edge so it stays visible on white
+pages): **loose, voluminous curly blonde hair** falling to the shoulders, soft skin shading and
+contouring, **elongated almond eyes** with green irises and a subtle wing, **long tapered brows**,
+**full, elongated lips**. Natural sloping shoulders in a **black suit** with notched lapels, a
+**white shirt** and a **green tie**. On the heart side, the **tikalgo lettering alone in 3D gold**
+(no badge or background). She wears the **green headset** (assistant) with the **orange AI node**
+as the microphone (the logo's i-dot).
 
 | File | State |
 |---|---|
@@ -54,8 +56,8 @@ monogram engraved in a gold badge) on the chest over the heart. She wears the **
 Respect `prefers-reduced-motion`: show the static listening/thinking files instead of the
 animated speaking file when reduced motion is requested.
 
-Alternate personas (optional, selectable in Settings → Tika → Avatar): `tika/alt/dark-hair/`
-(previous version: long dark hair, green jacket), `tika/alt/male/` and `tika/alt/poirot/`
+Alternate personas (optional, selectable in Settings → Tika → Avatar): `tika/alt/blonde-bob/`
+(dark background, gold badge), `tika/alt/dark-hair/` (long dark hair, green jacket), `tika/alt/male/` and `tika/alt/poirot/`
 (small curled mustache + bow tie).
 
 ## Colors
