@@ -1,4 +1,4 @@
-# TikAlgo — Logo & Brand Assets (v11)
+# TikAlgo — Logo & Brand Assets (v12)
 
 **Concept — AI × Trading monogram:** the letters **t i** followed by a **green k** drawn exactly like
 the approved reference: a tall, almost-vertical left arm (to the height of the *t*) and a slimmer
@@ -9,8 +9,8 @@ right arm rising at 42°, meeting in a sharp point on the baseline. It reads as 
 **Typefaces** (both SIL Open Font License 1.1 — free for commercial use, incl. logos):
 - **Monogram:** [Space Grotesk](https://fonts.google.com/specimen/Space+Grotesk) SemiBold (600).
 - **Full wordmark "tikalgo":** [Unbounded](https://fonts.google.com/specimen/Unbounded) SemiBold
-  (600) — wide and modern, corners rounded (r = 5), with a **green k** (echoing the monogram) and
-  the orange i-dot.
+  (600) — wide and modern, corners rounded (r = 5), single color with the orange i-dot.
+  Alternate with a green k: `alt/tikalgo-wordmark-green-k*.svg`.
  Letters are converted to
 vector outlines (no font needed at runtime). The k is custom geometry matched to the font's stem width: left arm 7°,
 right arm 42° at 0.8 × stem width.
@@ -27,7 +27,8 @@ Monogram letter corners are **softly rounded** (vector opening, r = 3.5 at 100-u
 | `tikalgo-logo.svg` | Primary mark + dark wordmark | Horizontal logo on light |
 | `tikalgo-logo-on-dark.svg` | Framed mark + white wordmark | Horizontal logo on dark (header) |
 | `tikalgo-logo-currentcolor.svg` | Wordmark inherits CSS `color` | Theme-aware UI header |
-| `tikalgo-wordmark.svg` / `-on-dark.svg` | **tikalgo** in Unbounded, green k, orange i-dot | Text-only placements |
+| `tikalgo-wordmark.svg` / `-on-dark.svg` | **tikalgo** in Unbounded 600, orange i-dot | Text-only placements |
+| `alt/tikalgo-wordmark-green-k*.svg` | Same with a green k | Alternate |
 | `favicon.svg` | = primary mark | Browser favicon |
 | `png/icon-192.png`, `png/icon-512.png` | Primary mark | PWA manifest |
 | `png/apple-touch-icon.png`, `png/favicon-32.png` | Primary mark | iOS / legacy favicon |
