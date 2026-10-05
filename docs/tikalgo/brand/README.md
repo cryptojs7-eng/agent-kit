@@ -1,15 +1,15 @@
-# TikAlgo — Logo & Brand Assets (v8)
+# TikAlgo — Logo & Brand Assets (v9)
 
-**Concept — AI × Trading monogram:** the letters **t i** followed by a **green k**: a near-vertical
-left arm rising to the height of the *t*, a **small flat base** at the corner (like the foot of a
-7), and a right arm that **curves** up to x-height. It reads as the **k** of *tikalgo*, an
-**up-trend**, and an **approved-signal check**. The dot of the *i* is the **orange AI node**.
-Everything sits in a **rounded square** (corner radius = 20% of the side).
+**Concept — AI × Trading monogram:** the letters **t i** followed by a **green k** drawn exactly like
+the approved reference: a tall, almost-vertical left arm (to the height of the *t*) and a slimmer
+right arm rising at 42°, meeting in a sharp point on the baseline. It reads as the **k** of
+*tikalgo*, an **up-trend**, and an **approved-signal check**. The dot of the *i* is the
+**orange AI node**. Everything sits in a **rounded square** (corner radius = 20% of the side).
 
 **Typeface:** [Space Grotesk](https://fonts.google.com/specimen/Space+Grotesk) SemiBold (600) —
 SIL Open Font License 1.1 (free for commercial use, incl. logos). Letters are converted to
-vector outlines (no font needed at runtime). The k is custom geometry matched to the font's stem width: left arm 5°,
-foot 0.3 × stem, right arm a narrow constant-width quadratic curve.
+vector outlines (no font needed at runtime). The k is custom geometry matched to the font's stem width: left arm 7°,
+right arm 42° at 0.8 × stem width.
 
 ## Variants
 | File | Description | Use |
