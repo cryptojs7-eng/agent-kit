@@ -53,6 +53,8 @@ natural face proportions with soft volumetric shading and highlights, **large bl
 | `tika/tika-avatar-speaking.svg` | Speaking (animated orange ring + pulsing mic; SVG/SMIL) |
 | `tika/png/*.png` | 512/256/128/64 px exports — prefer these ≤ 128 px (the strand SVG is ~300 KB) |
 
+Photorealistic version: see `tika/PHOTO_PROMPT.md` (image-model brief + post-processing into the brand frame).
+
 Respect `prefers-reduced-motion`: show the static listening/thinking files instead of the
 animated speaking file when reduced motion is requested.
 
