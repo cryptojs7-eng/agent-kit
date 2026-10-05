@@ -17,7 +17,7 @@
     <ellipse cx="28" cy="27.6" rx="1.25" ry="1.55" fill="#FF7A1A"/>
     <ellipse cx="36" cy="27.6" rx="1.25" ry="1.55" fill="#FF7A1A"/>
     <path d="M32 27.8 Q31.1 30.2 32.5 30.4" fill="none" stroke="#D69A74" stroke-width="1" stroke-linecap="round"/>
-    <g fill="#2E211B" transform="translate(32 30.9) scale(0.82 0.78) translate(-32 -30.9)">
+    <g fill="#2E211B" transform="translate(32 30.9) scale(0.62 0.58) translate(-32 -30.9)">
       <path id="mh" d="M32 31.0 C33.6 30.1 35.8 30.0 37.6 31.0 C38.7 31.6 39.7 31.5 40.2 30.6 C40.6 29.8 40.2 28.9 39.4 28.9 C38.8 28.9 38.5 29.5 38.8 30.0 C38.3 29.8 38.0 29.5 38.2 29.0 C38.6 28.0 40.2 27.9 40.9 28.9 C41.7 30.0 41.2 31.9 39.6 32.6 C37.6 33.4 35.0 32.4 32.0 32.6 Z"/>
       <use href="#mh" transform="translate(64 0) scale(-1 1)"/>
     </g>
