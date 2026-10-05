@@ -36,25 +36,24 @@ Monogram letter corners are **softly rounded** (vector opening, r = 3.5 at 100-u
 | `png/tikalgo-logo*.png`, `png/tikalgo-wordmark*.png` | Raster logos (transparent) | Docs, slides |
 
 ## Tika — AI assistant avatar (`tika/`)
-A natural, friendly person in the logo's rounded dark square: warm skin tone, dark hair,
-eyebrows, nose and a natural smile; a green brand shirt with collar, a **green headset**
-(assistant) and the **orange AI node** as the microphone (the logo's i-dot).
+**Tika is a woman.** A natural, friendly professional in the logo's rounded dark square: long
+dark hair, light make-up (lashes, blush, lipstick), a white shirt collar with a dark **necktie**
+under a brand-green jacket, and the **tikalgo logo on the chest over the heart**. She wears the
+**green headset** (assistant) with the **orange AI node** as the microphone (the logo's i-dot).
 
 | File | State |
 |---|---|
 | `tika/tika-avatar.svg` ⭐ | Default / idle |
 | `tika/tika-avatar-listening.svg` | Listening (green ring) — mic active |
 | `tika/tika-avatar-thinking.svg` | Thinking (orange eyes) — generating an answer |
-| `tika/tika-avatar-speaking.svg` | Speaking (animated orange pulse ring + antenna; SVG/SMIL) |
+| `tika/tika-avatar-speaking.svg` | Speaking (animated orange ring + pulsing mic; SVG/SMIL) |
 | `tika/png/*.png` | 512/256/128/64 px exports |
-
-**Alternate character — `tika/poirot/`:** the same person and brand styling with a dapper,
-curled **Poirot-style mustache** and a dark **bow tie** — the "market detective" persona. Same four
-states (idle, listening, thinking, speaking) and PNG exports. Choose the persona in Settings →
-Tika → Avatar.
 
 Respect `prefers-reduced-motion`: show the static listening/thinking files instead of the
 animated speaking file when reduced motion is requested.
+
+Alternate personas (optional, selectable in Settings → Tika → Avatar): `tika/alt/male/` and
+`tika/alt/poirot/` (small curled mustache + bow tie).
 
 ## Colors
 | Token | Hex | Role |
