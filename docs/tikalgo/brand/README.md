@@ -36,10 +36,12 @@ Monogram letter corners are **softly rounded** (vector opening, r = 3.5 at 100-u
 | `png/tikalgo-logo*.png`, `png/tikalgo-wordmark*.png` | Raster logos (transparent) | Docs, slides |
 
 ## Tika — AI assistant avatar (`tika/`)
-**Tika is a woman.** A natural, friendly professional in the logo's rounded dark square: long
-dark hair, light make-up (lashes, blush, lipstick), a white shirt collar with a dark **necktie**
-under a brand-green jacket, and the **tikalgo logo on the chest over the heart**. She wears the
-**green headset** (assistant) with the **orange AI node** as the microphone (the logo's i-dot).
+**Tika is a woman.** A young, elegant professional in the logo's rounded dark square:
+**medium-length (shoulder) blonde hair** with a soft fringe, **elongated almond eyes** with winged
+liner and green irises, **long arched brows**, **full, elongated lips**, light blush. She wears a
+**black suit** with a **white shirt** and a slim black tie, and a **3D gold tikalgo pin** (the
+monogram engraved in a gold badge) on the chest over the heart. She wears the **green headset**
+(assistant) with the **orange AI node** as the microphone (the logo's i-dot).
 
 | File | State |
 |---|---|
@@ -52,8 +54,9 @@ under a brand-green jacket, and the **tikalgo logo on the chest over the heart**
 Respect `prefers-reduced-motion`: show the static listening/thinking files instead of the
 animated speaking file when reduced motion is requested.
 
-Alternate personas (optional, selectable in Settings → Tika → Avatar): `tika/alt/male/` and
-`tika/alt/poirot/` (small curled mustache + bow tie).
+Alternate personas (optional, selectable in Settings → Tika → Avatar): `tika/alt/dark-hair/`
+(previous version: long dark hair, green jacket), `tika/alt/male/` and `tika/alt/poirot/`
+(small curled mustache + bow tie).
 
 ## Colors
 | Token | Hex | Role |
