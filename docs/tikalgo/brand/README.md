@@ -1,4 +1,4 @@
-# TikAlgo — Logo & Brand Assets (v9)
+# TikAlgo — Logo & Brand Assets (v10)
 
 **Concept — AI × Trading monogram:** the letters **t i** followed by a **green k** drawn exactly like
 the approved reference: a tall, almost-vertical left arm (to the height of the *t*) and a slimmer
@@ -10,6 +10,8 @@ right arm rising at 42°, meeting in a sharp point on the baseline. It reads as 
 SIL Open Font License 1.1 (free for commercial use, incl. logos). Letters are converted to
 vector outlines (no font needed at runtime). The k is custom geometry matched to the font's stem width: left arm 7°,
 right arm 42° at 0.8 × stem width.
+All letter corners and edges are **softly rounded** (vector opening with radius 3 at 100-unit
+font size, ≈ 0.26 × stem), in both the monogram and the wordmark.
 
 ## Variants
 | File | Description | Use |
