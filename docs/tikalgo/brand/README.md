@@ -48,6 +48,11 @@ eyebrows, nose and a natural smile; a green brand shirt with collar, a **green h
 | `tika/tika-avatar-speaking.svg` | Speaking (animated orange pulse ring + antenna; SVG/SMIL) |
 | `tika/png/*.png` | 512/256/128/64 px exports |
 
+**Alternate character — `tika/poirot/`:** the same person and brand styling with a dapper,
+curled **Poirot-style mustache** and a dark **bow tie** — the "market detective" persona. Same four
+states (idle, listening, thinking, speaking) and PNG exports. Choose the persona in Settings →
+Tika → Avatar.
+
 Respect `prefers-reduced-motion`: show the static listening/thinking files instead of the
 animated speaking file when reduced motion is requested.
 
