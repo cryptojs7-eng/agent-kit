@@ -1,5 +1,5 @@
-# TIKALGO Quant Intelligence (TQI) + TAMRS + Offline AI Decision Engine (ODE)
-## Research report and implementation specification (v3)
+# TIKALGO Quant Intelligence (TQI) + TAMRS + Offline AI Decision Engine (ODE) + Continuous Learning (CLS)
+## Research report and implementation specification (v4)
 
 > **خلاصه برای مالک پروژه (فارسی):** این سند هدفش ارتقای سه چیز است:
 > 1. **موتور سیگنال:** دقیق‌تر، رژیم‌محور و قابل توضیح.
@@ -11,6 +11,14 @@
 > - **بخش دوم (TAMRS):** استراتژی اختصاصی تیکالگو. این استراتژی هستهٔ «Strategy Ensemble» در بخش اول است و از کتاب‌های Schwager، Covel/Turtle و Tharp استخراج شده.
 >
 > - **بخش سوم (ODE):** «موتور تصمیم آفلاین». یک لایهٔ تصمیم‌گیری محلی است و به هیچ API ابری وابسته نیست. بالای موتورهای موجود می‌نشیند، شواهد را ترکیب می‌کند و LONG، SHORT، WAIT، REDUCE یا EXIT پیشنهاد می‌دهد. Risk Engine حق وتو دارد و LIVE فقط بعد از دروازه‌های III.0 باز می‌شود.
+>
+> - **بخش چهارم (CLS):** یادگیری مداوم و کنترل‌شده در سه حلقه:
+>   - A: آمار و کالیبراسیون روزانه؛
+>   - B: مدل قهرمان و چالشگر؛
+>   - C: پژوهش از منابع مطالعاتی و تاریخچهٔ معاملات خود سیستم.
+>
+>   مقایسه با سیستم فعلی (baseline) اندازه‌گیری می‌شود.
+> - **بخش پنجم:** کتابخانهٔ تحقیقاتی گسترده، یعنی منابع مهمی که خودم بررسی و اضافه کردم و کاربرد هرکدام در سند.
 >
 > بخش «چطور در پروژه استفاده کنیم» (I.X) ترتیب دقیق پیاده‌سازی را روی کد موجود نشان می‌دهد.
 > اجرای آن با `TIKALGO_MASTER_PROMPT.md` §17 روی سرور انجام می‌شود.
@@ -50,6 +58,8 @@
 | W (weaknesses) | I.W + Part II §12 |
 | X (next steps / how to use in the project) | I.X |
 | **Offline AI Decision Engine** (deliverables 1–24 of the ODE brief) | **Part III**. Items 1, 17–21 are produced on the server; 22 is in III.17 |
+| **Continuous Learning System** (3 loops, champion/challenger, knowledge base, baseline A/B) | **Part IV** |
+| **Extended research library** (23 additional sources → concrete spec changes) | **Part V** |
 
 ---
 
@@ -1340,3 +1350,205 @@ Changes are audit-logged. Hard risk caps are admin-only.
 | 14 | Paper | Q9 |
 | 15 | Shadow | Q13, Q16 |
 | 16 | LIVE activation exposed (locked until III.0) | Q16 |
+
+---
+
+# PART IV: Continuous Learning System (CLS)
+
+> **خلاصهٔ فارسی:** هدف این بخش این است که مدل تصمیم‌گیری **به‌طور مداوم** خودش را ارتقا دهد. از سه منبع یاد می‌گیرد:
+> - دادهٔ بازار؛
+> - **تاریخچهٔ معاملات خودش**، شامل معامله‌هایی که رد کرده؛
+> - منابع مطالعاتی، یعنی کتاب‌ها، مقاله‌ها و اسکیل‌ها.
+>
+> یادگیری در **سه حلقه با سرعت متفاوت** انجام می‌شود:
+> - **حلقهٔ A (روزانه):** آمار و کالیبراسیون را خودکار به‌روز می‌کند.
+> - **حلقهٔ B (هفتگی/ماهانه):** مدل‌های «چالشگر» را آموزش می‌دهد و با مدل «قهرمان» مقایسه می‌کند.
+> - **حلقهٔ C (پژوهشی):** فرضیه‌های جدید را از منابع مطالعاتی و تحلیل شکست‌ها می‌سازد.
+>
+> اصل ایمنی: یادگیری **مداوم** است ولی **کنترل‌شده**. هیچ تغییری بدون آزمون آماری وارد مدل اصلی نمی‌شود. تغییری که ریسک LIVE را **افزایش** دهد هرگز خودکار اعمال نمی‌شود و تأیید دستی لازم دارد.
+
+## IV.1 Three learning loops
+| Loop | Cadence | What learns | Data | Applied how | Safety |
+|---|---|---|---|---|---|
+| **A: Statistics & calibration** | Daily (and after every N closed trades) | Bayesian expectancy per (strategy × regime × profile), §III.6 `E_hist`; probability calibration (isotonic refit on recent outcomes); cost/slippage model from TCA; per-reason no-trade value | Own journal (LIVE > PAPER > SHADOW counterfactuals), last fills | **Automatic**, within bounds: each parameter may move ≤ X% per update, and the shrinkage prior keeps it near the validated value | Applied automatically in PAPER/SHADOW. In LIVE, applied automatically **only if it reduces risk or confidence**; risk-increasing changes wait for Loop B validation |
+| **B: Champion / challenger models** | Weekly retrain candidates; promotion evaluated monthly | M1–M3 meta-models, regime model, fusion weights | Expanding point-in-time history + own decision dataset (taken + rejected with counterfactual labels) | A challenger runs in **SHADOW** in parallel with the champion on the **same candidates**; promotion rules in IV.4 | Every retrain is a trial in the experiment ledger (PBO and DSR include it). Auto-promotion is allowed in PAPER only. LIVE needs manual approval |
+| **C: Research & knowledge** | Continuous backlog; monthly review | New alphas, strategies, features and rule changes | Knowledge base (books, papers, notes), failure-taxonomy aggregates (§III.13), market anomalies, drift alerts | Hypothesis → alpha registry → full research pipeline (§I.J, §I.R) → new versions | Nothing from Loop C changes production without passing the full lifecycle |
+
+## IV.2 What the system learns from
+1. **Market history:** point-in-time, ever-growing; the same Feature Factory.
+2. **Its own decisions** (the most valuable source over time):
+   - **taken trades:** the realised R, MFE, MAE and slippage;
+   - **rejected candidates:** counterfactual triple-barrier labels (§III.9);
+   - **regime and strategy outcomes;**
+   - **failure classes** (§III.13).
+
+   Sample weights: LIVE 1.0, PAPER 0.7, SHADOW-counterfactual 0.5, backtest 0.3 (configurable), with **time decay** (half-life ~ 6–12 months) and **regime-balanced sampling**, so a recent regime doesn't erase older ones.
+3. **Execution history:** TCA per venue, symbol, size and session feeds the cost model directly (Loop A).
+4. **Research knowledge** (Loop C): see IV.3.
+
+## IV.3 Knowledge base from study sources
+- **Inputs:**
+  - the research documents in this file;
+  - MASTER_PROMPT §12 trader and firm knowledge skills;
+  - legally owned books and notes;
+  - public papers (Part I sources);
+  - monthly failure reports from the journal.
+- **Structure:** the inputs are stored as **principle cards**:
+  ```
+  card_id, source, citation (page/section/url), principle, codable_rule, related_features,
+  related_strategies, regimes, evidence_status (untested|supported|rejected), linked_alpha_ids, updated_at
+  ```
+  They are embedded with a **local** embedding model and stored in the existing pgvector.
+- **Local LLM (optional) as research assistant:**
+  - retrieves cards relevant to a failure cluster or drift alert, e.g. "losses in RANGE with high funding";
+  - proposes **hypotheses with citations**.
+  
+  Each hypothesis becomes an `idea` entry in the alpha registry. Only the quantitative pipeline can turn it into `validated`.
+- Cards are updated with test results: `supported` or `rejected`. The knowledge base therefore learns which ideas actually work **in TIKALGO's markets**.
+
+## IV.4 Champion / challenger promotion rules (Loop B)
+- **Same-candidate comparison:** champion and challenger score the identical candidate stream in SHADOW, with the same costs. The decision trace stores both outputs.
+- **Promote the challenger to PAPER champion only if all hold:**
+  - N ≥ 100 shared candidates;
+  - Δ net expectancy of the filtered trades > 0 with bootstrap p < 0.05;
+  - max drawdown not worse by more than 10%;
+  - calibration ECE ≤ the champion's + 0.02;
+  - no-trade filter value ≥ the champion's;
+  - fold consistency ≥ 70%;
+  - the PBO over the retrain history is still < 0.3.
+- **LIVE promotion:** the same criteria **plus** III.0 gates 3–6 (shadow period, infrastructure, registry, manual approval). The new model starts at reduced risk (¼ → ½ → full over 50 and 100 trades).
+- **Automatic rollback:** if a newly promoted model triggers `MODEL_DEGRADATION` (§III.15) within its first 100 trades, the previous champion is restored automatically (rollback is risk-reducing, so it is allowed without approval).
+- **Model lineage:** champion → challenger history is kept in the model registry. The "learning curve" (champion quality over time) is a dashboard metric.
+
+## IV.5 Guardrails against bad learning
+| Risk | Guardrail |
+|---|---|
+| **Selection bias:** learning only from trades it chose | Counterfactual labels for rejected candidates, plus a small **exploration budget in PAPER only** (e.g. 5% of rejected-but-borderline candidates are paper-traded), never in LIVE |
+| **Overfitting to the recent regime** | Minimum training window (≥ 2 years HTF where data exists), regime-balanced sampling, time-decay floor, regime-stratified validation |
+| **Overfitting through repeated retraining** | Every retrain counts as a trial; PBO and DSR are computed over the full ledger; MinBTL check; promotion only on shadow evidence collected **after** training |
+| **Catastrophic forgetting** | Keep long history; stress-regime test sets are fixed (crash, panic, range); a challenger must not degrade on them |
+| **Data poisoning / bad data** | Data-quality gates; rows from incident windows are excluded; anomaly detection on labels |
+| **Reward hacking** (e.g. fewer trades to look good) | Promotion metric = net expectancy **and** DD **and** no-trade value **and** trade-count floor (≥ 70% of the champion's opportunity capture) |
+| **Feedback loops / herding with our own impact** | TCA monitors our own market impact; size caps vs liquidity |
+| **Silent drift** | §III.15 monitors; Loop A cannot hide degradation, because calibration changes are logged and bounded |
+
+## IV.6 Baseline and measuring improvement (does learning actually help?)
+1. **Q0 baseline:** before any change, record the **current** TIKALGO system's statistics per market profile from existing trade history (paper and live) and from a fresh costed backtest of the current logic:
+   - net expectancy (R), PF, win rate;
+   - max DD, Sharpe, Sortino, Calmar;
+   - trade count;
+   - fees, slippage and funding.
+   
+   Stored as `baseline_v0`.
+2. **A/B in Q9 onward:** the current logic (`baseline_v0`) and the new stack run **side by side** in PAPER/SHADOW on the same symbols and periods.
+3. **Monthly scorecard** (dashboard + report):
+
+   | Metric | Baseline | Current champion | Δ | Trend |
+   |---|---|---|---|---|
+   | Net expectancy (R) | | | | |
+   | Profit factor | | | | |
+   | Max DD | | | | |
+   | Calibration ECE | | | | |
+   | No-trade value | | | | |
+   | Cost per trade (R) | | | | |
+   | Failure-class mix | | | | |
+
+4. **Learning effectiveness:**
+   - the slope of champion net expectancy over successive promotions;
+   - the share of Loop C hypotheses that were validated;
+   - the time to detect degradation.
+
+## IV.7 Operations
+- **Jobs** (existing worker/scheduler infrastructure):
+  - `cls.loopA.daily`;
+  - `cls.loopB.retrain.weekly`;
+  - `cls.loopB.promotion.monthly`;
+  - `cls.loopC.research.monthly`;
+  - `cls.scorecard.monthly`.
+- **Resources:**
+  - Loop A runs in seconds to minutes.
+  - Loop B (LightGBM) runs in minutes to an hour on CPU. It is scheduled off-peak, with priority below the live decision path, and must never compete with live inference.
+- **Reproducibility:** every artefact is versioned (dataset, features, model, config) and can be rebuilt from the ledger.
+- **Settings:**
+  - `learning.enabled`;
+  - `learning.loopA.enabled`, `bounds`;
+  - `learning.loopB.cadence`, `min_shared_candidates`, `auto_promote_paper` (default **on**);
+  - `learning.auto_promote_live` (default **off**, locked; admin-only, and even when on it requires the III.0 gates);
+  - `learning.exploration_paper_pct`;
+  - `learning.sample_weights`, `time_decay_half_life`.
+
+## IV.8 Tests
+- Loop A bounds are respected; risk-increasing updates are blocked in LIVE.
+- Counterfactual labelling equals the triple-barrier simulator.
+- Champion/challenger evaluation uses identical candidates.
+- Promotion rules: each criterion is checked; a failing case is rejected.
+- Automatic rollback on degradation.
+- Every retrain is recorded in the ledger and counted in the PBO.
+- The exploration budget never applies in LIVE.
+- Knowledge-base hypotheses can't reach production without the pipeline.
+- Baseline A/B reports are reproducible.
+
+## IV.9 Honest expectation
+Continuous learning makes the system **adaptive**: it notices when an edge weakens, re-weights strategies by what currently works, improves its cost estimates and calibration, and turns its own mistakes into tested improvements.
+
+It **does not guarantee** excellent results. Markets adapt, and some periods have no exploitable edge. In those periods the correct "learned" behaviour is to **trade less** (WAIT).
+
+Success is measured by the IV.6 scorecard against `baseline_v0`, over months, net of costs.
+
+---
+
+# PART V: Extended research library (selected beyond the user-provided sources)
+
+> **خلاصهٔ فارسی:** این‌ها منابع مهمی هستند که خودم انتخاب کردم، علاوه بر منابعی که شما فرستادید. از همه‌شان فقط اصول عمومی و منتشرشده برداشته شده است.
+> - مقاله‌های داوری‌شده و کتاب‌های مرجع کوانت؛
+> - تحقیقات اختصاصی کریپتو؛
+> - اجرا و ریزساختار بازار؛
+> - کالیبراسیون و توضیح‌پذیری مدل؛
+> - drift مدل؛
+> - حاکمیت ریسک مدل.
+>
+> ستون آخر جدول نشان می‌دهد هر منبع کجای این سند استفاده شده و چه چیزی را بهتر کرده است. همهٔ این منابع به‌صورت «کارت اصل» وارد پایگاه دانش حلقهٔ C می‌شوند (IV.3).
+
+| # | Source | Key public finding / method | Used in TIKALGO (section → change) |
+|---|---|---|---|
+| X1 | **López de Prado, *Advances in Financial Machine Learning* (Wiley, 2018)** | Triple-barrier labelling, **meta-labelling**, purged k-fold CV with embargo, sample uniqueness weights, feature importance (MDA/MDI) | §III.7, §III.11, §I.R: the core of the ODE labelling and validation design |
+| X2 | **Moskowitz, Ooi, Pedersen, "Time Series Momentum" (JFE, 2012)** | A past 12-month return predicts the future return of the same asset across asset classes. Volatility-scaled positions | Part II trend components; volatility-scaled sizing; a hypothesis for multi-market trend |
+| X3 | **Hurst, Ooi, Pedersen, "A Century of Evidence on Trend-Following Investing" (AQR)** | Trend following was positive across a century, in many regimes and crises (crisis alpha) | Supports trend as the core return source; stress-regime behaviour expectations |
+| X4 | **Asness, Moskowitz, Pedersen, "Value and Momentum Everywhere" (JF, 2013)** | Momentum and value premia appear across markets and are negatively correlated with each other | Orthogonal alpha principle (§I.K, §III.5); a cross-sectional momentum family |
+| X5 | **Liu, Tsyvinski, "Risks and Returns of Cryptocurrency" (RFS, 2021)** | Crypto returns are driven by crypto-specific factors (momentum, investor attention), not traditional asset exposure | Crypto profile: momentum and attention/social features as hypotheses; weak macro weight by default for crypto |
+| X6 | **Liu, Tsyvinski, Wu, "Common Risk Factors in Cryptocurrency" (JF, 2022)** | Crypto market, size and momentum factors explain the cross-section | Crypto factor exposure in portfolio construction (§I.M); cross-sectional crypto alpha |
+| X7 | **Schmeling, Schrimpf, Todorov, "Crypto Carry" (BIS Working Paper No. 1087, 2023, rev. 2025)** | The futures–spot basis (carry) in crypto is large and time-varying, linked to trend-chasing demand and crash risk | Funding and basis as **crowding/risk** features (§II.2, §I.E E11); carry hypothesis in the alpha registry |
+| X8 | **Harvey, Liu, Zhu, "…and the Cross-Section of Expected Returns" (RFS, 2016)** | With hundreds of factors tested, the significance hurdle should be **t > 3.0**, not 2.0 | Alpha acceptance: require t ≥ 3 for new alphas (in addition to PBO and DSR) (§I.R) |
+| X9 | **Bailey, López de Prado, "The Deflated Sharpe Ratio" (JPM, 2014)** | Corrects the Sharpe for selection bias, non-normality and the number of trials | §I.R: DSR gate formula |
+| X10 | **Grinold, Kahn, *Active Portfolio Management*** (Fundamental Law of Active Management) | IR ≈ IC × √breadth: many **independent** small edges beat one strong edge | The "breadth" metric = the number of independent alphas (§I.K, orthogonal alpha); why independence is required |
+| X11 | **Moreira, Muir, "Volatility-Managed Portfolios" (JF, 2017)** | Scaling exposure inversely to recent variance improves Sharpe for many factors | Portfolio volatility targeting (§I.M), the `m_vol` multiplier (§II.6.3) |
+| X12 | **Ledoit, Wolf, "Honey, I Shrunk the Sample Covariance Matrix" (2004)** | Shrinkage covariance is far more stable than the sample covariance | §I.M covariance estimation |
+| X13 | **Hamilton, "A New Approach to the Economic Analysis of Nonstationary Time Series…" (Econometrica, 1989)** | Markov regime-switching models | §I.I regime model (HMM/regime-switching as an L2 candidate) |
+| X14 | **Brunnermeier, Pedersen, "Market Liquidity and Funding Liquidity" (RFS, 2009)** | Liquidity spirals: funding constraints amplify drops and liquidity dries up in stress | LIQUIDITY_STRESS / PANIC regime inputs: leverage, liquidations, funding dislocations (§I.I) |
+| X15 | **Almgren, Chriss, "Optimal Execution of Portfolio Transactions" (2000)** | A trade-off between market impact and timing risk; optimal slicing schedules | Execution Intelligence: TWAP/VWAP slicing and the impact model (§I.O) |
+| X16 | **Cont, Kukanov, Stoikov, "The Price Impact of Order Book Events" (J. Fin. Econometrics, 2014)** | **Order Flow Imbalance (OFI)** at the best quotes explains short-term price changes linearly, scaled by depth | An LTF order-flow feature (OFI), better than raw DOM snapshots (§II.2 order-flow family) |
+| X17 | **Easley, López de Prado, O'Hara, "Flow Toxicity and Liquidity in a High-Frequency World" (RFS, 2012)** | VPIN as a measure of order-flow toxicity, elevated before liquidity events | A toxicity feature for the LIQUIDITY_STRESS layer and execution caution |
+| X18 | **Kaufman, *Trading Systems and Methods*** | The Efficiency Ratio and adaptive trend measures; system-design practice | ER as the primary trend-efficiency feature (§II.2, §II.3) |
+| X19 | **Lundberg, Lee, "A Unified Approach to Interpreting Model Predictions" (NeurIPS, 2017)** and **TreeSHAP (2020)** | SHAP values give consistent local attributions; TreeSHAP is exact and fast for tree models | §III.14 explainability |
+| X20 | **Guo et al., "On Calibration of Modern Neural Networks" (ICML, 2017)** | Modern models are often miscalibrated; ECE as a metric; temperature/isotonic scaling | §III.7 calibration and §III.15 ECE monitor |
+| X21 | **Gama et al., "A Survey on Concept Drift Adaptation" (ACM Computing Surveys, 2014)** | Drift detection and adaptation strategies; the risks of blind retraining | §III.15 and Part IV: controlled drift response and champion/challenger |
+| X22 | **US Federal Reserve / OCC SR 11-7, "Guidance on Model Risk Management" (2011)** | Model validation, effective challenge, ongoing monitoring, inventory, governance | §I.Q governance; champion/challenger as "effective challenge" (IV.4) |
+| X23 | **Kelly criterion (Kelly 1956; Thorp's practical work)** | Growth-optimal sizing; full Kelly is very volatile, so practitioners use **fractional Kelly** | A cap check: the fixed-fractional `r` is never above ¼-Kelly implied by the validated expectancy and variance (§II.6.3) |
+
+### Concrete improvements these sources add to the spec
+1. **Alpha acceptance** (X8, X9): a new alpha needs t ≥ 3, DSR > 0.95 **and** PBO < 0.3.
+2. **Breadth metric** (X10): the dashboard shows the count of independent active alphas (pairwise return |ρ| < 0.3). The goal is more independent small edges, not one big model.
+3. **Volatility targeting** (X11, X12): portfolio-level vol targeting with a shrinkage covariance, as an extra down-scaling multiplier (never above 1× the base risk).
+4. **Sizing sanity** (X23): `r` ≤ ¼-Kelly fraction from the validated expectancy and variance. Otherwise reduce `r`.
+5. **Order flow** (X16, X17): OFI and VPIN replace raw DOM for LTF timing and the stress layer.
+6. **Crypto-specific** (X5–X7): crypto factor exposures (market, size, momentum) in portfolio construction; funding and basis as crowding features; low default macro weight for crypto unless validated.
+7. **Execution** (X15): an Almgren-Chriss-style slicing rule when order size > k% of 1-minute depth.
+8. **Governance** (X22): an "effective challenge" reviewer checklist on each LIVE promotion.
+
+### Research protocol for adding new sources (continuous)
+- Monthly, Loop C scans:
+  - new peer-reviewed or working papers (SSRN, arXiv q-fin, BIS, NBER);
+  - practitioner research (AQR, Man, Two Sigma insights, CME, exchanges' research).
+- Each relevant item becomes a principle card with a citation and status `untested`.
+- Only items with a **codable, testable** rule enter the alpha registry.
+- Popularity alone is not a reason to add anything.
