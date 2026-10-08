@@ -941,18 +941,19 @@ We will use IP-bound keys without withdrawal permission. Thank you.
 
 ---
 
-## 17. هوش کوانت تیکالگو (TQI) و استراتژی اختصاصی TAMRS: پرامپت اجرایی Q0 تا Q16
+## 17. هوش کوانت تیکالگو (TQI)، استراتژی TAMRS و موتور تصمیم آفلاین (ODE): پرامپت اجرایی Q0 تا Q16
 
 > **مرجع کامل:** [`strategy/TIKALGO_QUANT_INTELLIGENCE_AND_TAMRS.md`](./strategy/TIKALGO_QUANT_INTELLIGENCE_AND_TAMRS.md)
 > - **بخش اول (TQI):** معماری نهادی سیستم، شامل لایهٔ داده، فیچر، آلفا، رژیم، مدل متا، پورتفولیو، ریسک، اجرا، اخبار/LLM، حاکمیت مدل و ضدبیش‌برازش. از اصول **عمومی** JPMorgan، Two Sigma، Man AHL، AQR، BlackRock و BIS و از مقالات Bailey و López de Prado و RL استخراج شده است.
 > - **بخش دوم (TAMRS):** استراتژی اختصاصی. از کتاب‌های Schwager، Covel/Turtle و Tharp استخراج شده است.
+> - **بخش سوم (ODE):** موتور تصمیم آفلاین، برای معاملات واقعی. لایهٔ تصمیم محلی است و در مسیر سفارش هیچ API ابری ندارد. شامل این‌هاست: قرارداد فیچر تصمیم (DFC)، meta-labeling با LightGBM یا مدل لجستیک، برچسب triple-barrier، هوش «معامله نکن»، Fail-safe، ژورنال و طبقه‌بندی خطا، پایش drift، و دروازه‌های LIVE در III.0.
 >
 > **هدف:** ارتقای موتور سیگنال، مدیریت معاملات و مدیریت سرمایه روی همین کد موجود. الگوریتم محرمانهٔ هیچ نهادی کپی یا ادعا نمی‌شود.
 
 ### پرامپت (کامل کپی کنید و به Claude Code روی سرور بدهید)
 ```text
 You are the Lead Quant Architect, AI Researcher and Senior Trading-System Engineer of the EXISTING TIKALGO platform. Continue per CLAUDE.md and docs/state/TIKALGO_STATE.md (do not re-read the whole repo; query Graphify).
-Mission: upgrade TIKALGO's signal engine, trade management and capital management by implementing docs/tikalgo/strategy/TIKALGO_QUANT_INTELLIGENCE_AND_TAMRS.md (Part I = TQI architecture, Part II = TAMRS strategy) on the existing codebase, phase by phase following its section I.X (Q0–Q16). Do one phase per session unless told otherwise. Report to me in Persian.
+Mission: upgrade TIKALGO's signal engine, trade management and capital management by implementing docs/tikalgo/strategy/TIKALGO_QUANT_INTELLIGENCE_AND_TAMRS.md (Part I = TQI architecture, Part II = TAMRS strategy, Part III = OFFLINE AI DECISION ENGINE above the existing engines) on the existing codebase, phase by phase following §I.X (Q0–Q16) and the step map §III.X. Do one phase per session unless told otherwise. Report to me in Persian.
 
 CRITICAL RULES:
 - No toy bot, standalone framework, parallel engine, mock data, fake success or UI without backend. Reuse/extend existing engines and contracts (feature, SMC/ICT, regime, scanner, strategy, AI decision, backtest, paper, risk, execution, market-data, news/sentiment, Redis, Postgres/Timescale, workers, APIs, frontend). Version any contract you must change.
@@ -962,6 +963,8 @@ CRITICAL RULES:
 - Point-in-time only: every series has ts + available_at (+ vintage for macro); as-of joins; past-only normalization; purged CV + embargo for ML; no revised macro data in history.
 - Every backtest/model report shows GROSS and NET (fees, spread, slippage, funding, borrow, impact, latency). Log every experiment (n_trials) in the experiment ledger; compute PBO (CSCV) and Deflated Sharpe where practical.
 - Never weaken/delete existing tests. Never report numbers you did not compute from real stored data; if data is missing, say so.
+- OFFLINE decision path: no OpenAI/Claude/Gemini/OpenRouter/hosted-model calls in the order path; local CPU inference (LightGBM/logistic/ONNX; optional local LLM via Ollama on 127.0.0.1 only for news structuring/explanations, async, never numbers, never orders). Hosted/cloud models (incl. hosted Jev) = research/explanation only (Part III §III.2). Add a test that fails on any outbound AI host from the decision path. Fail-safe → WAIT (§III.16).
+- AI recommends; Risk Engine vetoes/resizes; size/leverage never increase with confidence. Measure NO-TRADE quality (§III.9). LIVE only after §III.0 gates, at ¼ risk for the first 50 trades.
 - Every decision writes an immutable Decision Trace (regime, strategy, top features+direction, confidence, E[edge], E[R], risk, conflicts, reasons for/against, decision LONG|SHORT|WAIT|REDUCE|EXIT, model/feature/data versions).
 
 PHASES (from §I.X):
@@ -969,6 +972,7 @@ Q0 assessment (deliverables A,B,C + data-coverage table) → Q1 research docs ad
 
 Each phase: tests for its scope (timestamp integrity, leakage, regime, alpha, routing, model prediction, portfolio, risk limits, correlation, execution cost/slippage, news timestamps, macro PIT, model versioning, decision trace, backtest/walk-forward, paper), then build/typecheck/lint/all tests, Graphify update, save STATE/NEXT/CHANGELOG_AI/DECISIONS/BACKEND_GAPS, deploy & commit (§13).
 
+ODE REPORT (Persian, deliverables 1–24 of Part III): assessment · reused modules · ODE architecture · DFC · model architecture · training pipeline · labeling · regime/strategy/risk/portfolio/execution integration · journal · explainability · monitoring · anti-overfitting · files changed · tests · backtest · walk-forward · paper · model resource benchmark (measured) · weaknesses · next steps.
 FINAL REPORT (Persian, cumulative, deliverables A–X): A current architecture assessment · B reusable modules · C missing capabilities · D lessons per public source · E source→principle→implementation · F final architecture · G model hierarchy · H features · I regime · J alpha · K ensemble · L meta-model · M portfolio · N risk · O execution · P news/LLM · Q governance · R anti-overfitting · S tests added · T files modified · U backtest results (real, gross & net, data ranges, N, n_trials, PBO/DSR) · V paper/shadow results · W remaining weaknesses · X exact next steps.
 ```
 

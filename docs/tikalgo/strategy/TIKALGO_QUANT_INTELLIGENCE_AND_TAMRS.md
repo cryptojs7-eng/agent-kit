@@ -1,5 +1,5 @@
-# TIKALGO Quant Intelligence (TQI) + TAMRS
-## Research report and implementation specification (v2)
+# TIKALGO Quant Intelligence (TQI) + TAMRS + Offline AI Decision Engine (ODE)
+## Research report and implementation specification (v3)
 
 > **خلاصه برای مالک پروژه (فارسی):** این سند هدفش ارتقای سه چیز است:
 > 1. **موتور سیگنال:** دقیق‌تر، رژیم‌محور و قابل توضیح.
@@ -9,6 +9,8 @@
 > سند دو بخش دارد:
 > - **بخش اول (TQI):** معماری «نهادی» سیستم: لایهٔ داده، کارخانهٔ فیچر و آلفا، رژیم، مدل متا، پورتفولیو، ریسک، اجرا، اخبار و LLM، حاکمیت مدل و ضدبیش‌برازش. این بخش از اصول **عمومی و منتشرشده** نهادها و مقالات علمی استخراج شده است (کپی الگوریتم محرمانه نیست).
 > - **بخش دوم (TAMRS):** استراتژی اختصاصی تیکالگو. این استراتژی هستهٔ «Strategy Ensemble» در بخش اول است و از کتاب‌های Schwager، Covel/Turtle و Tharp استخراج شده.
+>
+> - **بخش سوم (ODE):** «موتور تصمیم آفلاین». یک لایهٔ تصمیم‌گیری محلی است و به هیچ API ابری وابسته نیست. بالای موتورهای موجود می‌نشیند، شواهد را ترکیب می‌کند و LONG، SHORT، WAIT، REDUCE یا EXIT پیشنهاد می‌دهد. Risk Engine حق وتو دارد و LIVE فقط بعد از دروازه‌های III.0 باز می‌شود.
 >
 > بخش «چطور در پروژه استفاده کنیم» (I.X) ترتیب دقیق پیاده‌سازی را روی کد موجود نشان می‌دهد.
 > اجرای آن با `TIKALGO_MASTER_PROMPT.md` §17 روی سرور انجام می‌شود.
@@ -47,6 +49,7 @@
 | S, T, U, V (tests, files, backtest, paper/shadow results) | Produced on the server: phases Q2–Q18 |
 | W (weaknesses) | I.W + Part II §12 |
 | X (next steps / how to use in the project) | I.X |
+| **Offline AI Decision Engine** (deliverables 1–24 of the ODE brief) | **Part III**. Items 1, 17–21 are produced on the server; 22 is in III.17 |
 
 ---
 
@@ -899,3 +902,441 @@ Rules:
 - **Small samples:** S-RV and S-SQ will have small samples per (profile × regime). Cells stay disabled until N ≥ 50.
 - **Costs:** the cost model must be validated against actual PAPER fills; intraday profiles may fail once real costs are applied.
 - **Correlation instability:** correlation clusters break down in crashes (everything → ρ≈1). The downside-correlation measure and the heat cap are the protection.
+
+---
+
+# PART III: TIKALGO Offline AI Decision Engine (ODE)
+
+> **خلاصهٔ فارسی:** ODE لایهٔ تصمیم‌گیری هوشمند **بالای** موتورهای کمّی موجود تیکالگو است و جایگزین هیچ‌کدام نمی‌شود.
+> - شواهد را از ماژول‌های موجود جمع می‌کند: سیگنال، ورود و خروج، SMC، اوردرفلو، مشتقات، نهنگ، ماکرو و اخبار.
+> - رژیم بازار را تفسیر می‌کند، استراتژی مناسب را انتخاب می‌کند، کیفیت معامله و Edge را می‌سنجد، و یکی از این پنج تصمیم را پیشنهاد می‌دهد: LONG، SHORT، WAIT، REDUCE یا EXIT.
+>
+> سه اصل ثابت:
+> - مسیر تصمیم **کاملاً محلی و آفلاین** است و هیچ API ابری در آن نیست.
+> - AI فقط **پیشنهاد** می‌دهد و Risk Engine حق وتو دارد.
+> - در هر شک یا کمبود داده، تصمیم WAIT است.
+>
+> این بخش برای **معاملات واقعی** طراحی شده است. با این حال LIVE فقط بعد از عبور از همهٔ دروازه‌های اعتبارسنجی و تأیید دستی فعال می‌شود (III.0).
+
+ODE is the concrete production implementation of **Part I levels L2–L5** (§I.G, §I.L). It uses the TAMRS components (Part II) and every other existing TIKALGO strategy as its candidate sources.
+
+## III.0 Readiness for real (LIVE) trading
+LIVE can be enabled for a (market profile × strategy family) cell only when **all** of these hold, checked automatically and shown in the Admin UI:
+
+| # | Gate | Requirement |
+|---|---|---|
+| 1 | Validation | The cell passed Part II §9.4 and §I.R: OOS net expectancy ≥ +0.10R, PF ≥ 1.25, PBO < 0.3, walk-forward efficiency ≥ 0.5, MC 95th-percentile DD within the limit |
+| 2 | Paper | ≥ 30 days and ≥ 30 trades in PAPER with net expectancy inside the OOS 90% CI. ODE calibration error (ECE) ≤ 0.08 |
+| 3 | Shadow | ≥ 14 days in SHADOW on live data (decisions logged, no orders) with no fail-safe defects and decision latency within budget |
+| 4 | Infrastructure | The Risk Engine, kill-switch, exchange-side stops, reconciliation and alerting have been tested |
+| 5 | Model | The model is registered in the registry with status `live-candidate`; there is a rollback version |
+| 6 | Approval | Admin approval is recorded; the user explicitly opts in; LIVE starts at **¼ of the configured risk** for the first 50 trades |
+
+## III.1 Position in the flow
+```
+REAL MARKET DATA → existing modules → FEATURES → SIGNAL ENGINE → ENTRY/EXIT ANALYSIS → REGIME ENGINE
+  → [ODE: Decision Feature Contract → evidence scoring → strategy selection → meta-model → decision object]
+  → RISK ENGINE (veto/resize) → PORTFOLIO CHECK → EXECUTION VALIDATION → FINAL DECISION → EXECUTION
+  → JOURNAL → OUTCOME ANALYSIS → controlled research
+```
+ODE consumes the existing engines' outputs through their current contracts:
+- signal, entry and exit candidates;
+- regime;
+- features.
+
+It **never** recomputes or replaces them. The only thing it may add to the existing regime engine is extra probabilistic outputs (§I.I).
+
+## III.2 Offline operation rules
+| Component | Where it runs | If unavailable |
+|---|---|---|
+| Decision Feature assembly + evidence scorers (L1/L2) | Local (existing worker runtime) | Fail-safe → WAIT |
+| Meta-model (L3/L4: LightGBM / logistic / small NN) | **Local CPU** (ONNX Runtime or native LightGBM); GPU optional | Fall back to the **validated baseline scorer** (Part II §6.1, registered as a model). If that is also unavailable → WAIT |
+| Local LLM (optional; e.g. via Ollama bound to 127.0.0.1) | Local | Decisions continue without it. Only explanation text and news structuring degrade |
+| Cloud LLMs / hosted models (OpenAI, Claude, Gemini, OpenRouter, hosted Jev) | **Not in the decision path** | No effect on decisions. Allowed only for offline research or optional explanations, never blocking |
+| Market data | Existing providers | Stale or missing data → fail-safe |
+
+> **Reconciliation with MASTER_PROMPT §15 (pluggable decision models):** the hosted Jev and cloud models remain selectable for **research and explanation** only. In the order path, only **locally executed and registered** models are allowed. A hosted model can become a decision model only if it is shipped as an on-prem/offline build and validated like any other model.
+
+## III.3 Decision Feature Contract (DFC v1)
+- A versioned, typed schema, defined once in the existing shared schema/types location and generated for both backend languages if the stack has more than one.
+- **Every field carries:** `value`, `ts`, `available_at`, `source_module`, `quality` (ok | stale | missing | degraded) and `age_bars`.
+- **Missing values** are explicit (`null` + mask). They are never forward-filled beyond the field's max staleness and never imputed from future data.
+
+```json
+{
+  "dfc_version": "1.0.0",
+  "decision_ts": "2026-10-09T12:00:00Z",
+  "symbol": "BTCUSDT", "market": "crypto_futures", "venue": "…", "profile": "crypto_perp",
+  "tf": { "htf": "4h", "mtf": "1h", "ltf": "15m", "exec": "5m" },
+  "price":       { "ohlcv": {}, "ret_1": 0, "ret_k": {}, "atr": {}, "atr_pct": {}, "gap": 0, "realized_vol": {} },
+  "trend":       { "ema_slope": {}, "sma": {}, "adx": {}, "er": {}, "direction": {}, "strength": {}, "mtf_alignment": 0 },
+  "ichimoku":    { "tenkan": {}, "kijun": {}, "cloud_state": {}, "htf_kijun_dist_atr": 0 },
+  "momentum":    { "rsi": {}, "roc": {}, "rel_strength": {} },
+  "structure":   { "bos": {}, "choch": {}, "swings": {}, "sweep": {}, "displacement": {}, "fvg": [], "order_blocks": [] },
+  "orderflow":   { "cvd_slope": {}, "delta": {}, "footprint_imbalance": {}, "dom_imbalance": 0, "liquidity_walls": [] },
+  "derivatives": { "oi_change": {}, "funding": 0, "funding_z": 0, "liquidations": {}, "basis": 0, "ls_ratio": 0 },
+  "whale":       { "score": 0, "accumulation": 0, "distribution": 0, "large_positions": [], "large_transfers": [] },
+  "onchain":     { "exchange_netflow": 0, "active_addresses": 0, "large_tx": 0, "stablecoin_flow": 0 },
+  "macro":       { "dxy": {}, "vix": {}, "us10y": {}, "spx": {}, "ndx": {}, "gold": {}, "btc_d": {}, "eth_btc": {}, "fear_greed": 0, "risk_on_off_factor": 0 },
+  "news":        [{ "event_type": "", "sentiment": 0, "importance": 0, "surprise": 0, "assets": [], "confidence": 0, "source_url": "", "published_at": "", "evidence_quote": "" }],
+  "social":      { "sentiment": 0, "trend": 0, "abnormal_activity": 0 },
+  "signals":     [{ "strategy_id": "", "direction": "", "strength": 0, "timeframe": "", "entry": 0, "stop": 0, "targets": [], "confidence": 0 }],
+  "entry":       { "valid": true, "zone": [0, 0], "trigger": "", "confirmation": [] },
+  "exit":        { "exit_signal": false, "target_state": "", "trailing_state": {}, "invalidation": {} },
+  "regime":      { "direction_probs": {}, "vol_probs": {}, "stress_probs": {}, "argmax": "", "confidence": 0 },
+  "risk":        { "equity": 0, "available": 0, "exposure": {}, "portfolio_heat_R": 0, "cluster_exposure": {}, "drawdown": 0, "leverage": 0, "liq_distance_atr": 0 },
+  "execution":   { "spread": 0, "est_slippage_R": 0, "depth": {}, "fees_R": 0, "funding_to_tp_R": 0, "fill_prob": 0 },
+  "quality":     { "missing_fields": [], "stale_fields": [], "data_quality_score": 0 }
+}
+```
+
+- Blocks with no point-in-time history (often whale, on-chain or social) are **context-only**: they are shown and journaled, but their model weight is 0 until validated (§I.H).
+- `feature_version` = hash of DFC version + feature registry versions. It is stored with every decision.
+
+## III.4 Multi-timeframe intelligence
+- **Alignment score** `A ∈ [−1, 1]`: weighted agreement of the trend/structure direction across HTF (0.5), MTF (0.3) and LTF (0.2), using the profile's TF triple (§II.8).
+- **Quality pattern (long example):**
+  - HTF trend up (P(TREND_UP) ≥ 0.6);
+  - MTF pullback into the value zone;
+  - LTF liquidity sweep;
+  - execution-TF bullish displacement / CHOCH;
+  - → `mtf_pattern = TREND_PULLBACK_CONTINUATION`, which is eligible.
+- **Counter-trend rule:** an LTF signal opposite to the HTF trend is allowed only if both of these hold:
+  - P(REVERSAL) ≥ 0.5;
+  - the candidate comes from a reversal-type strategy (S-RV / SMC reversal).
+  
+  Otherwise → **WAIT** with reason `HTF_CONFLICT`. When allowed, the size multiplier is ≤ 0.5.
+
+## III.5 Evidence fusion (independent evidence, not vote counting)
+1. **Deterministic family scorers (L2)** turn DFC blocks into signed evidence `e_f ∈ [−1, 1]` relative to the candidate direction. Families:
+   - Trend, Structure, Momentum, OrderFlow, Liquidity, Derivatives, Whale, Macro, News;
+   - the existing strategy signal itself.
+2. **Independence:** families whose evidence is correlated (|ρ| > 0.7 over walk-forward windows, §II.2) form one **evidence cluster** and count once (the cluster mean).
+3. **Base score** `S = Σ_c w_c · ē_c`, using regime-conditional weights from walk-forward validation (§I.L), shrunk toward equal weights.
+4. **Adjustments:**
+   - `+ confirmation_bonus`: only if ≥ 3 **independent clusters** agree at |e| ≥ 0.5;
+   - `− contradiction_penalty`: Σ over clusters with e < −0.3;
+   - `− uncertainty_penalty`: regime entropy and data-quality deficit;
+   - `− correlation_penalty`: portfolio cluster exposure;
+   - `− liquidity_penalty`: depth and spread vs profile;
+   - `− execution_penalty`: estimated cost in R;
+   - `− event_risk_penalty`: high-impact news window or event uncertainty.
+5. The adjusted score is a **feature** for the meta-model, not the decision itself (§III.7).
+
+## III.6 Strategy selection (not "highest raw score")
+For each candidate from an existing strategy *k* in the current regime *r* and profile *p*:
+```
+E_hist(k,r,p)  = Bayesian-shrunk expectancy:  (n·mean_R_live+paper + n0·mean_R_OOS_backtest) / (n + n0)
+degrade(k)     = 1 if rolling-30-trade expectancy ≥ lower OOS CI, else 0.5; 0 if strategy is DEGRADED/suspended
+compat(k,r,p,tf) ∈ {0,1}     (regime/market/timeframe compatibility from strategy cards §I.K)
+E_net(k)       = meta-model E[R]_net for this candidate (§III.7)
+corr_pen(k)    = penalty if k's returns correlate with strategies already holding positions
+select = argmax_k  compat · degrade · (0.5·E_net + 0.5·E_hist) − corr_pen − cost
+```
+- If the best value is < `min_expected_edge` → **WAIT**.
+- If the top two candidates have **opposite directions** with similar values → **WAIT** (`STRATEGY_CONFLICT`).
+- Selection is deterministic: no exploration in the order path. Exploration of new strategies happens only in PAPER/SHADOW.
+
+## III.7 Model architecture (smallest model that works)
+| Model | Target | Candidates (choose by validation) | Notes |
+|---|---|---|---|
+| M1 Success classifier, per strategy family | P(TP1 before SL within horizon), net of costs | Logistic (baseline) → LightGBM (monotonic constraints on core evidence) → small MLP only if it clearly beats LightGBM | **Meta-labelling**: predicts whether an existing strategy's candidate is worth taking |
+| M2 Payoff model | E[R] given success/failure; quantiles of MFE and MAE | LightGBM quantile or linear quantile | Gives `E[R]_net = P·E[R⁺] − (1−P)·E[R⁻] − cost` |
+| M3 Time model | Time-to-resolution quantiles | LightGBM quantile | Sets `decision_expiry` and the time-exit sanity check |
+| M4 Regime model | Regime probabilities | GMM/HMM or threshold + calibration (existing engine extended) | Shared with §I.I |
+| Calibration | Isotonic or Platt per family | — | Required. ECE is monitored |
+| Optional local LLM | News event structuring; explanation phrasing | The smallest local model that passes the benchmark (§III.17) | **No numbers originate from the LLM**; numbers in text are checked against the trace |
+
+**Inference runtime:**
+- Export to **ONNX** (LightGBM/sklearn → ONNX) when the serving stack differs from the training stack.
+- Otherwise use native LightGBM in the existing Python worker.
+- The target is CPU-only, with GPU optional.
+
+**Decision rule (the meta decision):**
+```
+if failsafe_triggered:                      decision = WAIT
+elif open position and exit conditions met: decision = EXIT  (or REDUCE on partial / regime downgrade)
+elif E[R]_net ≥ min_expected_edge
+     and P ≥ p_min and planned_RR ≥ RR_min
+     and model_uncertainty ≤ u_max
+     and confidence ≥ conf_threshold:       decision = LONG / SHORT (direction of selected candidate)
+else:                                       decision = WAIT (with reasons)
+```
+- `confidence` = calibrated P, adjusted down by `model_uncertainty`. Model uncertainty is the dispersion across walk-forward fold models or bootstrap ensembles, plus the out-of-distribution distance of the DFC from training data.
+
+## III.8 Decision output object (DO v1)
+```json
+{
+  "decision": "LONG|SHORT|WAIT|REDUCE|EXIT",
+  "symbol": "", "market": "", "timeframe": {"htf": "", "mtf": "", "ltf": "", "exec": ""},
+  "strategy": "", "regime": {"argmax": "", "probs": {}},
+  "entry": {"type": "limit|stop_limit|market", "price": 0, "zone": [0, 0]},
+  "stop_loss": 0, "tp1": 0, "tp2": 0, "tp3": null, "trailing_stop": {"method": "", "params": {}},
+  "expected_R": 0, "expected_edge": 0, "p_success": 0, "confidence": 0,
+  "risk_score": 0, "portfolio_risk": {"heat_R_after": 0, "cluster_R_after": 0},
+  "position_size": {"qty": 0, "risk_pct": 0, "risk_R": 1}, "recommended_leverage": 0,
+  "holding_horizon": {"bars": 0, "until": ""},
+  "signal_quality": 0, "execution_quality": 0, "news_risk": 0, "liquidity_risk": 0, "model_uncertainty": 0,
+  "decision_expiry": "",
+  "invalidation_conditions": [""],
+  "supporting_evidence": [{"family": "", "score": 0, "detail": ""}],
+  "contradicting_evidence": [{"family": "", "score": 0, "detail": ""}],
+  "no_trade_reasons": [""],
+  "decision_trace": [{"step": "", "input_ref": "", "output": {}}],
+  "model_version": "", "feature_version": "", "dfc_version": "1.0.0", "data_snapshot_id": "",
+  "timestamp": "", "mode": "PAPER|SHADOW|LIVE"
+}
+```
+- `position_size` and `recommended_leverage` are **proposals**. The Risk Engine computes the binding values (§III.10).
+- The decision expires at `decision_expiry`. An expired decision can never be executed.
+
+## III.9 No-trade intelligence
+**Reason codes** (enum, multiple allowed):
+- `SIGNAL_CONFLICT`, `HTF_CONFLICT`, `STRATEGY_CONFLICT`
+- `REGIME_UNCERTAIN`, `REGIME_STRESS`
+- `LOW_EDGE`, `POOR_RR`
+- `LOW_LIQUIDITY`, `HIGH_SPREAD`
+- `NEWS_RISK`
+- `PORTFOLIO_LIMIT`, `CORRELATION_LIMIT`
+- `LOW_CONFIDENCE`, `HIGH_UNCERTAINTY`
+- `POOR_EXECUTION`
+- `DATA_QUALITY`
+- `MODEL_UNAVAILABLE`, `RISK_UNAVAILABLE`, `STATE_UNKNOWN`
+- `COOLDOWN`, `SESSION_CLOSED`
+
+**Measuring no-trade quality.** Every rejected candidate gets a **counterfactual label** using the same triple-barrier rules (§III.11), including costs. Metrics:
+
+| Metric | Definition |
+|---|---|
+| Filter value | `mean_R(taken) − mean_R(all candidates)`. Must be > 0 |
+| Avoided-loss rate | Share of rejected candidates that would have hit SL first |
+| Missed-opportunity cost | Mean R of rejected candidates that would have reached TP1 |
+| Abstention curve | Expectancy vs. % of candidates taken (thresholds swept). The chosen threshold should sit on the flat or optimal part |
+
+These metrics are reported per reason code. A reason that rejects mostly winners is reviewed.
+
+## III.10 Risk, portfolio and execution integration (AI recommends; others approve)
+```
+DO (proposal) → RISK VALIDATION (hard limits; Part II §6.3–6.6, §I.N)
+             → PORTFOLIO VALIDATION (budgets, clusters, factor exposure; §I.M)
+             → EXECUTION VALIDATION (spread/slippage/liquidity/fill-prob; order type; §I.O)
+             → ORDER  (existing Execution Gate)
+```
+- **Possible transformations:**
+  - LONG → REDUCE size;
+  - LONG → WAIT (temporary limit, e.g. a spread spike);
+  - LONG → REJECT (hard limit).
+  
+  Each step appends to the decision trace with the rule id.
+- **Binding size** (in the Risk Engine):
+  ```
+  qty = equity · r · m_regime · m_vol · m_dd · m_conf / (stop_dist · point_value)
+  ```
+  - `m_conf = min(1, conf / conf_full)` can only reduce size. There is **no upward scaling from confidence or expected R**.
+  - The result is capped by notional, liquidity, leverage and liquidation-distance limits.
+- **Leverage** = the minimum needed for the margin, capped by profile and user limits. It never rises because of confidence.
+- **Existing positions:** ODE may emit REDUCE or EXIT from exit-engine signals or a regime downgrade. The Exit Engine's hard rules (SL, invalidation) execute without needing ODE.
+
+## III.11 Training dataset and labelling (point-in-time)
+**Rows:**
+- (a) **candidate rows**: one per candidate emitted by an existing strategy at decision time. This is the main dataset for M1–M3.
+- (b) **state rows**: periodic HTF snapshots for the regime model.
+
+**Each row stores:**
+- the DFC snapshot, built by replaying the **as-of** data. The same code path is used live and in training: the "feature parity" test;
+- the candidate fields;
+- versions.
+
+**Labels** (event-based triple barrier, per candidate; costs included):
+- `hit`: TP1-before-SL within horizon H (setup-specific), as 1/0/timeout;
+- `R_realized` under the actual exit rules (partials, BE, trailing), simulated with the same cost model;
+- `MFE_R`, `MAE_R`;
+- `t_to_tp1`, `t_to_sl`, `t_resolution`;
+- `regime_transition` within H.
+
+The SHORT side is labelled symmetrically.
+
+**Leakage controls:**
+- Label windows define each row's `[t, t_end]`.
+- **Purged** walk-forward CV removes training rows whose label windows overlap the test fold, plus an **embargo** of ≥ H bars.
+- Sample weights use average uniqueness, because overlapping candidates are not independent.
+- Normalisers are fitted on training folds only.
+
+**Dataset versioning:** the dataset id is a hash of (data snapshot range, DFC version, feature versions, label config). Datasets are immutable once registered.
+
+## III.12 Training and promotion pipeline
+```
+Historical data → PIT feature dataset → labels → train (purged CV) → validation → OOS lock-box
+→ walk-forward (anchored + rolling) → stress (regime, market, 2× costs, entry delay, synthetic §I.R-6)
+→ PAPER → SHADOW → production candidate → manual approval → LIVE (¼ risk ramp)
+```
+- **Model selection** (per family, per profile, in order):
+  1. Calibrated OOS log-loss/Brier.
+  2. OOS net expectancy of the filtered trades.
+  3. Stability across folds.
+  4. Latency and RAM.
+  5. Simplicity.
+  
+  A more complex model must beat the simpler one on (1) and (2) with fold consistency ≥ 70%. Otherwise the simpler model is kept.
+- **Feature budget:** at most ~40 inputs per model after redundancy removal. Each feature must pass the ablation rule (§II.2).
+- Everything is logged in the experiment ledger. PBO and DSR are computed over all configurations tried (§I.R).
+
+## III.13 Decision journal and failure taxonomy
+Stored per decision, linked to the existing journal:
+- the DFC snapshot id;
+- module outputs;
+- the decision object;
+- risk, portfolio and execution transformations;
+- orders and fills;
+- the outcome (R, MFE, MAE, slippage);
+- post-close **prediction vs reality** (P vs hit, E[R] vs R, expected vs actual slippage).
+
+**Deterministic failure classification** (first matching rule; then human review):
+
+| Class | Rule |
+|---|---|
+| DATA_FAILURE | A field used was later found stale, missing or corrected (data-quality incident log) |
+| EXECUTION_FAILURE | Slippage > 2× estimate, or a missed or partial fill changed the outcome sign |
+| LIQUIDITY_FAILURE | Depth or spread fell below profile limits between decision and fill |
+| NEWS_FAILURE | A high-impact event occurred within the trade window that the news layer had not flagged at decision time |
+| REGIME_FAILURE | The regime arg-max changed against the trade within ≤ ⅓ H, and the loss followed the change |
+| RISK_FAILURE | The stop was inside the MAE distribution of winners (too tight), or a size or limit breach |
+| SIGNAL_FAILURE | The regime was stable and the strategy's own invalidation triggered |
+| MODEL_FAILURE | P ≥ 0.6 and the outcome was a loss, repeated with a calibration drift signal |
+| VARIANCE | None of the above; the loss is within the expected distribution |
+
+Monthly aggregates feed the research backlog. **Nothing updates LIVE logic automatically** (§I.T).
+
+## III.14 Explainability (from actual inputs only)
+- **Local feature contributions:** TreeSHAP for LightGBM (exact, computed at inference) or coefficients × inputs for linear models.
+- Evidence-cluster scores come from §III.5, and penalties are itemised.
+- **Explanations are rendered from the stored trace by a deterministic template.** The local LLM may rephrase the text. A validator then checks that every number and claim in the text exists in the trace; if not, the template text is used.
+
+**Example** (the rendered form of a stored trace):
+```
+LONG BTCUSDT · crypto_perp · 4h/1h/15m/5m · strategy S-TP
+REGIME: TREND_UP 0.82 (vol: normal 0.71; stress: low 0.05)
+SUPPORT: HTF trend +0.91 · Structure +0.83 · OrderFlow(CVD) +0.76 · Derivatives(OI) +0.69 · Liquidity +0.72
+CONFLICT: Funding −0.31 · Resistance (HTF wall 1.1 ATR) −0.22
+TOP MODEL CONTRIBUTIONS: mtf_alignment +0.11 · choch_ltf +0.07 · funding_z −0.04
+P(TP1 before SL)=0.58 · E[R]_net=+0.62R · planned R:R 2.7 · cost 0.06R
+RISK: 0.5% equity (m_dd=1, m_conf=0.9) · heat after 1.6R · cluster(crypto-beta) 1.1R
+INVALIDATION: 1h close below 61,240 (pullback low − buffer) · expiry 3×15m bars
+FINAL: LONG (risk-approved, size reduced 10% by portfolio cluster)
+```
+
+## III.15 Model monitoring and degradation
+| Monitor | Signal | Threshold (default) |
+|---|---|---|
+| Calibration | ECE / reliability vs realised outcomes (rolling 50) | ECE > 0.10 |
+| Expectancy | Rolling 30-trade net expectancy vs OOS CI lower bound | Below for 2 consecutive windows |
+| Feature drift | PSI per top-20 feature | PSI > 0.25 on ≥ 3 features |
+| Regime drift | Regime frequency vs training | KL divergence > threshold |
+| Execution drift | TCA slippage vs model | > 1.5× for 20 fills |
+| No-trade quality | Filter value | ≤ 0 over 100 candidates |
+| Strategy degradation | Per-strategy rolling DD | > 2× historical 95th-percentile DD |
+
+**`MODEL_DEGRADATION` actions** (in order; never automatic replacement):
+1. Reduce `m_conf` caps.
+2. Reduce allocation for the affected family or profile.
+3. Move the model to SHADOW; the validated baseline takes over if its own monitors are healthy, otherwise WAIT.
+4. Open a retrain-candidate research job.
+5. A new model goes through the full pipeline (§III.12).
+
+## III.16 Fail-safe state machine
+| Condition | Result |
+|---|---|
+| Required DFC block missing, or stale beyond max age | WAIT (`DATA_QUALITY`) |
+| Meta-model unavailable | Validated baseline (flag `degraded`). If unavailable → WAIT |
+| Model output NaN, out of range or invalid schema | WAIT (`MODEL_UNAVAILABLE`) |
+| Risk Engine or portfolio state unavailable | WAIT. **No order may be sent** |
+| Execution state unknown (unreconciled orders or positions) | WAIT, plus a reconciliation job and an alert |
+| Clock skew > tolerance, or data feed time gap | WAIT |
+| Kill-switch active | EXIT or REDUCE per the kill-switch policy; no new entries |
+
+Fail-safe outcomes are journaled and counted. Frequent fail-safes are an operational alert, not a reason to loosen checks.
+
+## III.17 Local model benchmark and resource requirements
+**Benchmark protocol:** run on the production server hardware, per candidate model. Measure:
+- decision quality (OOS log-loss, Brier, ECE, filtered expectancy);
+- latency (p50 and p99);
+- RAM;
+- CPU usage;
+- determinism (same input → same output);
+- explainability support.
+
+Choose the **smallest model meeting the gates**.
+
+**Expected order of magnitude** (to be measured, not assumed):
+
+| Component | Typical footprint |
+|---|---|
+| Logistic / LightGBM / XGBoost (≤ 500 trees, ≤ 40 features) | Model ≤ 10 MB, RAM ≤ 100 MB, CPU latency ≈ sub-ms to a few ms per decision, plus TreeSHAP of a few ms |
+| Small MLP (ONNX) | Similar or smaller; latency in ms |
+| Optional local LLM for news and explanations (quantised small model, e.g. 3–8B, 4-bit) | Roughly 2–6 GB RAM, seconds per response on CPU. **Kept off the critical path**: asynchronous, with timeouts |
+
+The decision latency budget is ≤ 200 ms per candidate on CPU, excluding the LLM.
+
+## III.18 Settings (existing Settings architecture; separate PAPER / SHADOW / LIVE)
+`ai_decision.enabled`, `mode` (PAPER|SHADOW|LIVE; LIVE locked until III.0), `model_id`, `model_version`, `inference` (cpu|gpu), `local_model_path`, `confidence_threshold`, `min_expected_edge`, `min_expected_R`, `p_min`, `u_max` (uncertainty), `no_trade_threshold`, `regime_filter` (allowed regimes), `strategy_weights` (bounded; the validated defaults are read-only and overrides are within ± limits), `risk_per_trade` (≤ the hard cap), `max_leverage` (≤ the profile cap), `llm.enabled`, `llm.model`, `llm.timeout_ms`.
+
+Changes are audit-logged. Hard risk caps are admin-only.
+
+## III.19 TIKALGO integration
+- **AI Signals and Scanner:** show the ODE decision, reasons and explanation for each candidate. The scanner can filter by `decision != WAIT` and by reason codes.
+- **Watchlist:** per-symbol current decision state and expiry.
+- **Entry/Exit engines:** inputs to ODE. Their hard exits remain authoritative.
+- **Risk, Portfolio and Execution:** the validation chain (§III.10).
+- **Paper:** ODE in PAPER mode drives paper orders.
+- **SHADOW:** decisions are logged with no orders.
+- **Journal:** §III.13.
+- **Redis streams:** `ai.decision.*`, `ai.noTrade.*`, `ai.monitor.*`.
+- **Postgres/Timescale tables:** `ai_decisions`, `ai_decision_traces` (append-only), `ai_datasets`, `model_registry`, `experiment_ledger`, `ai_monitor_metrics`.
+- **API and WebSocket:** follow the existing route and WebSocket patterns, e.g. a decisions list, a decision by id with its trace, a monitor state, and a WebSocket channel for live decisions. Existing APIs are unchanged, and new ones are versioned.
+
+## III.20 Tests
+- DFC schema validation, and missing or stale handling.
+- **Feature parity:** live path == training replay.
+- As-of joins, plus no-lookahead and no-repaint (Part II §9.1).
+- MTF conflict rule.
+- Evidence fusion: independence clustering, bonus and penalty math.
+- Strategy selection: degraded strategy suppressed; opposite-candidate conflict → WAIT.
+- Meta decision thresholds.
+- Calibration.
+- Size never increases with confidence; leverage cap; liquidation distance.
+- Risk → REDUCE / WAIT / REJECT transformations.
+- Portfolio budgets.
+- Execution validation.
+- Fail-safe matrix: every row of §III.16.
+- Offline test: the network is blocked and decisions still work; cloud calls are absent from the decision path, enforced by a test that fails on any outbound AI host.
+- LLM cannot create or modify orders; LLM text numbers are validated against the trace.
+- Decision expiry.
+- Journal completeness and failure classification rules.
+- Monitoring thresholds trigger the right actions.
+- Model registry gating: an untracked model can't run in LIVE.
+- No-trade quality metrics.
+- Backtest and walk-forward reproducibility (same dataset id → same results).
+
+## III.21 Remaining weaknesses
+- The meta-labelling dataset grows only as fast as strategies emit candidates. Rare setups (reversal, squeeze) may never reach ML-ready sample sizes, so they stay on the calibrated baseline.
+- Counterfactual labels for rejected trades assume the same execution, so they are optimistic about fills.
+- Whale, on-chain, social and news features may lack point-in-time history and will contribute only after enough live-collected data exists.
+- A local LLM adds operational load (RAM, latency) for limited decision value. It stays optional.
+- Calibration can drift quickly in regime shifts. The monitors and the baseline fallback limit the damage but not instantly.
+
+## III.X Implementation steps (maps the 16 requested steps to MASTER_PROMPT §17 phases)
+| Step | Work | Phase |
+|---|---|---|
+| 1–3 | Inspect the architecture; map signal, entry, exit, risk, portfolio and AI/data modules | Q0 |
+| 4 | Decision Feature Contract v1 + feature parity harness | Q2–Q3 (extended) |
+| 5 | Point-in-time candidate dataset + triple-barrier labels | Q8a |
+| 6 | Offline baseline (calibrated scoring, registered as a model) | Q6 |
+| 7 | Meta Decision Engine (M1–M3, selection, decision rule, fail-safe) | Q7 / Q14 |
+| 8 | Regime, strategy and signal integration; MTF logic | Q4–Q5, Q7 |
+| 9 | Risk, portfolio and execution validation chain | Q6, Q10 |
+| 10 | Decision journal + failure taxonomy | Q7, Q15 |
+| 11 | Monitoring + degradation actions | Q13 |
+| 12–13 | Backtests + walk-forward (+ PBO/DSR, stress) | Q8 |
+| 14 | Paper | Q9 |
+| 15 | Shadow | Q13, Q16 |
+| 16 | LIVE activation exposed (locked until III.0) | Q16 |
