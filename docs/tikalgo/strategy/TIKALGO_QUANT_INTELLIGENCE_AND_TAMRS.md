@@ -1,5 +1,5 @@
-# TIKALGO Quant Intelligence (TQI) + TAMRS + Offline AI Decision Engine (ODE) + Continuous Learning (CLS)
-## Research report and implementation specification (v4)
+# TIKALGO Quant Intelligence (TQI) + TAMRS + TIKALGO AI (Offline Decision Engine) + Continuous Learning (CLS)
+## Research report and implementation specification (v5)
 
 > **خلاصه برای مالک پروژه (فارسی):** این سند هدفش ارتقای سه چیز است:
 > 1. **موتور سیگنال:** دقیق‌تر، رژیم‌محور و قابل توضیح.
@@ -12,6 +12,7 @@
 >
 > - **بخش سوم (ODE):** «موتور تصمیم آفلاین». یک لایهٔ تصمیم‌گیری محلی است و به هیچ API ابری وابسته نیست. بالای موتورهای موجود می‌نشیند، شواهد را ترکیب می‌کند و LONG، SHORT، WAIT، REDUCE یا EXIT پیشنهاد می‌دهد. Risk Engine حق وتو دارد و LIVE فقط بعد از دروازه‌های III.0 باز می‌شود.
 >
+> - **بخش ششم (TIKALGO AI v2):** نسخهٔ کاملاً آفلاین و پیشرفتهٔ موتور تصمیم: حافظهٔ تاریخی و شباهت، منتقد مستقل، تصمیم‌های جایگزین، استقلال و تضاد شواهد، موتور عدم‌قطعیت، گذار رژیم، تشخیص تله، زمان‌بندی ورود، خروج پویا، کالبدشکافی معامله، و اثبات نبود وابستگی به AI ابری.
 > - **بخش چهارم (CLS):** یادگیری مداوم و کنترل‌شده در سه حلقه:
 >   - A: آمار و کالیبراسیون روزانه؛
 >   - B: مدل قهرمان و چالشگر؛
@@ -60,6 +61,7 @@
 | **Offline AI Decision Engine** (deliverables 1–24 of the ODE brief) | **Part III**. Items 1, 17–21 are produced on the server; 22 is in III.17 |
 | **Continuous Learning System** (3 loops, champion/challenger, knowledge base, baseline A/B) | **Part IV** |
 | **Extended research library** (23 additional sources → concrete spec changes) | **Part V** |
+| **TIKALGO AI v2** (fully offline local decision intelligence; report items 1–10) | **Part VI** (extends Part III) |
 
 ---
 
@@ -915,7 +917,9 @@ Rules:
 
 ---
 
-# PART III: TIKALGO Offline AI Decision Engine (ODE)
+# PART III: TIKALGO AI, the Offline AI Decision Engine (ODE)
+
+> **Product name: TIKALGO AI.** `ode` is kept as the internal module/service id (e.g. `ai.decision.*` streams, `ode` package). In the UI, Settings, docs and reports, the engine is always called **TIKALGO AI**.
 
 > **خلاصهٔ فارسی:** ODE لایهٔ تصمیم‌گیری هوشمند **بالای** موتورهای کمّی موجود تیکالگو است و جایگزین هیچ‌کدام نمی‌شود.
 > - شواهد را از ماژول‌های موجود جمع می‌کند: سیگنال، ورود و خروج، SMC، اوردرفلو، مشتقات، نهنگ، ماکرو و اخبار.
@@ -1552,3 +1556,390 @@ Success is measured by the IV.6 scorecard against `baseline_v0`, over months, ne
 - Each relevant item becomes a principle card with a citation and status `untested`.
 - Only items with a **codable, testable** rule enter the alpha registry.
 - Popularity alone is not a reason to add anything.
+
+---
+
+# PART VI: TIKALGO AI v2, Fully Offline Local Decision Intelligence (extensions)
+
+> **خلاصهٔ فارسی:** این بخش **TIKALGO AI** (موتور تصمیم آفلاین، بخش سوم) را به نسخهٔ ۲ می‌رساند و این اجزا را اضافه می‌کند:
+> - حافظهٔ تاریخی و موتور شباهت؛
+> - منتقد مستقل تصمیم (Decision Critic)؛
+> - موتور تصمیم‌های جایگزین (Counterfactual)؛
+> - امتیاز استقلال شواهد؛
+> - موتور تضاد؛
+> - موتور عدم‌قطعیت چندمنبعی؛
+> - تشخیص گذار رژیم؛
+> - قابلیت‌اطمینان هر فیچر؛
+> - رتبه‌بندی فرصت‌ها؛
+> - بررسی تله‌های بازار؛
+> - هوش زمان‌بندی ورود؛
+> - هوش خروج پویا؛
+> - کالبدشکافی معامله؛
+> - حالت `OFFLINE_AI_MODE=true` همراه با **اثبات** نبود وابستگی به AI ابری.
+>
+> قانون مطلق: در مسیر تصمیم PAPER و LIVE هیچ LLM ابری، API پولی یا کلید API مربوط به LLM وجود ندارد. با خاموش بودن Ollama یا قطع اینترنت، هستهٔ تصمیم ۱۰۰٪ کار می‌کند. در هر خطا، تصمیم NO TRADE است و **هرگز** به AI ابری برگشت داده نمی‌شود.
+
+Part III remains the base. Part VI adds components and **tightens** rules; where they differ, Part VI wins.
+
+## VI.1 Decision flow (local-first)
+```
+DATA → FEATURE FACTORY (+ reliability, VI.9) → REGIME ENGINE (+ transition state, VI.8)
+→ EXISTING SIGNAL / STRATEGY / ENTRY / EXIT ENGINES (candidates)
+→ LOCAL ML MODELS (Part III M1–M3 + VI.3 models) → HISTORICAL MEMORY & SIMILARITY (VI.2)
+→ META DECISION MODEL (Part III §III.7) → COUNTERFACTUAL ENGINE (VI.5)
+→ DECISION CRITIC (VI.4) + ADVERSARIAL CHECK (VI.12) → UNCERTAINTY & CONFLICT ENGINE (VI.6, VI.7)
+→ ENTRY-TIMING (VI.13) → OPPORTUNITY RANKING (VI.10) → PORTFOLIO / RISK GATE (veto) → EXECUTION
+In-trade: DYNAMIC EXIT INTELLIGENCE (VI.14) → Risk veto → Execution.  After close: TRADE AUTOPSY (VI.15).
+```
+
+## VI.2 Historical Market Memory and Similarity Engine
+- **Store:** the `decision_memory` table (Timescale), one row per candidate/setup. It extends the §III.11 candidate dataset; it is not a new dataset. Each row holds:
+  - market, symbol, timeframe triple, regime and stability;
+  - the compact feature vector;
+  - signal and strategy, entry, exit;
+  - outcome: realised R, MFE, MAE, duration, hit/timeout;
+  - news, liquidity and volatility state;
+  - the model decision and versions;
+  - `label_end_ts`.
+- **Leakage rule:** at decision time t, only rows with `label_end_ts < t` are searchable. The outcome must have been known by then.
+  The vector normaliser (rolling z-scores) and the projection (PCA to ~24–32 dims, fitted on past data only, refit monthly and versioned) both come from data before t.
+- **Search:**
+  - Within the same market profile, plus an optional cross-market pool flagged separately.
+  - Family-weighted standardised distance on the projected vector, using local approximate nearest neighbours: pgvector HNSW if present, otherwise hnswlib/FAISS on CPU.
+  - Return the top-k (k = 50) and a radius set.
+  - Regime-matched results are reported separately.
+- **Outputs:**
+  - `similarity_score`: mean similarity of the top-k;
+  - `n_similar` within the radius;
+  - win rate;
+  - median R and the R quantiles;
+  - MFE/MAE quantiles;
+  - median duration;
+  - regime-specific stats;
+  - `historical_uncertainty = CI width` (bootstrap) — this feeds VI.7.
+- **Use:** memory is **one evidence block**, never the decision. With `n_similar < 30`, its weight shrinks toward the prior. Analogs are shown in the UI as "similar past setups" with links to the journal.
+
+## VI.3 Local model set (smallest that works; chosen by benchmark §III.17)
+| Model | Target | Default candidate |
+|---|---|---|
+| Regime classifier + transition | Regime probabilities and stability (VI.8) | Calibrated LightGBM, or GMM/HMM (existing regime engine extended) |
+| Trade quality / TP probability | P(TP1 before SL) | Logistic → LightGBM / CatBoost (monotonic) |
+| SL probability / trap risk | P(SL first within H), P(trap) | LightGBM. Used by the Critic (VI.4) |
+| Direction probability | P(up-move ≥ x·ATR before down-move ≥ x·ATR), symmetric barrier | LightGBM. Context only, never the sole trigger |
+| Expected R and quantiles | E[R], R quantiles, MFE/MAE quantiles | LightGBM quantile |
+| Time-to-resolution | Quantiles | LightGBM quantile |
+| Execution quality | Expected slippage/fill vs TCA history | Linear/GBM on TCA data |
+| Remaining-trade value (in-trade) | E[R_remaining \| hold] for open positions | LightGBM on in-trade snapshots |
+
+- All models are exported to **ONNX** (or native LightGBM) and served on CPU. GPU is optional.
+- A small PyTorch model (e.g. a temporal CNN) is admitted only if it beats GBM OOS, net of costs, with fold consistency ≥ 70%.
+
+## VI.4 Decision Critic (independent adversary)
+- **Purpose:** for any LONG/SHORT proposal, actively search for reasons **not** to trade.
+- **Independence by design:**
+  1. a **different target**: P(SL first) or P(trap), not P(TP1);
+  2. a **different feature emphasis**: against-evidence families, crowding, liquidity and execution;
+  3. a **different model class or training window**;
+  4. a **rule checklist**.
+
+  The OOS correlation between the Critic's score and the main model's score is monitored. If it is > 0.7, the Critic is flagged `REDUNDANT` and reviewed.
+- **Rule checklist** (each check outputs pass/fail + severity):
+  - HTF conflict;
+  - liquidity trap (opposing wall within 1×ATR, thin book);
+  - fake-breakout signature (VI.12);
+  - late entry (distance from trigger > 1×ATR, or > 2.5×ATR from the HTF value zone);
+  - poor R:R;
+  - funding extreme (|z| ≥ 2 in the trade direction);
+  - abnormal OI (OI spike with price stall);
+  - adverse CVD;
+  - whale distribution (if validated);
+  - macro/news window;
+  - regime weakening or transition (VI.8);
+  - poor execution (cost > 0.15R);
+  - model uncertainty (VI.7).
+- **Output:**
+  - **PASS**: no high-severity fail and P(trap) < τ1;
+  - **WEAKEN**: 1 high-severity fail or 2+ medium, or τ1 ≤ P(trap) < τ2 → size ×0.5 and a stricter entry (VI.13);
+  - **REJECT**: 2+ high-severity fails or P(trap) ≥ τ2 → WAIT.
+  
+  The Critic's reasons are listed in the decision object.
+
+## VI.5 Counterfactual Decision Engine
+For every decision point, evaluate **all actions**: LONG, SHORT, WAIT, and REDUCE / EXIT if a position is open.
+
+| Quantity | LONG / SHORT | WAIT | REDUCE / EXIT (open position) |
+|---|---|---|---|
+| E[R]_net | From M1/M2 with costs | Value of waiting = P(better entry within k bars) × entry improvement (VI.13 model) − P(missed move) × expected R missed | From the remaining-trade model vs locking in the current R |
+| Probability | P(TP1 first) | — | P(adverse hit) |
+| Risk / DD contribution | Planned R × portfolio marginal risk | 0 | Reduced |
+| Execution quality | Cost estimate | — | Exit cost |
+| Opportunity cost | The best alternative candidate's E[R]_net (VI.10) | — | — |
+
+**Utility:** `U(a) = E[R]_net(a) − λ·risk(a) − μ·ΔDD(a) − opportunity_cost(a)`, with λ and μ from the user's risk profile.
+
+**Choose LONG/SHORT only if:**
+- `U(trade) − U(WAIT) ≥ δ_margin` (default 0.15R), and
+- `U(trade) − U(opposite) ≥ δ_margin`.
+
+Otherwise the decision is WAIT. Example: LONG +1.4R, SHORT −0.4R, WAIT +0.2R → LONG passes the margin.
+All action values are stored in `counterfactual_results`.
+
+## VI.6 Evidence Independence and Conflict Engine
+- **Source groups** (independence is by information source, not by indicator count):
+  - `price` (RSI, MACD, EMA, ADX, Ichimoku, SMC, structure are all price-derived);
+  - `volume`;
+  - `orderflow` (CVD, delta, footprint, DOM, OFI);
+  - `derivatives` (OI, funding, liquidations, basis);
+  - `onchain`;
+  - `whales`;
+  - `macro`;
+  - `news`;
+  - `sentiment`;
+  - `memory` (historical analogs).
+- **Evidence Independence Score:**
+  - Group scores are combined after merging groups whose evidence correlates with |ρ| > 0.7 (§III.5).
+  - `EIS = number of independent groups confirming the direction with |e| ≥ 0.5`, also reported as the effective number `(Σ|w·e|)² / Σ(w·e)²`.
+  - A minimum EIS is required per setup (default ≥ 3, including ≥ 1 non-price group when such data is validated for that market).
+- **Conflict index:** `CI = Σ_g w_g·max(0, −e_g) / Σ_g w_g·|e_g|`.
+  - LOW < 0.15;
+  - MEDIUM 0.15–0.30 → confidence ×0.8, size ×0.75;
+  - **HIGH_CONFLICT** ≥ 0.30 → WAIT, or size ×0.5 if the Critic passes and the margin over WAIT ≥ 2·δ.
+
+## VI.7 Uncertainty Engine (separate from confidence)
+| Component | Measure |
+|---|---|
+| Model uncertainty | Dispersion across walk-forward fold models / bootstrap ensemble predictions |
+| Regime uncertainty | Entropy of the regime probabilities + transition state (VI.8) |
+| Data uncertainty | 1 − weighted feature reliability (VI.9) of the inputs used |
+| Historical uncertainty | Analog CI width; low `n_similar` (VI.2) |
+| Execution uncertainty | Cost estimate variance; TCA error for this venue/symbol |
+| Distribution shift | OOD score: kNN distance percentile vs training data + PSI of key features |
+
+- **Aggregate:** `U = max(component z-scores)` and a weighted mean; both are stored.
+- **Rule:** trade only if `U ≤ u_max` **regardless of confidence**. High confidence with high uncertainty → WAIT (`HIGH_UNCERTAINTY`).
+
+## VI.8 Regime transition
+- **Stability state** (from the dynamics of the regime probabilities over the last k HTF bars):
+  - **STABLE**: arg-max probability ≥ 0.6 and its slope ≥ −δ;
+  - **WEAKENING**: arg-max probability falling over k bars plus confirming internals (ER/ADX falling, structure failure on the MTF);
+  - **TRANSITION**: hysteresis pending, a top-2 probability gap < 0.15, or entropy above threshold;
+  - **UNKNOWN**: data or model issue.
+- **Risk multipliers:** STABLE 1.0; WEAKENING 0.75 (no new pyramiding); TRANSITION 0.5 (new entries only for transition-type setups such as squeeze or reversal, which must pass the Critic); UNKNOWN 0 → WAIT.
+- **Example path:** TREND_UP STABLE → WEAKENING → TRANSITION → RANGE STABLE. The router switches strategy families only after STABLE.
+
+## VI.9 Feature reliability
+`reliability_f = freshness × completeness × source_reliability × (1 − anomaly) × predictive_weight_f,regime`
+
+| Factor | Definition |
+|---|---|
+| Freshness | Decays with age relative to the feature's max staleness |
+| Completeness | Share of non-missing inputs over the lookback window |
+| Source reliability | Rolling uptime/error rate of the provider |
+| Anomaly | Robust z-score outlier flag or a cross-source mismatch |
+| Predictive weight | Regime-specific OOS rank-IC from the Feature Factory, floored at 0 |
+
+- Reliability scales the feature's group weight in VI.6.
+- If a group's reliability is < 0.5, it is excluded and reported as "context only".
+- The data uncertainty in VI.7 uses the weighted reliability of the inputs actually used.
+
+## VI.10 Opportunity cost and candidate ranking
+- At each scan cycle, rank all surviving candidates by:
+  ```
+  rank = E[R]_net / risk_R × liquidity_score × execution_quality × (1 − corr_penalty) × capital_efficiency
+  ```
+  where capital efficiency = E[R]_net per unit of margin and holding time.
+- **Greedy allocation** under the portfolio risk budget (§I.M):
+  - Take the best candidate, update exposures, and re-score the rest. A correlated candidate gets a lower rank after each pick.
+  - Stop when the budget is used or no candidate passes the thresholds.
+- Rejected candidates get the reason `OPPORTUNITY_COST` with the id of the better alternative.
+
+## VI.11 Portfolio-aware decision (adds to §I.M)
+Exposure is computed before every decision and stored with it:
+- open positions;
+- gross and net exposure;
+- correlation clusters;
+- leverage and drawdown;
+- **asset-class exposure**: crypto beta (vs BTC), FX exposure by currency leg (USD, EUR, JPY …), metals, US stocks by sector, ETFs by underlying.
+
+A new trade is resized or rejected if it raises a cluster's or asset class's risk above its budget. This includes **hidden** exposure: for example, long gold plus short USD/JPY plus long EUR/USD are all short-USD.
+
+## VI.12 Adversarial market check (trap detector)
+For each candidate, ask: "If this is a trap, what would we expect to see?" Each trap has explicit **falsifiers** built from point-in-time data:
+
+| Trap | Signatures (any 2 → Critic WEAKEN; 3 → REJECT) |
+|---|---|
+| Bull/bear trap, fake breakout | Breakout on volume z < 0.5; CVD divergence on the breakout; a close back inside the range within n bars historically frequent for this symbol/regime; breakout into an HTF liquidity wall |
+| Liquidity sweep / stop hunt (against us) | Equal highs/lows just beyond our stop; thin book; recent sweeps in the same session |
+| OI trap | OI ↑ sharply with price stalling; funding rising in the trade direction |
+| Funding trap | Funding |z| ≥ 2 in the trade direction; basis extreme (crowded side) |
+| News spike | A high-impact event within the window; a price jump > 3×ATR on one bar with no follow-through |
+| Abnormal volatility | ATR percentile ≥ 0.95 or a realised-vol jump; spread widening |
+
+The trap probability model (VI.3) is trained on labelled trap outcomes (breakout reversals within n bars) and is combined with these rules.
+
+## VI.13 Entry-timing intelligence (correct direction ≠ correct entry)
+**Output** `entry_action`:
+- `ENTER_NOW`;
+- `WAIT_PULLBACK(zone)`;
+- `WAIT_CONFIRMATION(trigger)`;
+- `WAIT_SWEEP(level)`;
+- `WAIT_STRUCTURE(tf)`.
+
+Each non-immediate action becomes a **pending conditional plan** with an expiry: a limit or stop-limit order, or a re-evaluation trigger.
+
+**How it decides:**
+- Late-entry checks from VI.4.
+- The P(better entry within k bars) model: the historical distribution of pullback depth for similar setups (VI.2) and the time model.
+- A plan is chosen only if its value beats `ENTER_NOW` (VI.5 WAIT valuation).
+- Plans are re-validated at trigger time against the full decision pipeline. There is no blind fill.
+
+## VI.14 Dynamic exit intelligence
+At every ETF close for open positions, evaluate HOLD / REDUCE / TAKE_PROFIT / MOVE_SL / TRAIL / EXIT using:
+- the remaining-trade model;
+- the regime stability;
+- the Critic run in reverse ("reasons this trade is now failing");
+- exit-engine states;
+- time decay.
+
+**Rules:**
+- **SL may only tighten.**
+- Hard exits (SL, invalidation, kill-switch) execute without the AI.
+- The Risk Engine can veto any AI exit suggestion that would raise risk. An exit that **reduces** risk is always allowed.
+- Every in-trade action is journaled with its counterfactual values.
+
+## VI.15 Trade autopsy (extends §III.13)
+- **Error classes:**
+  - `MODEL_ERROR`
+  - `FEATURE_ERROR` (a reliability issue or a wrong feature value)
+  - `REGIME_ERROR`
+  - `SIGNAL_ERROR`
+  - `ENTRY_ERROR` (direction right, timing wrong: MAE beyond the stop, then TP reached)
+  - `EXIT_ERROR` (MFE ≥ 2R given back, or premature exit followed by the target)
+  - `EXECUTION_ERROR`
+  - `RISK_ERROR`
+  - `UNEXPECTED_EVENT` (an exogenous shock not visible at decision time)
+  - plus the earlier `DATA`, `NEWS` and `LIQUIDITY` classes, and `VARIANCE`.
+- **Deterministic rules come first; a human reviews later.**
+- Each autopsy row joins the research dataset with the prediction-vs-actual deltas.
+- Learning still follows the controlled cycle of Part IV:
+  ```
+  TRADE → OUTCOME → AUTOPSY → DATASET → RESEARCH → TRAIN → VALIDATION → OOS → WALK-FORWARD
+  → STRESS → PAPER → SHADOW → APPROVAL → PRODUCTION
+  ```
+  **No direct self-modification in LIVE.**
+
+## VI.16 Anti-overfitting and cost awareness (additions)
+- **Additional mandatory validations:**
+  - funding stress (funding ×2, sign flips);
+  - liquidity stress (spread ×3, depth ÷3);
+  - **unseen-market validation**: a profile held out entirely, e.g. train on BTC/ETH and test on other large-caps; train on EURUSD/GBPUSD and test on AUDUSD;
+  - **unseen-period validation**.
+- A model that only works on one market or period is not promoted.
+- **Gross edge and net edge** (after commission, spread, slippage, funding, impact and a latency assumption) are computed and stored separately for every decision and every backtest trade.
+
+## VI.17 OFFLINE_AI_MODE and proof of no cloud-AI dependency
+- **Flag:** `OFFLINE_AI_MODE=true` is the **default** for the decision service. When it is true:
+  - decision modules may use only local ML, the local DB, Redis, cached market and news data, local datasets and local models;
+  - **no LLM API key exists in the decision service's configuration schema**, so none can be required.
+- **Proof** (all four are required and reported):
+  1. **Static:** an import/dependency lint rule (e.g. import-linter, ESLint no-restricted-imports or a custom check) fails the build if any decision-path module imports an AI-provider SDK, HTTP client wrappers aimed at AI hosts, or reads an `*_API_KEY` for LLMs.
+  2. **Network:** the decision service runs in a container or network policy whose egress allowlist contains only the DB, Redis and the market-data/exchange endpoints. Known AI hosts are blocked. Blocked attempts are logged and alerted.
+  3. **Test:** an integration suite runs the full decision pipeline with **no network** (container `--network none` + local DB/Redis fixtures from real stored data) and with the Ollama service stopped. It asserts that decisions, explanations (template) and journaling all work, with zero AI egress attempts.
+  4. **Runtime self-check:** at startup and hourly, a health report shows `Cloud AI dependency: NONE`, `Local models loaded: …`, `Ollama: optional (on/off)`.
+- **Fail-safe additions:**
+  - dataset or model checksum mismatch → NO TRADE;
+  - regime UNKNOWN → NO TRADE;
+  - uncertainty > u_max → NO TRADE;
+  - poor execution quality → NO TRADE;
+  - **never fall back to cloud AI**.
+
+## VI.18 Decision output additions (DO v2 = DO v1 + fields)
+Added fields:
+- `regime_stability`
+- `uncertainty` (components + aggregate)
+- `data_quality`
+- `evidence_independence` (EIS + groups)
+- `evidence_conflict` (CI + level)
+- `historical_similarity` (score, n, win rate, median R, MFE/MAE)
+- `model_risk`
+- `critic_result` (PASS|WEAKEN|REJECT + checks)
+- `counterfactual_results` (per action: E[R], P, risk, ΔDD, exec, opportunity cost, U)
+- `entry_action`
+- `trap_checks`
+- `opportunity_rank`
+- `gross_edge`, `net_edge`
+- `offline_mode: true`
+
+The schema version is bumped. Existing consumers keep working: the fields are additive and the API is versioned.
+
+## VI.19 Explainability (answer six questions from the trace)
+**WHY TRADE?**
+The top positive evidence groups, with scores, plus the top model contributions (TreeSHAP).
+
+**WHY NOT?**
+The top contradicting groups, the Critic's findings, the trap checks and the uncertainty components.
+
+**WHY NOW?**
+The entry-timing result, the regime stability, the trigger event and the decision expiry.
+
+**WHY THIS SIZE?**
+`r` × the multipliers (regime, vol, DD, confidence ≤ 1, Critic, conflict, transition), the portfolio and cluster caps hit, and the leverage logic.
+
+**WHY NOT ANOTHER MARKET?**
+The opportunity ranking: this candidate's rank and the next-best alternatives with their scores.
+
+**WHAT INVALIDATES?**
+Price, structure and time conditions, plus regime-change and conflict thresholds.
+
+The explanation is rendered from the trace by template. The optional local LLM may only rephrase it, and the text is validated against the trace's numbers (§III.14).
+
+## VI.20 Settings (Local AI section in existing Settings)
+**Controls:**
+- Offline AI ON/OFF (`OFFLINE_AI_MODE`, default ON for the decision path);
+- Local Model, Model Version;
+- thresholds: Decision (δ_margin), Confidence, Uncertainty (u_max), Critic (τ1, τ2), Historical Similarity (min n, min score);
+- Max Portfolio Risk, Max Correlation;
+- Mode: PAPER / SHADOW / LIVE. **LIVE is OFF by default** and locked until III.0.
+
+**Read-only health panels:**
+- Model Health (loaded, latency, ECE, drift);
+- Dataset Health (rows, freshness, checksum, leakage-test status);
+- Last Training, Last Validation;
+- Model Performance (rolling net expectancy, PF, DD vs OOS CI);
+- Drift Status;
+- Cloud-AI dependency status (VI.17).
+
+## VI.21 Tests (additions to §III.20)
+- Deterministic decision tests: fixed inputs → identical decision, including the Critic and counterfactual results.
+- Memory leakage test: no analog with `label_end_ts ≥ t`; projection and normalisers are fitted only on past data.
+- Similarity correctness on synthetic known neighbours.
+- Critic independence monitor; Critic REJECT forces WAIT.
+- Counterfactual margin rule: WAIT wins on ties.
+- EIS counts price-derived indicators as one group.
+- Conflict thresholds.
+- Uncertainty rule: high confidence with high uncertainty → WAIT.
+- Regime transition multipliers.
+- Feature reliability down-weighting; stale or anomalous inputs are excluded.
+- Opportunity ranking under the budget.
+- Hidden-exposure test (short-USD cluster).
+- Trap detector cases built from labelled real windows.
+- Entry-timing plans expire and are re-validated.
+- Dynamic exit: SL never loosens; the risk veto applies; hard exits work without the AI.
+- Autopsy rules.
+- **Offline suite** (VI.17-3) and the static lint rule.
+- Model loading and checksum failure → NO TRADE.
+- Missing or stale data → NO TRADE.
+- Risk-veto tests.
+- Portfolio tests.
+
+## VI.22 Final report for this brief (produced on the server)
+1. Modules reused.
+2. Modules created.
+3. Local models built or used, with benchmark results (§III.17).
+4. How the dataset and feature pipeline work (PIT, labels, memory).
+5. How the decision flow works (VI.1, with a real trace example).
+6. Proof of no cloud-AI dependency: VI.17 items 1–4 with outputs.
+7. Tests run, with results.
+8. PAPER / SHADOW / LIVE status (LIVE OFF).
+9. Model, data and decision health.
+10. Remaining items.
