@@ -25,7 +25,7 @@
 | **دستیار صوتی و آموزشی «تیکا» (Tika): فقط‌خواندنی، محرمانه و چندزبانه** | ساخت یا ارتقای دستیار | بخش ۱۴ |
 | **مدل‌های تصمیم: Jev + مدل‌های آفلاین و ابری (قابل انتخاب)** | مرجع مدل‌های AI | بخش ۱۵ |
 | **فعال‌سازی LBank Futures** (داده‌ی زنده، PAPER کامل، LIVE پشت Flag) | وقتی سراغ LBank می‌روید | بخش ۱۶ |
-| **استراتژی اختصاصی TAMRS** (رژیم‌محور، ریسک‌محور، چندبازاره) | تحقیق ← پیاده‌سازی ← بک‌تست ← PAPER | بخش ۱۷ |
+| **هوش کوانت TQI + استراتژی TAMRS** (موتور سیگنال، مدیریت معاملات و سرمایه) | تحقیق ← پیاده‌سازی ← بک‌تست ← PAPER ← Shadow | بخش ۱۷ |
 | **فهرست کامل پروژه‌ها و لینک‌ها و نصب** | مرجع (۱۱۷ مخزن + لینک‌های غیرگیت‌هابی + سبک‌ها) | پیوست Z (Z.1 تا Z.15) |
 
 > 💡 **اصل حافظه‌ی دائمی:** بعد از Bootstrap، Claude Code **هرگز کل پروژه را از اول نمی‌خواند**. هر جلسه فقط `CLAUDE.md`، `docs/state/TIKALGO_STATE.md`، `graphify-out/GRAPH_REPORT.md` و `docs/state/NEXT.md` را می‌خواند و از همان نقطه ادامه می‌دهد. برای جزئیات کد از گراف Graphify پرس‌وجو می‌کند، نه از خواندن کورکورانه‌ی فایل‌ها.
@@ -941,50 +941,41 @@ We will use IP-bound keys without withdrawal permission. Thank you.
 
 ---
 
-## 17. استراتژی اختصاصی TAMRS (TIKALGO Adaptive Multi-Regime Strategy): پرامپت اجرایی Q0 تا Q9
+## 17. هوش کوانت تیکالگو (TQI) و استراتژی اختصاصی TAMRS: پرامپت اجرایی Q0 تا Q16
 
-> **مرجع کامل:** [`strategy/TAMRS_RESEARCH_AND_SPEC.md`](./strategy/TAMRS_RESEARCH_AND_SPEC.md). این فایل شامل جدول تحقیق (منبع ← اصل ← قانون کدپذیر ← فیچر ← مزیت ← شرایط شکست) و قوانین دقیق ورود، خروج، ریسک، رژیم و پورتفولیو است. پروتکل بک‌تست و Robustness هم در آن هست.
-> منابع (Market Wizards سه‌گانه، Covel/Turtle و Tharp) فقط منبع تحقیق‌اند. نام محصول TAMRS است و هیچ استراتژی‌ای کپی نمی‌شود.
+> **مرجع کامل:** [`strategy/TIKALGO_QUANT_INTELLIGENCE_AND_TAMRS.md`](./strategy/TIKALGO_QUANT_INTELLIGENCE_AND_TAMRS.md)
+> - **بخش اول (TQI):** معماری نهادی سیستم، شامل لایهٔ داده، فیچر، آلفا، رژیم، مدل متا، پورتفولیو، ریسک، اجرا، اخبار/LLM، حاکمیت مدل و ضدبیش‌برازش. از اصول **عمومی** JPMorgan، Two Sigma، Man AHL، AQR، BlackRock و BIS و از مقالات Bailey و López de Prado و RL استخراج شده است.
+> - **بخش دوم (TAMRS):** استراتژی اختصاصی. از کتاب‌های Schwager، Covel/Turtle و Tharp استخراج شده است.
+>
+> **هدف:** ارتقای موتور سیگنال، مدیریت معاملات و مدیریت سرمایه روی همین کد موجود. الگوریتم محرمانهٔ هیچ نهادی کپی یا ادعا نمی‌شود.
 
 ### پرامپت (کامل کپی کنید و به Claude Code روی سرور بدهید)
 ```text
-You are the Lead Quant Architect of the EXISTING TIKALGO project. Continue per CLAUDE.md and docs/state/TIKALGO_STATE.md (do not re-read the whole repo; query Graphify).
-Mission: implement TAMRS exactly as specified in docs/tikalgo/strategy/TAMRS_RESEARCH_AND_SPEC.md (copy it into the repo under docs/strategy/ if not present), phase by phase Q0–Q9. Report to me in Persian.
+You are the Lead Quant Architect, AI Researcher and Senior Trading-System Engineer of the EXISTING TIKALGO platform. Continue per CLAUDE.md and docs/state/TIKALGO_STATE.md (do not re-read the whole repo; query Graphify).
+Mission: upgrade TIKALGO's signal engine, trade management and capital management by implementing docs/tikalgo/strategy/TIKALGO_QUANT_INTELLIGENCE_AND_TAMRS.md (Part I = TQI architecture, Part II = TAMRS strategy) on the existing codebase, phase by phase following its section I.X (Q0–Q16). Do one phase per session unless told otherwise. Report to me in Persian.
 
 CRITICAL RULES:
-- No toy strategy, standalone bot, duplicate engine, mock data, fake success or UI without backend. Reuse existing engines/contracts (strategy, feature, SMC/ICT, regime, scanner, AI decision, backtest, paper, risk, execution, Redis, Postgres/Timescale, APIs, workers, frontend contracts). Keep API contracts unless absolutely necessary (then version them).
-- LIVE stays OFF (tamrs.live.enabled=false). AI never invents trades, never increases risk, never bypasses Risk Engine / Execution Gate.
-- No lookahead/repaint: closed bars only; every non-OHLCV series joined as-of available_at ≤ decision time.
-- Never weaken or delete existing tests. Never download pirated books; use only official pages, the public Original Turtle Trading Rules PDF, and books legally present in the repo.
-- Never report a backtest number you did not actually compute from real stored data. If data is missing, say so and stop that part.
+- No toy bot, standalone framework, parallel engine, mock data, fake success or UI without backend. Reuse/extend existing engines and contracts (feature, SMC/ICT, regime, scanner, strategy, AI decision, backtest, paper, risk, execution, market-data, news/sentiment, Redis, Postgres/Timescale, workers, APIs, frontend). Version any contract you must change.
+- Do not copy or claim proprietary institutional algorithms; use only the public principles listed in Part I §I.D/§I.E.
+- LIVE stays OFF by default. Lifecycle: RESEARCH → BACKTEST → OOS → WALK-FORWARD → STRESS → PAPER → SHADOW → REVIEW → MANUAL APPROVAL → LIVE. Never auto-activate LIVE; never auto-promote a model.
+- AI/LLM never places, sizes or modifies orders, never invents trades or news, never raises risk, never bypasses Risk Engine / Execution Gate. LLM outputs are schema-validated, evidence-linked (source_url, published_at, evidence_quote).
+- Point-in-time only: every series has ts + available_at (+ vintage for macro); as-of joins; past-only normalization; purged CV + embargo for ML; no revised macro data in history.
+- Every backtest/model report shows GROSS and NET (fees, spread, slippage, funding, borrow, impact, latency). Log every experiment (n_trials) in the experiment ledger; compute PBO (CSCV) and Deflated Sharpe where practical.
+- Never weaken/delete existing tests. Never report numbers you did not compute from real stored data; if data is missing, say so.
+- Every decision writes an immutable Decision Trace (regime, strategy, top features+direction, confidence, E[edge], E[R], risk, conflicts, reasons for/against, decision LONG|SHORT|WAIT|REDUCE|EXIT, model/feature/data versions).
 
-Q0 — Inventory (read-only): map every existing module the spec relies on (regime, features incl. Donchian/ATR/ADX/ER/RSI/Kijun/BB, SMC: BOS/CHOCH/sweeps/FVG/OB, order flow: CVD/volume/OI/funding/liquidations/DOM, whales incl. Hyperliquid, macro: DXY/VIX/US10Y/Gold/NDX/SPX/BTC.D/F&G, news/sentiment, backtester, paper engine, risk engine, execution gate, settings, scanner, AI signals, watchlist). Output a table: spec component → existing file/class → reuse / extend / missing. Also list which data series have historical point-in-time coverage (with date ranges) — features without it get weight 0.
+PHASES (from §I.X):
+Q0 assessment (deliverables A,B,C + data-coverage table) → Q1 research docs adapted to the real code (D,E + source→feature and source→strategy matrices, model hierarchy, validation method) → Q2 data governance & leakage tests → Q3 Feature Factory (registry, quality, redundancy, ablation) → Q4 regime engine v2 (probabilistic layers + stress model) → Q5 strategy ensemble (TAMRS components + strategy cards) → Q6 meta-model baseline + Risk extensions + Portfolio construction → Q7 AI/LLM contract + Decision Trace → Q8 backtests & anti-overfitting (walk-forward, plateaus, Monte Carlo, synthetic stress, PBO/DSR) → Q9 integration (Scanner, AI Signals, Watchlist, Paper) → Q10 Execution Intelligence + TCA → Q11 Alpha Factory (registry + experiment ledger) → Q12 News/LLM pipeline + point-in-time macro → Q13 model registry + drift monitor + shadow mode → Q14 ML meta-label model (only if it beats baseline OOS net, PBO<0.3) → Q15 feedback loop & outcome attribution → Q16 shadow review → manual-approval gate.
 
-Q1 — Research report: write docs/strategy/TAMRS_RESEARCH.md from §1 of the spec, adjusted to what Q0 found (SOURCE → PRINCIPLE → CODABLE RULE → TIKALGO FEATURE → EXPECTED ADVANTAGE → FAILURE CONDITIONS) and the derivation of the final strategy. Commit before coding.
+Each phase: tests for its scope (timestamp integrity, leakage, regime, alpha, routing, model prediction, portfolio, risk limits, correlation, execution cost/slippage, news timestamps, macro PIT, model versioning, decision trace, backtest/walk-forward, paper), then build/typecheck/lint/all tests, Graphify update, save STATE/NEXT/CHANGELOG_AI/DECISIONS/BACKEND_GAPS, deploy & commit (§13).
 
-Q2 — Data integrity first: add available_at as-of joins where missing; implement the 4 no-repaint tests (incremental==batch, truncation, shift, randomized-future) for existing features + new ones. Fix any leak found in existing code and report it.
-
-Q3 — Feature independence: implement the redundancy procedure (§2: rolling Spearman, OOS rank-IC, VIF, ablation hook). Produce the per-profile primary-feature table from real data.
-
-Q4 — Regime Engine: extend the EXISTING regime module to the 8 states with hysteresis/priority (§3). Tests per state with deterministic fixtures built from real stored candles (labelled windows), plus edge cases.
-
-Q5 — Setup components S-TB, S-TP, S-SQ, S-MR, S-RV (§5) as reusable strategy components in the existing strategy engine; Router (§4) with per-cell enable flags; Exit Engine rules (§6.2). Each component unit-tested (entry, stop bounds, TP1/2/3, BE, trailing, time, regime-change, opposite-signal exits).
-
-Q6 — Fusion + Edge model (§6.1) with walk-forward calibration (no in-sample calibration leaking into OOS); Risk Engine extensions (§6.3–6.6: fixed-fractional sizing independent of confidence, pyramiding caps, heat, correlation clusters incl. downside correlation, directional/beta exposure, daily/weekly loss, DD ladder, leverage & liquidation-distance) inside the EXISTING Risk Engine. Market profiles (§7) and TF triples (§8) as config in existing Settings, separate PAPER/LIVE.
-
-Q7 — AI Decision Layer: extend the existing AI decision path with the §10 JSON contract (APPROVE/REJECT/DOWNGRADE, risk_multiplier ∈ [0,1]), schema validation, audit log, deterministic fallback with degraded flag. Tests: AI cannot add a trade, cannot raise risk, invalid output → NO TRADE.
-
-Q8 — Backtests & robustness (§9.2–9.4) on real stored data only: each component alone in its regimes → combined → ablation; IS/OOS, anchored walk-forward, parameter plateau grid, Monte Carlo (10k), stress windows (verify dates against data), 2× cost stress. Full metric set per component/setup/regime/market/long-short. Apply acceptance gates; disable any (setup×regime×profile) cell that fails. Save reports to docs/strategy/backtests/<date>/ (markdown + CSV) and the DB.
-
-Q9 — Integration & safety: Scanner, AI Signals, Watchlist, Paper Trading and Execution wired to TAMRS through existing contracts; Settings UI exposes §11 config (only validated cells switchable); LIVE activation gate per §11 (default OFF). Start PAPER for passing profiles. Then build/typecheck/lint/all tests, Graphify update, save STATE/NEXT/CHANGELOG_AI/DECISIONS/BACKEND_GAPS, deploy & commit (§13).
-
-FINAL OUTPUT (Persian report): 1) research findings 2) extracted principles per book 3) final TAMRS 4) exact entry/exit/risk rules as implemented 5) architecture changes 6) files changed 7) tests added 8) backtest results (real, with data ranges, costs, N) 9) remaining weaknesses 10) recommended next validation step.
+FINAL REPORT (Persian, cumulative, deliverables A–X): A current architecture assessment · B reusable modules · C missing capabilities · D lessons per public source · E source→principle→implementation · F final architecture · G model hierarchy · H features · I regime · J alpha · K ensemble · L meta-model · M portfolio · N risk · O execution · P news/LLM · Q governance · R anti-overfitting · S tests added · T files modified · U backtest results (real, gross & net, data ranges, N, n_trials, PBO/DSR) · V paper/shadow results · W remaining weaknesses · X exact next steps.
 ```
 
-### دروازه‌های پذیرش (خلاصه)
-- هر جزء جداگانه باید از دروازه‌های §9.4 عبور کند؛ هر جزئی که نتیجهٔ OOS را بهتر نکند حذف می‌شود.
-- اندازهٔ پوزیشن هرگز با بالا رفتن اطمینان (confidence) بزرگ نمی‌شود؛ همهٔ ضریب‌ها ≤ ۱ هستند.
-- LIVE فقط بعد از: بک‌تست ← Walk-forward ← حداقل ۳۰ روز PAPER با ۳۰ معامله ← تأیید ادمین ← فعال‌سازی صریح کاربر.
+### دروازه‌های کلیدی (خلاصه)
+- هر جزء جداگانه از دروازه‌های Part II §9.4 و I.R عبور می‌کند: OOS خالص بعد از هزینه، PBO کمتر از ۰٫۳، و پایداری نتیجه روی بازه‌ای از پارامترها. هر جزئی که نتیجه را بهتر نکند حذف می‌شود.
+- اندازهٔ پوزیشن هرگز با بالا رفتن اطمینان بزرگ نمی‌شود؛ همهٔ ضریب‌ها ≤ ۱ هستند. Risk Engine مستقل از AI است و حق وتو دارد.
+- اگر سیگنال سیستماتیک، AI، ریسک یا اجرا با هم مخالف باشند، تصمیم WAIT یا REDUCE است و سیستم پیش‌بینی را تحمیل نمی‌کند.
 
 ---
 
