@@ -1,5 +1,5 @@
-# TIKALGO Quant Intelligence (TQI) + TAMRS + TIKALGO AI (Offline Decision Engine) + Continuous Learning (CLS)
-## Research report and implementation specification (v5)
+# TIKALGO Quant Intelligence (TQI) + TAMRS + TIKALGO AI (Offline Decision Engine + Cognitive Core) + Continuous Learning (CLS)
+## Research report and implementation specification (v6)
 
 > **خلاصه برای مالک پروژه (فارسی):** این سند هدفش ارتقای سه چیز است:
 > 1. **موتور سیگنال:** دقیق‌تر، رژیم‌محور و قابل توضیح.
@@ -13,6 +13,7 @@
 > - **بخش سوم (ODE):** «موتور تصمیم آفلاین». یک لایهٔ تصمیم‌گیری محلی است و به هیچ API ابری وابسته نیست. بالای موتورهای موجود می‌نشیند، شواهد را ترکیب می‌کند و LONG، SHORT، WAIT، REDUCE یا EXIT پیشنهاد می‌دهد. Risk Engine حق وتو دارد و LIVE فقط بعد از دروازه‌های III.0 باز می‌شود.
 >
 > - **بخش ششم (TIKALGO AI v2):** نسخهٔ کاملاً آفلاین و پیشرفتهٔ موتور تصمیم: حافظهٔ تاریخی و شباهت، منتقد مستقل، تصمیم‌های جایگزین، استقلال و تضاد شواهد، موتور عدم‌قطعیت، گذار رژیم، تشخیص تله، زمان‌بندی ورود، خروج پویا، کالبدشکافی معامله، و اثبات نبود وابستگی به AI ابری.
+> - **بخش هفتم (TIKALGO AI Cognitive Core):** هستهٔ شناختی عمومی، محلی و آفلاین. شامل ادراک، حافظهٔ چندگانه، مدل جهان، گراف دانش، استدلال، علیت، برنامه‌ریزی، ابزارها، کتابخانهٔ مهارت، بازتاب، فرضیه و آزمایش، انتقال دانش، «نمی‌دانم»، مناظرهٔ چندعاملی، خودارزیابی، و ارزیابی توانایی بر اساس Levels of AGI. معامله یکی از حوزه‌های این هسته است. این بخش بعد از اعتبارسنجی هستهٔ معاملاتی پیاده می‌شود.
 > - **بخش چهارم (CLS):** یادگیری مداوم و کنترل‌شده در سه حلقه:
 >   - A: آمار و کالیبراسیون روزانه؛
 >   - B: مدل قهرمان و چالشگر؛
@@ -62,6 +63,7 @@
 | **Continuous Learning System** (3 loops, champion/challenger, knowledge base, baseline A/B) | **Part IV** |
 | **Extended research library** (23 additional sources → concrete spec changes) | **Part V** |
 | **TIKALGO AI v2** (fully offline local decision intelligence; report items 1–10) | **Part VI** (extends Part III) |
+| **TIKALGO AI Cognitive Core** (local general-intelligence architecture; AGI CORE STATUS report) | **Part VII** (phases C0–C10, after Q0–Q19) |
 
 ---
 
@@ -1943,3 +1945,569 @@ The explanation is rendered from the trace by template. The optional local LLM m
 8. PAPER / SHADOW / LIVE status (LIVE OFF).
 9. Model, data and decision health.
 10. Remaining items.
+
+---
+
+# PART VII: TIKALGO AI Cognitive Core (Local, Offline-First General-Intelligence Architecture)
+
+> **خلاصهٔ فارسی:** این بخش، **TIKALGO AI** را از یک موتور تصمیم معاملاتی به یک **هستهٔ شناختی عمومی و محلی** ارتقا می‌دهد. این هسته این قابلیت‌ها را دارد:
+> - ادراک، حافظهٔ چندگانه، مدل جهان و گراف دانش؛
+> - استدلال چندروشی، موتور علیت و برنامه‌ریزی؛
+> - استفاده از ابزارها و کتابخانهٔ مهارت؛
+> - بازتاب (reflection)، فرضیه‌سازی و آزمایش؛
+> - یادگیری مداوم، انتقال دانش بین بازارها، و گفتن «نمی‌دانم»؛
+> - مناظرهٔ چندعاملی و خودارزیابی.
+>
+> «معامله» یکی از حوزه‌های تخصصی این هسته است، نه کل آن.
+>
+> سه نکتهٔ صادقانه:
+> 1. **AGI یک ادعای پژوهشی است، نه نتیجه‌ای که بشود روی یک VPS اعلام کرد.** ما توانایی‌ها را با بنچمارک اندازه می‌گیریم و شواهد ارائه می‌دهیم. چیزی را «اثبات AGI» نمی‌نامیم.
+> 2. **هوش این سیستم از معماری می‌آید، نه از یک مدل بزرگ.** معماری یعنی مدل‌های کوچک تخصصی، حافظه، مدل جهان، استدلال، برنامه‌ریزی و ابزارها.
+> 3. **ترتیب مهم است.** این بخش بعد از پایدار شدن هستهٔ معاملاتی (Q0 تا Q19 و اجرای PAPER) پیاده می‌شود. اول سودآوری و ایمنی، بعد گسترش هوش عمومی.
+
+## VII.0 Positioning
+- **Cognitive Core** = the general architecture. **Trading Domain** = one specialist that *uses* the core. Research and general problems are other domains.
+  ```
+                   TIKALGO AI COGNITIVE CORE
+                              │
+         ┌────────────────────┼────────────────────┐
+      TRADING              RESEARCH             GENERAL
+      DOMAIN               DOMAIN               PROBLEMS
+   (Parts I–VI)     (alpha/experiments)    (ops, analysis, Q&A)
+  ```
+- **Reuse first.** Most core components generalise parts already specified:
+
+  | Already specified | Generalised as |
+  |---|---|
+  | VI.5 counterfactual engine | Generic counterfactual engine |
+  | VI.4 Critic | Critic agent |
+  | VI.2 historical memory | Episodic memory |
+  | §I.J alpha registry + experiment ledger | Experiment engine |
+  | Part IV loops | Continual learning |
+  | §I.Q governance | Governance |
+
+  Q0 maps the existing TIKALGO code first.
+- **Absolute rule (unchanged):** the core's reasoning, memory, learning, planning and decisions run **100% locally**.
+  - No cloud LLM or paid inference API.
+  - No hidden cloud fallback.
+  - With `OLLAMA=OFF` and no Internet, the core must still REASON, PLAN, DECIDE, PAPER-TRADE and LEARN, as far as its structured models allow.
+
+## VII.1 Architecture and component mapping
+```
+PERCEPTION ─ MEMORY ─ KNOWLEDGE → WORLD MODEL → COGNITIVE STATE → {REASONING, CAUSALITY, PLANNING}
+→ COGNITIVE ROUTER → {LOCAL ML, LOCAL LLM (optional), SEARCH, SYMBOLIC, STATISTICS}
+→ MULTI-AGENT CRITIC → COUNTERFACTUAL ENGINE → DECISION ENGINE → SAFETY/RISK GATE → ACTION
+→ OBSERVATION → SELF-EVALUATION → LEARNING LOOP → CONTROLLED IMPROVEMENT
+```
+| Component | Reuses (existing / earlier parts) | New |
+|---|---|---|
+| Perception | Market-data workers, Feature Factory (§I.H), news/macro pipelines (§I.P) | Event/entity/relationship extraction, cognitive state |
+| Memory | Redis, journal, `decision_memory` (VI.2), principle cards + pgvector (IV.3) | Memory manager (tiers, consolidation), self-memory |
+| Knowledge graph | Graphify (code graph) + Postgres | Domain KG with temporal, point-in-time edges |
+| World model | Regime engine (§I.I), stress layer, scenario/synthetic generator (§I.R-6) | Latent-state transition model, scenario simulator API |
+| Reasoning, causality, planning | Rules, statistical engines | Reasoning library, causal engine, planner |
+| Router | — | Problem classifier + solver registry + meta-knowledge |
+| Critic / debate | VI.4 Critic, VI.12 traps | Agent set with distinct objectives + Judge |
+| Counterfactual | VI.5 | Generic interface |
+| Decision / risk | TIKALGO AI decision engine (Parts III, VI), Risk Engine | — |
+| Tools | All existing services | Tool registry with schemas and permissions |
+| Learning / improvement | Part IV, experiment ledger, model registry | Skill library, reflection records, capability registry |
+
+## VII.2 Capability-based progress (Levels of AGI)
+Reference: Morris et al., *"Position: Levels of AGI for Operationalizing Progress on the Path to AGI"*, ICML 2024 (Google DeepMind). It grades **performance** (depth) × **generality** (breadth), plus **autonomy** levels tied to deployment risk.
+
+**Capability registry** (table `capability_registry`):
+```
+capability, domain (general|trading|research), current_level, target_level, benchmark_id,
+score (0–100), failure_rate, confidence (CI), generalization (score on unseen-task split),
+autonomy_level, last_evaluated, evidence_refs[]
+```
+- **Levels used:** performance tiers adapted from the paper:
+
+  | Tier | Meaning |
+  |---|---|
+  | Emerging | Reaches the internal novice baseline |
+  | Competent | ≥ the internal expert-rule baseline |
+  | Expert | Clearly beats the expert baseline OOS |
+  | Virtuoso | — |
+  | Superhuman | — |
+
+  Each tier is measured **per capability** against explicit internal baselines. Generality is graded as **narrow** (one domain) vs **general**.
+- **Realistic expectation on a CPU VPS:**
+  - **Trading:** narrow, possibly Competent→Expert in specific validated cells.
+  - **General capabilities:** Emerging at best.
+  
+  This is reported honestly. The registry exists to make progress **measurable**, not to make claims.
+
+## VII.3 Perception
+```
+RAW DATA → FEATURES (§I.H) → EVENTS → ENTITIES → RELATIONSHIPS → STATE → WORLD MODEL
+```
+- **Event schema:**
+  ```
+  event_id, type, entity_ids[], ts, available_at, attributes, source, confidence, evidence_ref
+  ```
+  Events are derived deterministically from features. Examples:
+  - `BREAKOUT(BTCUSDT, 4h)`;
+  - `FUNDING_EXTREME`;
+  - `LIQUIDATION_CASCADE`;
+  - `CPI_RELEASE(surprise=+0.2)`;
+  - `WHALE_DISTRIBUTION`;
+  - `SPREAD_SHOCK`.
+  
+  News events come from §I.P.
+- **Entities and relationships** are written to the domain KG (VII.6) with validity times.
+- **Cognitive state:** a typed snapshot of the working set the core reasons over (goals, active entities, recent events, world-state estimate, open positions, health), kept in Redis and versioned per cycle.
+- **Inputs:** everything in the DFC (§III.3), plus economic calendar, account and execution state.
+
+## VII.4 World model
+**References:**
+- Ha & Schmidhuber, *World Models* (2018);
+- Moerland et al., *Model-based Reinforcement Learning: A Survey* (Foundations and Trends in ML, 2023);
+- Chen et al., *A Definition and Roadmap for World Models* (arXiv 2607.06401, 2026).
+
+**Financial world model** = a probabilistic **latent-state transition model**:
+- **Latent state** z_t: regime × volatility state × liquidity/stress state, from the regime engine (§I.I), plus macro/liquidity factors.
+- **Transition model** P(z_{t+1} | z_t, exogenous events): an HMM/regime-switching estimate with event-conditioned transition probabilities, e.g. P(TREND→RANGE | funding extreme).
+- **Observation model:** returns, vol, spreads, flows conditional on z (fitted distributions).
+- **Scenario simulator:** samples future paths. It uses regime-switching plus block-bootstrap residuals plus injected shocks (from §I.R-6). It can model:
+  - TREND, RANGE, BREAKOUT, REVERSAL;
+  - LIQUIDITY EVENT, NEWS SHOCK;
+  - VOLATILITY EXPANSION and CONTRACTION;
+  - REGIME TRANSITION.
+- **Uses:**
+  - the counterfactual engine (VII.9) and the planner (VII.10) score actions by simulating outcomes;
+  - the risk scenarios for the portfolio.
+- **Hidden state and uncertainty:** posterior state probabilities and their entropy are exposed.
+- **World Model Health:** probabilistic forecast skill (log score, CRPS) of predicted state and return distributions vs realised outcomes, and transition-probability calibration.
+
+## VII.5 Memory system
+| Memory | Content | Storage (reuse) | Lifecycle |
+|---|---|---|---|
+| Working | Current cognitive state, active goals, retrieved items | Redis (TTL) | Per cycle |
+| Episodic | The system's own experiences: decisions, trades, outcomes, autopsies, reflections | Journal + `decision_memory` + reflection records | Append-only; consolidated monthly |
+| Semantic | Concepts, principles, domain facts | Domain KG + principle cards (pgvector) | Updated by validated research |
+| Procedural | Executable skills | Skill library (VII.17) | Versioned; validated |
+| Historical market memory | Market analogs | VI.2 | PIT-safe |
+| Self-memory | Own strengths and weaknesses, calibration per task/regime, failure patterns, meta-knowledge | Capability registry + meta-knowledge table (VII.18) | Updated after evaluations |
+
+**Lifecycle:** STORE → INDEX → RETRIEVE → CONSOLIDATE → REFLECT → UPDATE.
+- **Retrieval score** (adapted from *Generative Agents*, Park et al. 2023):
+  ```
+  score = α·relevance (vector + KG proximity) + β·recency + γ·importance + δ·outcome_value
+  ```
+  It is computed locally, and memory is **point-in-time filtered** for any decision.
+- **Tiering** (adapted from *MemGPT*, Packer et al. 2023): small working context, paged retrieval from long-term stores. A local LLM is not required; retrieval is structured.
+- **Consolidation jobs:** merge duplicate episodes into summaries with statistics; promote recurring patterns to semantic cards as `untested` hypotheses; decay irrelevant items (never delete audit records).
+
+## VII.6 Knowledge graph
+- **Graphify** stays the **code/architecture** graph used by Claude Code.
+- The **domain KG** reuses the same Postgres or graph storage if Q0 shows that is suitable. Otherwise it uses Postgres tables or recursive queries (or Apache AGE if already installed). No new heavy graph database without need.
+- **Entities:** assets, exchanges, brokers, companies, projects, tokens, sectors, economies, currencies, macro indicators, organisations and people (public roles only), news events, strategies, signals, trades.
+- **Relations:** `correlates_with`, `causes`, `influences`, `depends_on`, `belongs_to`, `contradicts`, `supports`, `preceded_by`, `followed_by`, `similar_to`.
+- **Every edge has:** `confidence`, `evidence_refs`, `method` (statistical/causal/curated), `valid_from` / `valid_to` (temporal, so queries are point-in-time) and `version`.
+  - `causes` edges require causal-engine evidence (VII.8).
+  - `correlates_with` edges are rolling and dated.
+
+## VII.7 Reasoning core (not text generation)
+| Mode | Implementation (local) |
+|---|---|
+| Deductive | Rule engine over typed facts (risk rules, strategy rules, constraints) |
+| Inductive | Statistical estimation from data and memory (rates, distributions, CIs) |
+| Abductive | Rank candidate explanations of an observation by likelihood × prior (e.g. why did this trade fail: regime, execution or news?) |
+| Probabilistic | Bayesian updating; calibrated model probabilities |
+| Temporal | Time-aware KG queries, event sequences, lead/lag analysis |
+| Causal | Causal engine (VII.8) |
+| Analogical | Memory similarity (VI.2, VII.5) |
+| Constraint | CP/LP/MIP solver (e.g. OR-Tools / scipy) for allocation and scheduling |
+| Symbolic | Rule/Datalog-style inference over the KG |
+| Numerical | numpy/scipy/statsmodels solvers |
+| Counterfactual | VII.9 |
+
+- Every reasoning step emits a structured record: method, inputs, output, confidence.
+- The optional local LLM can only parse or produce text around these steps.
+
+## VII.8 Causal engine
+**Reference:** Pearl, *Causality* (2nd ed., Cambridge University Press, 2009).
+
+**Record format:**
+```
+CAUSE → MECHANISM → EFFECT → ALTERNATIVE EXPLANATIONS → COUNTERFACTUAL → EVIDENCE LEVEL
+```
+
+- **Domain DAGs:** encoded from domain knowledge. Example: global liquidity / USD / risk appetite → {BTC, ETH, NDX}. This separates **common-cause co-movement** from "BTC ↑ because ETH ↑".
+- **Estimation:**
+  - backdoor adjustment with regression or matching on stationary features;
+  - event studies around exogenous events (macro releases, scheduled unlocks);
+  - conditional-independence tests (PC-style discovery) as **suggestions only**;
+  - Granger-type lead/lag only as weak temporal evidence.
+- **Refutation tests** (required):
+  - placebo treatment;
+  - a random common cause;
+  - subset stability;
+  - out-of-period replication.
+- **Evidence levels:** `correlational` < `temporal` < `adjusted` < `quasi-experimental` (event study) < `replicated`.
+  - Only `adjusted+` may create `causes` edges.
+  - Trading logic may use causal claims only at `quasi-experimental+`.
+
+## VII.9 Generic counterfactual engine
+- **Interface:**
+  ```
+  evaluate(state, actions[], outcome_model, utility, risk_model, horizon)
+    → per action: E[outcome], risk, uncertainty, opportunity_cost, U
+  ```
+  Outcome models come from the world model, ML models or the simulator.
+- **Trading:** actions = {LONG, SHORT, WAIT, REDUCE, EXIT} (VI.5).
+- **Generic:** actions = {A, B, WAIT, DO_NOTHING}. Example: run an expensive research job now vs later under CPU budget.
+- **Selection rule:** an action is chosen only if it beats the safe default (WAIT / DO_NOTHING) by a margin that **grows with uncertainty**.
+
+## VII.10 Planning engine
+```
+GOAL → SUBGOALS → PLAN → ACTION → OBSERVE → EVALUATE → REPLAN
+```
+- **Hierarchical (HTN-style) decomposition** with typed tasks.
+  - Horizons: short (one decision cycle), medium (a trade lifecycle or research experiment), long (monthly research programme).
+- **Search** (adapted from *Tree of Thoughts*, Yao et al. 2023, without depending on an LLM):
+  - beam/tree search over candidate plans;
+  - states are scored by value estimates from models, the world-model simulation and the counterfactual engine;
+  - backtracking when a branch fails a constraint or its value drops.
+- **Contingencies:** every plan carries "if X then Y" branches. Trading example: an entry plan with expiry, invalidation and hedging/exit branches.
+- **Replanning triggers:** a regime change, a health degradation, a constraint violation, or a goal completed or failed.
+
+## VII.11 Tool use and tool registry
+**Registry fields:**
+```
+tool, purpose, input_schema, output_schema, cost (CPU/time), latency, reliability (rolling),
+permissions, risk_level (read | compute | simulate | paper_order | live_order | admin), owner, version
+```
+- **Tools** (existing services wrapped, not rewritten): DB, Redis, WebSocket, market-data adapters, scanner, backtester, execution engine, risk engine, news, on-chain, whale, analytics, a Python sandbox, local files (read-only scope), KG queries.
+- **Grounding** (adapted from *ReAct*, Yao et al. 2023, and *SayCan*, Ahn et al. 2022): a tool is selected only if **useful** (expected value for the current goal) × **able** (affordance: permission, health and preconditions satisfied).
+  - Every call is logged.
+  - **Outputs are observations, never trusted instructions.**
+- **Permissions:**
+  - `live_order` is callable only through the Risk Engine and Execution Gate, in LIVE mode, after the III.0 gates.
+  - The Python tool runs in a **sandbox** (no network, CPU/memory/time limits, read-only data mounts).
+
+## VII.12 Cognitive router
+"What kind of problem is this?" A rules-first classifier answers, with a small local classifier for ambiguous text requests. It then selects a solver from the **solver registry**:
+
+| Problem type | Solver |
+|---|---|
+| Math / numeric | Numerical solver |
+| Prediction | ML model |
+| Optimisation | Optimiser (CP/LP/MIP) |
+| Causal question | Causal engine |
+| Planning | Planner |
+| Pattern recognition | Local ML |
+| Text understanding | Local LLM (optional) or a structured parser |
+| Historical question | Memory / retrieval |
+| Trading decision | Trading Intelligence Stack (TIKALGO AI, Parts III/VI) |
+
+- **Meta-knowledge (VII.18) re-ranks solvers** by past performance on the task type.
+- If no solver qualifies → `INSUFFICIENT_EVIDENCE` / "I don't know" (VII.19).
+
+## VII.13 Local model stack
+- **Models:** LightGBM, XGBoost, CatBoost, sklearn, small PyTorch and ONNX Runtime, on CPU first.
+- **Optional local LLM** (Ollama / llama.cpp; quantised small model): used only where the benchmark proves value. It must never be a single point of failure.
+- **The `OLLAMA=OFF` test is mandatory.** With it off, the core must still:
+  - **reason** (structured);
+  - **plan** (search);
+  - **decide** (TIKALGO AI);
+  - **paper-trade**;
+  - **learn** (Loops A and B).
+
+## VII.14 Self-reflection (structured, not free text)
+Inspired by *Reflexion* (Shinn et al. 2023) and *Self-Refine* (Madaan et al. 2023).
+
+**Reflection record** (written after each decision cycle that resolves):
+```
+belief (claim + probability), basis (evidence ids), ignored_evidence (ids with reason),
+alternatives_considered (ids + values), outcome, error_location (autopsy class VI.15),
+lesson (structured: condition → adjustment proposal), confidence_change, links
+```
+- Reflections become **retrieval context** for similar future situations, and **hypothesis seeds** (VII.15).
+- They never directly change production logic.
+- Iterative refinement inside a cycle is bounded: at most N critique-revise rounds, each scored by a metric, not by self-assessment text.
+
+## VII.15 Hypothesis and experiment engine (research scientist loop)
+```
+OBSERVATION → QUESTION → HYPOTHESIS → EXPERIMENT → RESULT → CRITIQUE → REPLICATION → ACCEPT / REJECT
+```
+- **Sources:**
+  - autopsy clusters (e.g. "losses in RANGE with funding extreme and positive CVD");
+  - drift alerts;
+  - KG anomalies;
+  - reflection lessons;
+  - principle cards.
+- **Templates:** conditional-effect, lead-lag, interaction and regime-dependence hypotheses.
+  - Example: *"Funding extremes combined with positive CVD may predict failed continuation in RANGE."* → its dataset spec, test and metric are generated automatically.
+- **Execution:**
+  - reuses the alpha registry and experiment ledger (§I.J, §I.R);
+  - versioned and reproducible;
+  - **replication on a held-out period or market** is required before ACCEPT.
+- **Statistics:** multiple-testing control (t ≥ 3, DSR, PBO); every generated hypothesis counts as a trial.
+- **No hypothesis reaches production without the full pipeline.**
+
+## VII.16 Continual learning
+Part IV loops, plus methods from Wang et al., *A Comprehensive Survey of Continual Learning* (2023):
+- **Rehearsal/replay:** regime-stratified replay buffers, including fixed crash, range and panic sets.
+- **Regularisation toward the validated model:** bounded parameter drift.
+- **Modular / regime-specific models:** this limits interference.
+- **Forgetting tests:** a new model must not degrade on the frozen stress sets.
+
+**Never:** `LOSS → AUTOMATIC LIVE RETRAIN → LIVE`.
+
+## VII.17 Skill library
+Inspired by *Voyager* (Wang et al. 2023), fully offline.
+
+**Skill card:**
+```
+skill_id, name, inputs (typed), procedure (code ref, version), outputs, preconditions,
+validation (tests + metrics), performance (by market/regime), applicable_regimes, known_failures,
+dependencies (other skills), status (draft|validated|deprecated), owner, created_at
+```
+- **Examples:**
+  - detect liquidity sweep;
+  - classify regime transition;
+  - estimate slippage;
+  - build an entry plan;
+  - run a walk-forward test;
+  - compute a causal effect estimate.
+- **Composable:** skills form a DAG; the planner composes validated skills.
+- **New skills** are written as code by developers or Claude Code, offline, with tests. The core may **propose** compositions and parameter variants as experiments, never self-deploy code.
+
+## VII.18 Generalisation, transfer and meta-learning
+- **Transfer protocol** (e.g. BTC regime skill → ETH → Gold → SPX):
+  1. feature-distribution similarity check;
+  2. causal-structure similarity (shared drivers in the DAG);
+  3. zero-shot evaluation on the target;
+  4. fine-tune on target data only if needed;
+  5. **OOS validation on the target**.
+  
+  The transfer is registered only if the target's OOS passes.
+- **Meta-knowledge table:**
+  ```
+  task_type, context (market/regime/data size), method/model, score, n_evals, last_updated
+  ```
+  For example: regime classification → model A best in crypto, model B in FX; rare-event detection → model C; news interpretation → structured parser vs local LLM.
+  The router (VII.12) uses it.
+
+## VII.19 Uncertainty and "I don't know"
+- **Abstention policy (generic):** return `INSUFFICIENT_EVIDENCE` / "I don't know" when any of these holds:
+  - uncertainty > threshold (VI.7 components);
+  - OOD / distribution shift;
+  - missing data;
+  - conflicting evidence;
+  - unknown regime;
+  - weak analogs (n < min);
+  - poor calibration for that task.
+- **Measured** with **selective-risk curves** (coverage vs error): the system should be more accurate on what it answers than overall. Abstention quality is a scorecard item.
+- **No hallucination path:** every claim in an answer must reference evidence ids. Unreferenced claims are removed.
+
+## VII.20 Multi-agent cognitive debate (distinct objectives, not prompt clones)
+| Agent | Objective function | Implementation |
+|---|---|---|
+| Analyst | Maximise expected net R of the best candidate | TIKALGO AI meta-model |
+| Critic | Maximise detection of failure / trap | VI.4 Critic (different target and model) |
+| Researcher | Base rates and historical analogs; challenges novelty | Memory + statistics |
+| Risk Analyst | Minimise tail loss / DD contribution | Risk models, scenario simulator |
+| Causal Analyst | Validate the mechanism; flag correlation illusions | Causal engine |
+| Portfolio Analyst | Minimise marginal portfolio risk and concentration | Portfolio construction |
+| Execution Analyst | Minimise cost and slippage; fill feasibility | Execution intelligence |
+| **Judge** | Aggregate with **uncertainty weighting**: each agent's vote is weighted by its calibrated track record in this context; any veto-class objection (Risk/Execution hard limits) is binding | Deterministic aggregator |
+
+**Flow:** Evidence → Debate (each agent's structured position + evidence ids) → Criticism (cross-objections) → Resolution → Judge.
+- Disagreement entropy is an uncertainty input.
+- **High disagreement → WAIT / INSUFFICIENT_EVIDENCE.**
+- The optional local LLM may only narrate the debate from the structured records.
+
+## VII.21 Trading domain layer
+```
+Observe → Understand Regime → Retrieve History → Generate Candidates (existing engines)
+→ Evaluate Evidence → Causal/Counterfactual Analysis → Critic/Debate → Portfolio Analysis → Risk Gate → Execute / WAIT
+```
+Implemented by TIKALGO AI (Parts III and VI) as the trading specialist. The core provides memory, the world model, causal and planning services. No existing TIKALGO engine is replaced.
+
+## VII.22 Self-diagnostics
+| Health metric | Definition (0–100%) |
+|---|---|
+| Data Health | Weighted feature reliability (VI.9) of the active inputs |
+| Model Health | Calibration (1 − normalised ECE), drift status, latency within budget |
+| Memory Health | Index freshness, retrieval hit quality on probe queries, consolidation backlog |
+| Knowledge Health | Share of KG edges with valid evidence and not expired; contradiction count |
+| Tool Health | Rolling success rate and latency per tool |
+| World Model Health | Forecast skill (log score / CRPS) vs baseline |
+| Decision Health | No-trade value, filter value, rolling net expectancy vs OOS CI |
+| Calibration | Reliability per task |
+| Resources | CPU, RAM, disk vs budgets |
+
+These are shown on a self-diagnostics dashboard. Thresholds trigger degrade modes (VII.23) and alerts.
+
+## VII.23 Resource-aware intelligence
+**Compute governor** with per-cycle budgets and priorities:
+1. risk, exits and kill-switch;
+2. live decisions;
+3. monitoring;
+4. research and consolidation.
+
+**Degrade modes:**
+
+| Mode | What runs |
+|---|---|
+| FULL | Everything |
+| LITE | Smaller models, fewer simulations, more cache, no LLM |
+| MINIMAL | Rule baseline + risk only; research paused |
+
+**Efficiency metrics:** decision quality per CPU-second and per GB RAM ("maximum intelligence per CPU/RAM"). Huge models are never run when a small one meets the benchmark.
+
+## VII.24 Evaluation suite and scorecard
+| Area | Internal benchmark (held-out, unseen tasks) |
+|---|---|
+| Reasoning | Logic/math/abstraction task sets (generated + curated); ARC-AGI public tasks as an **external reference only** |
+| Generalisation | Performance on unseen markets, periods and task variants |
+| Memory | Long-horizon retrieval accuracy on probe questions about past episodes |
+| Transfer | Source→target OOS gains (VII.18) |
+| Tool use | Correct tool selection and argument validity on scripted tasks |
+| Causality | Synthetic data with a known DAG: recover cause vs confounded correlation; market event studies |
+| Counterfactual | Simulated environments with known outcomes |
+| Planning | Multi-step tasks in simulation; success rate, steps, recovery |
+| Learning | Improvement after feedback across Loop B generations |
+| Self-correction | Injected errors detected or fixed |
+| Uncertainty | Selective-risk curves; calibration |
+| Finance | Net expectancy, DD, no-trade value vs `baseline_v0` (IV.6) |
+| Safety | Zero hard-limit violations; red-team scenarios (bad data, tool failure, prompt-like inputs in news) |
+
+- **Scorecard (0–100 per area):** a normalised score vs internal baselines, with CI and "unseen-task" emphasis.
+- **Explicitly not an "AGI proof".** The dashboard shows the evidence and the Levels-of-AGI tier per capability.
+- **ARC-AGI** (arcprize.org; ARC-AGI-2 technical report) is used to track abstraction on unseen tasks. A low score is expected on CPU-scale systems. It is reported, never optimised by memorisation.
+
+## VII.25 Security and governance
+NIST AI RMF 1.0 (GOVERN, MAP, MEASURE, MANAGE) and its Playbook, mapped to concrete controls:
+
+| Function | Controls |
+|---|---|
+| GOVERN | Roles, approval workflow, model registry, policy for autonomy levels per domain (trading LIVE = human-approved) |
+| MAP | Capability registry, tool risk levels, data lineage, intended-use statements |
+| MEASURE | Evaluation suite, monitors, red-team tests |
+| MANAGE | Kill-switch, risk veto, human override, rollback, incident log |
+
+**Boundaries:**
+- tool permissions;
+- action limits per mode;
+- sandbox for code;
+- an immutable, hash-chained audit/decision history;
+- **no self-modification of production code, configs or models.**
+
+## VII.26 Controlled self-improvement
+```
+OBSERVE → DETECT WEAKNESS → FORM HYPOTHESIS → DESIGN EXPERIMENT → TRAIN/BUILD CANDIDATE
+→ TEST → COMPARE → OOS → STRESS → SHADOW → APPROVE → DEPLOY
+```
+**Prohibited:**
+- changing LIVE logic in response to losses;
+- editing its own permissions or limits;
+- deploying code;
+- disabling monitors or tests.
+
+## VII.27 Offline AI contract test
+`test_no_cloud_ai_dependency` (integration, CI and on-server). Setup:
+- run in a container with **no network**;
+- all cloud AI credentials removed;
+- Ollama stopped;
+- local DB/Redis loaded with real stored data.
+
+Then execute:
+```
+START → LOAD LOCAL MODELS → LOAD MEMORY → LOAD KNOWLEDGE → PROCESS DATA → REASON → PLAN
+→ DECIDE → PAPER TRADE → LEARN (Loop A update)
+```
+Assertions:
+- every stage completes;
+- zero egress attempts;
+- the health report shows `Cloud AI Dependency: NONE`.
+
+This is combined with the VI.17 static lint and network-isolation tests.
+
+## VII.28 Logging and audit (per reasoning cycle)
+```
+cycle_id, goal, observations (refs), retrieved_memory (ids), world_state (summary + probs),
+hypotheses (ids), tools_used, models_used (versions), reasoning_result (structured),
+alternatives (with values), critic/debate (positions), uncertainty, decision, action, result,
+error (autopsy class), learning (records created), versions, timestamp
+```
+**Private raw chain-of-thought is not stored as a product or log.** Only structured, auditable traces are stored.
+
+## VII.29 The cognitive loop
+```
+PERCEIVE → UNDERSTAND → REMEMBER → RETRIEVE → MODEL WORLD → REASON → GENERATE HYPOTHESES
+→ PREDICT → PLAN → SIMULATE COUNTERFACTUALS → CRITICIZE → ESTIMATE UNCERTAINTY → SELECT ACTION
+→ RISK CHECK → ACT / WAIT → OBSERVE RESULT → EVALUATE → REFLECT → LEARN → UPDATE SKILLS / MEMORY
+→ TEST IMPROVEMENT → (back to PERCEIVE)
+```
+**Cadences:**
+
+| Activity | Cadence |
+|---|---|
+| Trading cycles | On the ETF bar close |
+| Monitoring | Every minute |
+| Reflection | After each resolution |
+| Consolidation | Nightly |
+| Research | Weekly / monthly |
+| Evaluation suite | Monthly |
+
+## VII.30 Design trade-off: "The Bitter Lesson"
+Reference: Sutton, *The Bitter Lesson* (2019; original essay at incompleteideas.net).
+
+General methods that scale with computation and data (**search and learning**) tend to beat hand-crafted knowledge over time. Applied within VPS limits:
+- Prefer learning from TIKALGO's own growing data and **search** in planning/counterfactuals over ever-growing hand-tuned rules.
+- Keep domain priors where data is scarce (risk rules are **constraints**, not heuristics to be learned away).
+- Re-evaluate which hand-crafted components still beat learned ones as data grows (meta-knowledge, VII.18).
+
+## VII.31 Roadmap (after the trading core is validated)
+| Phase | Scope |
+|---|---|
+| C0 | Audit (repo, Graphify, existing AI/data modules), duplicate map, dependency graph, gap analysis vs Part VII |
+| C1 | Capability registry + evaluation-suite skeleton + baselines + self-diagnostics |
+| C2 | Perception events/entities + cognitive state + tool registry (wrap existing services; permissions; sandbox) |
+| C3 | Memory system (tiers, retrieval scoring, consolidation) + domain KG (temporal edges) |
+| C4 | World model (latent-state transitions + scenario simulator API) |
+| C5 | Generic counterfactual + planner (HTN + search) + router + meta-knowledge |
+| C6 | Causal engine (DAGs, estimation, refutation, evidence levels) |
+| C7 | Multi-agent debate + Judge (on top of the TIKALGO AI components) |
+| C8 | Reflection records + hypothesis/experiment engine (reuse ledger) + skill library |
+| C9 | Transfer protocol + continual-learning safeguards + resource governor |
+| C10 | `test_no_cloud_ai_dependency` full lifecycle, NIST RMF control review, AGI-core status report |
+
+Every capability must be **typed, tested, observable, versioned and fault-tolerant**. Existing APIs stay unchanged unless necessary (and are then versioned).
+
+## VII.32 Final report template (produced on the server)
+```
+AGI CORE STATUS
+Architecture · Existing Modules Reused · New Modules · Local Models · Memory · World Model ·
+Knowledge Graph · Reasoning · Planning · Causal Engine · Counterfactual Engine · Tool System ·
+Skill Library · Continual Learning · Self-Reflection · Self-Improvement · Generalization ·
+Evaluation Scores (with CIs and Levels-of-AGI tier per capability; not an AGI claim) ·
+Offline Verification: PASS/FAIL · Cloud AI Dependency: NONE/FOUND · Trading Integration ·
+Safety (NIST RMF mapping, violations = 0?) · Tests · Known Limitations · Next Capability
+```
+
+## VII.33 References for Part VII (verified where noted)
+| Reference | Status |
+|---|---|
+| Morris et al., "Position: Levels of AGI for Operationalizing Progress on the Path to AGI", ICML 2024, PMLR 235 | Verified |
+| Chen et al., "A Definition and Roadmap for World Models", arXiv 2607.06401 (July 2026) | Verified |
+| Ha & Schmidhuber, "World Models", arXiv 1803.10122 | |
+| Moerland et al., "Model-based Reinforcement Learning: A Survey", FnT ML 2023 | |
+| Packer et al., "MemGPT", arXiv 2310.08560 | |
+| Park et al., "Generative Agents", arXiv 2304.03442 | |
+| Pearl, *Causality*, Cambridge UP | |
+| Yao et al., "Tree of Thoughts", arXiv 2305.10601 | |
+| Yao et al., "ReAct", arXiv 2210.03629 | |
+| Ahn et al., "Do As I Can, Not As I Say" (SayCan) | |
+| Shinn et al., "Reflexion", arXiv 2303.11366 | |
+| Madaan et al., "Self-Refine", arXiv 2303.17651 | |
+| Wang et al., "A Comprehensive Survey of Continual Learning", arXiv 2302.00487 | |
+| Wang et al., "Voyager", arXiv 2305.16291 | |
+| ARC Prize / ARC-AGI-2 technical report | |
+| NIST AI RMF 1.0 + Playbook | |
+| Sutton, "The Bitter Lesson" (2019) | |
