@@ -16,6 +16,7 @@ export function parseCli(argv = process.argv.slice(2)): CliParsed {
     "quantity", "price", "orderId", "clientOrderId", "leverage",
     "orderType", "tokenId", "instId", "period", "bar",
     "startTime", "endTime", "marginType",
+    "tenkan", "kijun", "senkouB", "displacement", "series",
   ]);
 
   let command = "help";
@@ -62,6 +63,11 @@ export function parseCli(argv = process.argv.slice(2)): CliParsed {
       startTime: { type: "string" },
       endTime: { type: "string" },
       marginType: { type: "string" },
+      tenkan: { type: "string" },
+      kijun: { type: "string" },
+      senkouB: { type: "string" },
+      displacement: { type: "string" },
+      series: { type: "string" },
     },
     strict: false,
     allowPositionals: true,

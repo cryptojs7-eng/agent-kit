@@ -2,6 +2,7 @@ import type { ToolSpec } from "./types.js";
 import { asRecord, compactObject, readNumber, readString, requireString } from "./helpers.js";
 import { publicRateLimit, TOOBIT_CANDLE_BARS } from "./common.js";
 import { ValidationError } from "../utils/errors.js";
+import { computeIchimoku, DEFAULT_ICHIMOKU_PARAMS, parseCandles } from "../indicators/ichimoku.js";
 
 function readPositiveInt(args: Record<string, unknown>, key: string): number | undefined {
   const value = readNumber(args, key);
@@ -139,6 +140,63 @@ export function registerMarketTools(): ToolSpec[] {
           publicRateLimit("market_get_klines", 20),
         );
         return normalize(response);
+      },
+    },
+    {
+      name: "market_get_ichimoku",
+      module: "market",
+      description:
+        "Compute the Ichimoku Kinko Hyo indicator (Tenkan-sen, Kijun-sen, Senkou Span A/B cloud, Chikou Span) from Toobit klines, plus the projected future cloud and trend signals. Public endpoint. Rate limit: 20 req/s.",
+      isWrite: false,
+      inputSchema: {
+        type: "object",
+        properties: {
+          symbol: { type: "string", description: "e.g. BTCUSDT" },
+          interval: { type: "string", enum: [...TOOBIT_CANDLE_BARS], description: "K-line interval, e.g. 1h, 4h, 1d" },
+          limit: { type: "number", description: "Number of klines to fetch, default 300, max 1000. Needs at least senkouBPeriod + displacement for a full cloud." },
+          endTime: { type: "number", description: "End time in ms" },
+          tenkanPeriod: { type: "number", description: "Conversion line period, default 9" },
+          kijunPeriod: { type: "number", description: "Base line period, default 26" },
+          senkouBPeriod: { type: "number", description: "Leading Span B period, default 52" },
+          displacement: { type: "number", description: "Cloud / lagging span shift, default 26" },
+          seriesLength: { type: "number", description: "How many recent points of the full series to return, default 0 (only latest + signals)" },
+        },
+        required: ["symbol", "interval"],
+      },
+      handler: async (rawArgs, context) => {
+        const args = asRecord(rawArgs);
+        const params = {
+          tenkanPeriod: readPositiveInt(args, "tenkanPeriod") ?? DEFAULT_ICHIMOKU_PARAMS.tenkanPeriod,
+          kijunPeriod: readPositiveInt(args, "kijunPeriod") ?? DEFAULT_ICHIMOKU_PARAMS.kijunPeriod,
+          senkouBPeriod: readPositiveInt(args, "senkouBPeriod") ?? DEFAULT_ICHIMOKU_PARAMS.senkouBPeriod,
+          displacement: readPositiveInt(args, "displacement") ?? DEFAULT_ICHIMOKU_PARAMS.displacement,
+        };
+        const seriesLength = readNumber(args, "seriesLength") ?? 0;
+        if (seriesLength < 0) throw new ValidationError('Parameter "seriesLength" must be >= 0.');
+        const symbol = requireString(args, "symbol");
+        const interval = requireString(args, "interval");
+        const response = await context.client.publicGet(
+          "/quote/v1/klines",
+          compactObject({ symbol, interval, endTime: readNumber(args, "endTime"), limit: readPositiveInt(args, "limit") ?? 300 }),
+          publicRateLimit("market_get_ichimoku", 20),
+        );
+        const candles = parseCandles(response.data);
+        const minBars = Math.max(params.senkouBPeriod, params.kijunPeriod) + params.displacement;
+        const { series, ...result } = computeIchimoku(candles, params);
+        return {
+          endpoint: response.endpoint,
+          requestTime: response.requestTime,
+          data: {
+            symbol,
+            interval,
+            candles: candles.length,
+            ...(candles.length < minBars
+              ? { warning: `Only ${candles.length} klines; at least ${minBars} are needed for a complete cloud. Increase "limit".` }
+              : {}),
+            ...result,
+            ...(seriesLength > 0 ? { series: series.slice(-Math.floor(seriesLength)) } : {}),
+          },
+        };
       },
     },
     {
