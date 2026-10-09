@@ -515,7 +515,7 @@ mobile (bottom tab bar) and desktop, FA/EN RTL, dark/light, all states, wired to
 | Bybit | `ccxt: bybit` + native v5 | ✔ | ✔ | P0 | |
 | OKX | `ccxt: okx` | ✔ | ✔ | P0 | |
 | Bitget | `ccxt: bitget` | ✔ | ✔ | P0 | |
-| **LBank** | `ccxt: lbank` (Spot) + native contract API (Futures) | ✔ | ✔ (داده و PAPER؛ LIVE در انتظار دسترسی رسمی) | **P0** | API عمومی Futures فقط داده‌ی بازار است؛ برای LIVE بخش ۱۶ را ببینید |
+| **LBank** | فقط endpointهای عمومی (داده) | داده | داده و PAPER؛ **LIVE ممکن نیست** | P2 | پاسخ رسمی LBank (2026-10): API فقط برای شرکای سازمانی است و درخواست سازمانی جدید پذیرفته نمی‌شود؛ «API برای استفادهٔ تجاری باز نیست». اجرای فیوچرز به venue دیگر منتقل می‌شود (بخش ۱۶) |
 | **Toobit** | native (`agent-kit`: MCP و CLI) | ✔ | ✔ | **P0** | ابزارهای آماده + ایچیموکو |
 | XT.com | `ccxt: xt` | ✔ | ✔ | P1 | |
 | KuCoin | `ccxt: kucoin / kucoinfutures` | ✔ | ✔ | P1 | |
@@ -861,6 +861,13 @@ per §14. Reuse existing voice/chat components if present.
 ---
 
 ## 16. فعال‌سازی LBank Futures (پرامپت اجرایی L0 تا L9)
+
+> **به‌روزرسانی (2026-10)، پاسخ رسمی پشتیبانی LBank:** «API LBank برای استفادهٔ تجاری باز نیست. دسترسی API فقط به شرکای سازمانی داده می‌شود و درخواست سازمانی جدید فعلاً پذیرفته نمی‌شود.»
+> نتیجه برای این بخش:
+> - **L5 (آداپتور خصوصی) متوقف است.** `LBANK_FUTURES_LIVE` باید همیشه false بماند و `liveTrade` در ماتریس قابلیت‌ها هم false است.
+> - **LBank فقط به‌عنوان منبع دادهٔ عمومی و PAPER می‌ماند.** قبل از استفادهٔ تجاری از دادهٔ عمومی LBank در محصول (tikalgoai.com)، شرایط استفادهٔ LBank بررسی شود. در صورت ابهام، دادهٔ بازار از منبع دیگری گرفته شود.
+> - **«Venue جایگزین فیوچرز» در L6 پیش‌فرض است:** Hyperliquid (غیرمتمرکز، API کامل)، یا CoinEx، BingX، Bybit، OKX یا Bitget بسته به شرایط کاربر. هر venue جایگزین کانکتور، ماتریس قابلیت و تست‌های خودش را دارد.
+> - کلید API فعلی LBank کاربرد معاملاتی ندارد و باید غیرفعال یا حذف شود.
 
 > **واقعیت فعلی (بررسی‌شده، 2026-10):** API عمومی قراردادهای LBank (`https://lbkperp.lbank.com`، مسیر `/cfd/openApi/v1/pub/...`) فقط **داده‌ی بازار** می‌دهد: زمان سرور، فهرست قراردادها، تیکر و فاندینگ، و دفتر سفارش. **endpointهای خصوصی** (ثبت و لغو سفارش، پوزیشن، اهرم، حساب) در مستندات عمومی نیستند. CCXT (`lbank`) هم برای swap فقط همین ۴ endpoint عمومی را دارد. امضا: پارامترها مرتب ← MD5 (حروف بزرگ) ← HmacSHA256 یا RSA؛ هدرهای `timestamp`، `signature_method` و `echostr`. **کلیدی که به IP محدود نشده باشد ۳۰ روز اعتبار دارد.**
 > منابع: https://www.lbank.com/docs/contract.html · https://docs.ccxt.com/docs/exchanges/lbank
