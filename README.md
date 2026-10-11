@@ -8,12 +8,12 @@ Trade with natural language — from market queries to order execution. Built-in
 
 | Module | Capabilities | Tools |
 |--------|-------------|-------|
-| **Market** | Real-time ticker, depth, klines, mark price, funding rate, open interest, index | 21 |
+| **Market** | Real-time ticker, depth, klines, Ichimoku, mark price, funding rate, open interest, index | 22 |
 | **Spot** | Place/cancel orders, batch operations, order queries, trade history | 10 |
 | **Futures** | USDT-M perpetual, leverage, close position, TP/SL, flash close, reverse | 25 |
 | **Account** | Balance, deposit/withdraw, sub-accounts, transfer, flow, API key check | 10 |
 
-**Total: 66+ MCP tools**
+**Total: 67+ MCP tools**
 
 ## Usage Modes
 
@@ -72,6 +72,7 @@ toobit-trade-mcp setup --client <client>
 # Market data (no API key needed)
 toobit market ticker --symbol BTCUSDT
 toobit market candles --symbol BTCUSDT --interval 1h --limit 10
+toobit market ichimoku --symbol BTCUSDT --interval 4h
 toobit market funding-rate --symbol BTC-SWAP-USDT
 
 # Spot trading
@@ -100,7 +101,7 @@ toobit account balance
 ### Tool List
 
 <details>
-<summary><b>market — Market Data (21 tools, public)</b></summary>
+<summary><b>market — Market Data (22 tools, public)</b></summary>
 
 | Tool | Description |
 |------|-------------|
@@ -110,6 +111,7 @@ toobit account balance
 | `market_get_merged_depth` | Merged depth |
 | `market_get_trades` | Recent trades |
 | `market_get_klines` | Candlestick data |
+| `market_get_ichimoku` | Ichimoku cloud (Tenkan, Kijun, Senkou A/B, Chikou) + trend signals |
 | `market_get_ticker_24hr` | 24h spot ticker |
 | `market_get_ticker_price` | Latest price |
 | `market_get_book_ticker` | Best bid/ask |

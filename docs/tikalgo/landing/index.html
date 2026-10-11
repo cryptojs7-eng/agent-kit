@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>TIKALGO — See the Market Differently</title>
+  <meta name="description" content="TIKALGO is a multi-market AI trading intelligence platform: AI Active Signals, an offline TIKALGO AI decision engine, independent risk control and Tika, your AI trading tutor — across crypto, forex, gold, US stocks and ETFs.">
+  <meta name="theme-color" content="#050C09">
+  <meta property="og:title" content="TIKALGO — See the Market Differently">
+  <meta property="og:description" content="Regime-aware, risk-first AI trading intelligence across crypto, forex, gold, US stocks and ETFs.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="assets/bull-bear.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="assets/fonts/manrope-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/space-grotesk-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="assets/fonts/fonts.css">
+  <link rel="preload" as="image" href="assets/bull-bear.jpg">
+  <link rel="stylesheet" href="assets/landing.css">
+</head>
+<body>
+  <!-- NAV — login only (no public sign-up) -->
+  <header class="nav" id="nav">
+    <div class="container nav-inner">
+      <a href="#top" class="nav-logo" aria-label="TIKALGO home"><img src="assets/tikalgo-logo-on-dark.svg" alt="tikalgo"></a>
+      <nav class="nav-links" aria-label="Main">
+        <a href="#intelligence" data-i18n="nav.platform">Platform</a>
+        <a href="#markets" data-i18n="nav.markets">Markets</a>
+        <a href="#ai" data-i18n="nav.ai">TIKALGO AI</a>
+        <a href="#ecosystem" data-i18n="nav.integrations">Integrations</a>
+        <a href="#plans" data-i18n="nav.plans">Plans</a>
+        <a href="#join" data-i18n="nav.join">Membership</a>
+      </nav>
+      <div class="nav-right">
+        <div class="lang" role="group" aria-label="Language">
+          <button type="button" data-lang="en" aria-pressed="true">EN</button>
+          <button type="button" data-lang="fa" aria-pressed="false">فا</button>
+        </div>
+        <a href="/login" class="btn btn-primary" data-i18n="cta.login">Sign In</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- HERO -->
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-bg" id="heroBg" aria-hidden="true"></div>
+      <canvas id="heroCanvas" aria-hidden="true"></canvas>
+      <div class="container hero-content">
+        <p class="eyebrow reveal" data-i18n="hero.eyebrow">AI-assisted market intelligence</p>
+        <h1 class="h-xl" id="hero-title">
+          <span class="line"><span class="grad-text" data-i18n="hero.t1">See the Market</span></span>
+          <span class="line"><span class="green-text" data-i18n="hero.t2">Differently.</span></span>
+        </h1>
+        <p class="lead reveal" data-i18n="hero.lead">One intelligent ecosystem that connects market structure, liquidity, order flow, macro and news — and turns them into explainable, risk-checked decisions across crypto, forex, gold, US stocks and ETFs.</p>
+        <div class="hero-ctas reveal">
+          <a href="#intelligence" class="btn btn-primary" data-i18n="cta.discover">Discover TIKALGO</a>
+          <a href="/login" class="btn btn-ghost" data-i18n="cta.login">Sign In</a>
+        </div>
+        <div class="hero-badges reveal">
+          <span class="badge">CRYPTO</span><span class="badge">FOREX</span><span class="badge">GOLD</span><span class="badge">US STOCKS</span><span class="badge">ETFs</span>
+          <span class="badge ai" data-i18n="hero.badgeAi">TIKALGO AI · OFFLINE</span>
+        </div>
+      </div>
+      <div class="hero-tick" id="heroTick" dir="ltr" aria-live="off" hidden></div>
+      <div class="scroll-hint" aria-hidden="true"><span>SCROLL</span><span class="mouse"></span></div>
+    </section>
+
+    <!-- LIVE TAPE: TradingView's official live widget (crypto, forex, metals, US stocks, ETFs) -->
+    <section class="live-tape" aria-label="Live markets">
+      <p class="tape-l"><i class="dot-live"></i><span data-i18n="live.tape">Live markets — crypto, forex, metals, US stocks &amp; ETFs</span></p>
+      <div id="tapeTV" class="tape-box"></div>
+    </section>
+
+    <!-- CH 01 — STRUCTURE -->
+    <section class="chapter" id="structure" aria-labelledby="ch1">
+      <div class="grid-bg"></div>
+      <svg class="structure-svg" viewBox="0 0 1200 600" preserveAspectRatio="none" aria-hidden="true">
+        <line class="lvl" x1="0" y1="120" x2="1200" y2="120" stroke="#2FD08A" stroke-opacity=".5"/>
+        <line class="lvl" x1="0" y1="250" x2="1200" y2="250" stroke="#E9C46A" stroke-opacity=".5"/>
+        <line class="lvl" x1="0" y1="380" x2="1200" y2="380" stroke="#8FA59A" stroke-opacity=".5"/>
+        <line class="lvl" x1="0" y1="500" x2="1200" y2="500" stroke="#F6465D" stroke-opacity=".5"/>
+        <text x="16" y="110" fill="#2FD08A" data-i18n="s.bsl">Buy-side liquidity</text>
+        <text x="16" y="240" fill="#E9C46A" data-i18n="s.ob">Order block</text>
+        <text x="16" y="370" fill="#8FA59A" data-i18n="s.fvg">Fair value gap</text>
+        <text x="16" y="490" fill="#F6465D" data-i18n="s.ssl">Sell-side liquidity</text>
+        <path id="structPath" d="M0 520 L110 400 L190 450 L320 250 L400 320 L540 130 L630 210 L780 80 L900 150 L1040 60 L1200 40" fill="none" stroke="#3DDC2F" stroke-width="2.5" stroke-linejoin="round"/>
+        <circle id="structDot" r="5" fill="#3DDC2F" cx="0" cy="520"/>
+      </svg>
+      <div class="container chapter-head" style="position:relative">
+        <p class="eyebrow reveal" data-i18n="ch1.eyebrow">Chapter 01 — Structure</p>
+        <h2 class="h-lg reveal" id="ch1" data-i18n="ch1.title">Beyond the candle lies the structure.</h2>
+        <p class="lead reveal" data-i18n="ch1.lead">TIKALGO reads price as a living map — swing points, BOS and CHOCH, liquidity pools, order blocks and fair value gaps — and the forces moving between them.</p>
+      </div>
+    </section>
+
+    <!-- CH 02 — INTELLIGENCE -->
+    <section class="chapter" id="intelligence" aria-labelledby="ch2">
+      <div class="container">
+        <div class="chapter-head">
+          <p class="eyebrow reveal" data-i18n="ch2.eyebrow">Chapter 02 — Intelligence</p>
+          <h2 class="h-lg reveal" id="ch2" data-i18n="ch2.title">Every signal, connected.</h2>
+          <p class="lead reveal" data-i18n="ch2.lead">Independent analytical layers feed one decision context. Indicators that say the same thing count once — only independent evidence adds conviction.</p>
+        </div>
+        <div class="network reveal"><svg id="network" viewBox="0 0 1200 640" role="img" aria-label="Analytical layers connected to TIKALGO AI"></svg></div>
+        <div class="marquee" aria-hidden="true"><div class="marquee-track" id="marquee"></div></div>
+      </div>
+    </section>
+
+    <!-- CH 03 — MARKETS -->
+    <section class="chapter" id="markets" aria-labelledby="ch3">
+      <div class="container">
+        <div class="chapter-head">
+          <p class="eyebrow reveal" data-i18n="ch3.eyebrow">Chapter 03 — Markets</p>
+          <h2 class="h-lg reveal" id="ch3" data-i18n="ch3.title">One lens. Five markets.</h2>
+          <div class="tabs reveal" role="tablist" id="marketTabs"></div>
+        </div>
+        <div class="market-card reveal">
+          <div class="market-chart"><canvas id="marketCanvas"></canvas><div id="marketTV" class="tv-box" hidden></div><span class="note" id="marketNote" aria-live="polite">Live market data</span></div>
+          <div class="market-info" id="marketInfo" aria-live="polite"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CH 04 — PROCESS -->
+    <section class="chapter" id="process" aria-labelledby="ch4">
+      <div class="container process">
+        <div class="process-left">
+          <p class="eyebrow reveal" data-i18n="ch4.eyebrow">Chapter 04 — Process</p>
+          <h2 class="h-lg reveal" id="ch4" data-i18n="ch4.title">From data to decision.</h2>
+          <p class="lead reveal" data-i18n="ch4.lead">Every decision passes the same disciplined path. The AI recommends; the Risk Engine has the final veto.</p>
+          <div class="warn reveal" data-i18n="ch4.warn">⚠ AI can make mistakes. Trading involves substantial risk. Risk management remains essential, and every decision should be reviewed.</div>
+        </div>
+        <div class="steps" id="steps"><div class="rail"><div class="rail-fill" id="railFill"></div></div></div>
+      </div>
+    </section>
+
+    <!-- CH 05 — TIKALGO AI -->
+    <section class="chapter" id="ai" aria-labelledby="ch5">
+      <div class="grid-bg"></div>
+      <div class="container" style="position:relative">
+        <div class="chapter-head">
+          <p class="eyebrow reveal" style="color:var(--orange)" data-i18n="ch5.eyebrow">Chapter 05 — TIKALGO AI</p>
+          <h2 class="h-lg reveal" id="ch5" data-i18n="ch5.title">An AI that knows when to wait.</h2>
+          <p class="lead reveal" data-i18n="ch5.lead">TIKALGO AI is a local, offline decision engine above our quantitative engines. It weighs independent evidence, challenges itself, measures uncertainty — and only proposes a trade when there is real, cost-adjusted edge.</p>
+        </div>
+        <div class="ai-grid">
+          <div class="card reveal">
+            <div class="ai-points" id="aiPoints"></div>
+          </div>
+          <div class="card reveal" aria-label="Example decision trace">
+            <div class="trace" id="trace"></div>
+          </div>
+        </div>
+        <div class="stats" id="stats"></div>
+      </div>
+    </section>
+
+    <!-- CH 06 — TOOLKIT -->
+    <section class="chapter" id="toolkit" aria-labelledby="ch6">
+      <div class="container">
+        <div class="chapter-head">
+          <p class="eyebrow reveal" data-i18n="ch6.eyebrow">Chapter 06 — Toolkit</p>
+          <h2 class="h-lg reveal" id="ch6" data-i18n="ch6.title">Instruments of clarity.</h2>
+        </div>
+        <div class="tools" id="tools"></div>
+      </div>
+    </section>
+
+    <!-- CH 07 — TIKA -->
+    <section class="chapter" id="tika" aria-labelledby="ch7">
+      <div class="container">
+        <div class="chapter-head">
+          <p class="eyebrow reveal" data-i18n="ch7.eyebrow">Chapter 07 — Tika</p>
+          <h2 class="h-lg reveal" id="ch7" data-i18n="ch7.title">Meet Tika, your AI trading tutor.</h2>
+        </div>
+        <div class="tika">
+          <img src="assets/tika-512.jpg" alt="Tika, the TIKALGO AI assistant" class="tika-avatar reveal" width="220" height="220" loading="lazy">
+          <div class="bubbles" id="bubbles"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CH 08 — ECOSYSTEM -->
+    <section class="chapter" id="ecosystem" aria-labelledby="ch8">
+      <div class="container">
+        <div class="chapter-head">
+          <p class="eyebrow reveal" data-i18n="ch8.eyebrow">Chapter 08 — Ecosystem</p>
+          <h2 class="h-lg reveal" id="ch8" data-i18n="ch8.title">Connected to where you trade.</h2>
+        </div>
+        <div class="eco reveal">
+          <div class="eco-node"><img src="assets/tikalgo-logo-on-dark.svg" alt="tikalgo"></div>
+          <div class="eco-link" aria-hidden="true"></div>
+          <div class="venues" id="venues"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CH 09 — PLANS (from prompts/ui/05_REGIONAL_PRICING; buttons go to login — no public sign-up) -->
+    <section class="chapter" id="plans" aria-labelledby="ch9">
+      <div class="container">
+        <div class="chapter-head">
+          <p class="eyebrow reveal" data-i18n="ch9.eyebrow">Chapter 09 — Plans</p>
+          <h2 class="h-lg reveal" id="ch9" data-i18n="ch9.title">Start in paper. Grow with proof.</h2>
+          <p class="lead reveal" data-i18n="ch9.lead">Every plan starts in PAPER mode. LIVE trading is enabled only after validation and your explicit approval.</p>
+        </div>
+        <div class="plan-bar reveal">
+          <label class="cur"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>
+            <span class="sr-only" data-i18n="ch9.currency">Currency</span>
+            <select id="currency">
+              <option value="USD">US Dollar</option><option value="USDT">USDT (crypto)</option><option value="EUR">Euro</option>
+              <option value="GBP">British Pound</option><option value="JPY">Japanese Yen</option><option value="INR">Indian Rupee</option>
+            </select></label>
+        </div>
+        <div class="plans" id="plansGrid"></div>
+        <p class="tax reveal" id="taxNote"></p>
+      </div>
+    </section>
+
+    <!-- CH 10 — MEMBERSHIP REQUEST (reviewed and approved by an admin before the account is created) -->
+    <section class="chapter" id="join" aria-labelledby="ch10">
+      <div class="container join">
+        <div class="join-intro">
+          <p class="eyebrow reveal" data-i18n="ch10.eyebrow">Chapter 10 — Membership</p>
+          <h2 class="h-lg reveal" id="ch10" data-i18n="ch10.title">Request membership.</h2>
+          <p class="lead reveal" data-i18n="ch10.lead">TIKALGO membership is reviewed. Send your request; after an admin approves it, your account is created and activated, and we contact you with your sign-in details.</p>
+          <ol class="join-steps reveal">
+            <li><span>1</span><p data-i18n="ch10.s1">Submit the form</p></li>
+            <li><span>2</span><p data-i18n="ch10.s2">Admin review</p></li>
+            <li><span>3</span><p data-i18n="ch10.s3">Account created &amp; activated</p></li>
+          </ol>
+          <div class="contact reveal">
+            <h3 data-i18n="contact.t">Contact channels</h3>
+            <ul class="contact-list">
+              <li><a href="https://t.me/ad_tikalgo" rel="noopener" target="_blank"><b><svg width="18" height="18" viewBox="0 0 24 24" fill="#26A5E4" role="img" aria-hidden="true"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg><span data-i18n="contact.admin">Admin (Telegram)</span></b><span dir="ltr">@ad_tikalgo</span></a></li>
+              <li><a href="https://t.me/Tikalgoai" rel="noopener" target="_blank"><b><svg width="18" height="18" viewBox="0 0 24 24" fill="#26A5E4" role="img" aria-hidden="true"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg><span data-i18n="contact.channel">Telegram channel</span></b><span dir="ltr">t.me/Tikalgoai</span></a></li>
+              <li><a href="https://x.com/TikalgoAi" rel="noopener" target="_blank"><b><svg width="18" height="18" viewBox="0 0 24 24" fill="#FFFFFF" role="img" aria-hidden="true"><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/></svg>X</b><span dir="ltr">x.com/TikalgoAi</span></a></li>
+              <li><a href="https://www.instagram.com/tikalgoai" rel="noopener" target="_blank"><b><svg width="18" height="18" viewBox="0 0 24 24" fill="#FF0069" role="img" aria-hidden="true"><path d="M7.0301.084c-1.2768.0602-2.1487.264-2.911.5634-.7888.3075-1.4575.72-2.1228 1.3877-.6652.6677-1.075 1.3368-1.3802 2.127-.2954.7638-.4956 1.6365-.552 2.914-.0564 1.2775-.0689 1.6882-.0626 4.947.0062 3.2586.0206 3.6671.0825 4.9473.061 1.2765.264 2.1482.5635 2.9107.308.7889.72 1.4573 1.388 2.1228.6679.6655 1.3365 1.0743 2.1285 1.38.7632.295 1.6361.4961 2.9134.552 1.2773.056 1.6884.069 4.9462.0627 3.2578-.0062 3.668-.0207 4.9478-.0814 1.28-.0607 2.147-.2652 2.9098-.5633.7889-.3086 1.4578-.72 2.1228-1.3881.665-.6682 1.0745-1.3378 1.3795-2.1284.2957-.7632.4966-1.636.552-2.9124.056-1.2809.0692-1.6898.063-4.948-.0063-3.2583-.021-3.6668-.0817-4.9465-.0607-1.2797-.264-2.1487-.5633-2.9117-.3084-.7889-.72-1.4568-1.3876-2.1228C21.2982 1.33 20.628.9208 19.8378.6165 19.074.321 18.2017.1197 16.9244.0645 15.6471.0093 15.236-.005 11.977.0014 8.718.0076 8.31.0215 7.0301.0839m.1402 21.6932c-1.17-.0509-1.8053-.2453-2.2287-.408-.5606-.216-.96-.4771-1.3819-.895-.422-.4178-.6811-.8186-.9-1.378-.1644-.4234-.3624-1.058-.4171-2.228-.0595-1.2645-.072-1.6442-.079-4.848-.007-3.2037.0053-3.583.0607-4.848.05-1.169.2456-1.805.408-2.2282.216-.5613.4762-.96.895-1.3816.4188-.4217.8184-.6814 1.3783-.9003.423-.1651 1.0575-.3614 2.227-.4171 1.2655-.06 1.6447-.072 4.848-.079 3.2033-.007 3.5835.005 4.8495.0608 1.169.0508 1.8053.2445 2.228.408.5608.216.96.4754 1.3816.895.4217.4194.6816.8176.9005 1.3787.1653.4217.3617 1.056.4169 2.2263.0602 1.2655.0739 1.645.0796 4.848.0058 3.203-.0055 3.5834-.061 4.848-.051 1.17-.245 1.8055-.408 2.2294-.216.5604-.4763.96-.8954 1.3814-.419.4215-.8181.6811-1.3783.9-.4224.1649-1.0577.3617-2.2262.4174-1.2656.0595-1.6448.072-4.8493.079-3.2045.007-3.5825-.006-4.848-.0608M16.953 5.5864A1.44 1.44 0 1 0 18.39 4.144a1.44 1.44 0 0 0-1.437 1.4424M5.8385 12.012c.0067 3.4032 2.7706 6.1557 6.173 6.1493 3.4026-.0065 6.157-2.7701 6.1506-6.1733-.0065-3.4032-2.771-6.1565-6.174-6.1498-3.403.0067-6.156 2.771-6.1496 6.1738M8 12.0077a4 4 0 1 1 4.008 3.9921A3.9996 3.9996 0 0 1 8 12.0077"/></svg>Instagram</b><span dir="ltr">@tikalgoai</span></a></li>
+              <li><a href="https://youtube.com/@tikalgoai" rel="noopener" target="_blank"><b><svg width="18" height="18" viewBox="0 0 24 24" fill="#FF0000" role="img" aria-hidden="true"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>YouTube</b><span dir="ltr">@tikalgoai</span></a></li>
+              <li><a href="https://in.tradingview.com/u/Tikalgo/" rel="noopener" target="_blank"><b><svg width="18" height="18" viewBox="0 0 24 24" fill="#FFFFFF" role="img" aria-hidden="true"><path d="M15.8654 8.2789c0 1.3541-1.0978 2.4519-2.452 2.4519-1.354 0-2.4519-1.0978-2.4519-2.452 0-1.354 1.0978-2.4518 2.452-2.4518 1.3541 0 2.4519 1.0977 2.4519 2.4519zM9.75 6H0v4.9038h4.8462v7.2692H9.75Zm8.5962 0H24l-5.1058 12.173h-5.6538z"/></svg>TradingView</b><span dir="ltr">u/Tikalgo</span></a></li>
+            </ul>
+            <p class="slogan">Trade Smarter. Trade with Confidence.</p>
+          </div>
+        </div>
+        <form id="joinForm" class="join-form card reveal" novalidate>
+          <div class="row2">
+            <div class="field"><label for="jName" data-i18n="f.name">Full name</label><input id="jName" name="full_name" autocomplete="name" required maxlength="80"></div>
+            <div class="field"><label for="jAge" data-i18n="f.age">Age</label><input id="jAge" name="age" type="number" inputmode="numeric" min="18" max="100" required></div>
+          </div>
+          <div class="field"><label for="jEmail" data-i18n="f.email">Email</label><input id="jEmail" name="email" type="email" autocomplete="email" required maxlength="120" dir="ltr"></div>
+          <div class="row2">
+            <div class="field"><label for="jMobile" data-i18n="f.mobile">Mobile</label><input id="jMobile" name="mobile" type="tel" autocomplete="tel" required placeholder="+98 912 345 6789" dir="ltr"></div>
+            <div class="field"><label for="jWhatsapp" data-i18n="f.whatsapp">WhatsApp</label><input id="jWhatsapp" name="whatsapp" type="tel" placeholder="+98 912 345 6789" dir="ltr">
+              <label class="check sm"><input type="checkbox" id="jSameWa" checked> <span data-i18n="f.same">Same as mobile</span></label></div>
+          </div>
+          <div class="field"><label for="jTelegram" data-i18n="f.telegram">Telegram username</label><input id="jTelegram" name="telegram" placeholder="@username" dir="ltr" maxlength="33"></div>
+          <div class="row2">
+            <div class="field"><label for="jPlan" data-i18n="f.plan">Preferred plan</label>
+              <select id="jPlan" name="plan"><option value="weekly" data-i18n="f.pw">Weekly</option><option value="monthly" data-i18n="f.pm">Monthly</option><option value="yearly" selected data-i18n="f.py">Yearly</option></select></div>
+            <div class="field"><label for="jContact" data-i18n="f.contact">Preferred contact</label>
+              <select id="jContact" name="preferred_contact"><option value="telegram">Telegram</option><option value="whatsapp">WhatsApp</option><option value="email" data-i18n="f.email">Email</option></select></div>
+          </div>
+          <div class="hp" aria-hidden="true"><label for="jWebsite">Website</label><input id="jWebsite" name="website" tabindex="-1" autocomplete="off"></div>
+          <label class="check"><input type="checkbox" id="jTerms" required> <span data-i18n="f.terms">I am 18 or older and accept the Terms and the Privacy Policy.</span></label>
+          <label class="check"><input type="checkbox" id="jRisk" required> <span data-i18n="f.risk">I understand that trading involves substantial risk and nothing on TIKALGO is financial advice.</span></label>
+          <p id="joinError" class="form-msg err" role="alert" hidden></p>
+          <button type="submit" class="btn btn-primary" id="joinBtn" data-i18n="f.submit">Send membership request</button>
+          <p class="fine" data-i18n="f.fine">We use your details only to review your request and contact you. Already a member? Use Sign In.</p>
+          <div id="joinDone" class="form-msg ok" hidden></div>
+        </form>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="chapter cta" aria-labelledby="cta">
+      <canvas id="ctaCanvas" aria-hidden="true"></canvas>
+      <div class="container inner">
+        <h2 class="h-lg reveal" id="cta"><span class="grad-text" data-i18n="cta.t1">Your next perspective</span><br><span class="green-text" data-i18n="cta.t2">starts here.</span></h2>
+        <p class="lead reveal" data-i18n="cta.lead">A connected approach to financial intelligence and AI-assisted trading.</p>
+        <div class="hero-ctas reveal" style="justify-content:center">
+          <a href="/login" class="btn btn-primary" data-i18n="cta.enter">Sign In to TIKALGO</a>
+          <a href="#intelligence" class="btn btn-ghost" data-i18n="cta.discover2">Discover the platform</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="foot">
+        <div>
+          <img src="assets/tikalgo-logo-on-dark.svg" alt="tikalgo">
+          <p class="tag" data-i18n="foot.tag">Trade smarter. Trade with confidence.</p>
+          <p class="risk" data-i18n="foot.risk">Trading involves substantial risk of loss. Nothing on this site is financial advice. Past performance does not guarantee future results.</p>
+        </div>
+        <nav class="socials" aria-label="Social">
+          <a href="https://youtube.com/@tikalgoai" aria-label="YouTube" title="YouTube" rel="noopener" target="_blank" style="--brand:#FF0000"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" role="img" aria-hidden="true"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
+          <a href="https://t.me/Tikalgoai" aria-label="Telegram" title="Telegram" rel="noopener" target="_blank" style="--brand:#26A5E4"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" role="img" aria-hidden="true"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg></a>
+          <a href="https://x.com/TikalgoAi" aria-label="X" title="X" rel="noopener" target="_blank" style="--brand:#FFFFFF"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" role="img" aria-hidden="true"><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/></svg></a>
+          <a href="https://www.instagram.com/tikalgoai" aria-label="Instagram" title="Instagram" rel="noopener" target="_blank" style="--brand:#FF0069"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" role="img" aria-hidden="true"><path d="M7.0301.084c-1.2768.0602-2.1487.264-2.911.5634-.7888.3075-1.4575.72-2.1228 1.3877-.6652.6677-1.075 1.3368-1.3802 2.127-.2954.7638-.4956 1.6365-.552 2.914-.0564 1.2775-.0689 1.6882-.0626 4.947.0062 3.2586.0206 3.6671.0825 4.9473.061 1.2765.264 2.1482.5635 2.9107.308.7889.72 1.4573 1.388 2.1228.6679.6655 1.3365 1.0743 2.1285 1.38.7632.295 1.6361.4961 2.9134.552 1.2773.056 1.6884.069 4.9462.0627 3.2578-.0062 3.668-.0207 4.9478-.0814 1.28-.0607 2.147-.2652 2.9098-.5633.7889-.3086 1.4578-.72 2.1228-1.3881.665-.6682 1.0745-1.3378 1.3795-2.1284.2957-.7632.4966-1.636.552-2.9124.056-1.2809.0692-1.6898.063-4.948-.0063-3.2583-.021-3.6668-.0817-4.9465-.0607-1.2797-.264-2.1487-.5633-2.9117-.3084-.7889-.72-1.4568-1.3876-2.1228C21.2982 1.33 20.628.9208 19.8378.6165 19.074.321 18.2017.1197 16.9244.0645 15.6471.0093 15.236-.005 11.977.0014 8.718.0076 8.31.0215 7.0301.0839m.1402 21.6932c-1.17-.0509-1.8053-.2453-2.2287-.408-.5606-.216-.96-.4771-1.3819-.895-.422-.4178-.6811-.8186-.9-1.378-.1644-.4234-.3624-1.058-.4171-2.228-.0595-1.2645-.072-1.6442-.079-4.848-.007-3.2037.0053-3.583.0607-4.848.05-1.169.2456-1.805.408-2.2282.216-.5613.4762-.96.895-1.3816.4188-.4217.8184-.6814 1.3783-.9003.423-.1651 1.0575-.3614 2.227-.4171 1.2655-.06 1.6447-.072 4.848-.079 3.2033-.007 3.5835.005 4.8495.0608 1.169.0508 1.8053.2445 2.228.408.5608.216.96.4754 1.3816.895.4217.4194.6816.8176.9005 1.3787.1653.4217.3617 1.056.4169 2.2263.0602 1.2655.0739 1.645.0796 4.848.0058 3.203-.0055 3.5834-.061 4.848-.051 1.17-.245 1.8055-.408 2.2294-.216.5604-.4763.96-.8954 1.3814-.419.4215-.8181.6811-1.3783.9-.4224.1649-1.0577.3617-2.2262.4174-1.2656.0595-1.6448.072-4.8493.079-3.2045.007-3.5825-.006-4.848-.0608M16.953 5.5864A1.44 1.44 0 1 0 18.39 4.144a1.44 1.44 0 0 0-1.437 1.4424M5.8385 12.012c.0067 3.4032 2.7706 6.1557 6.173 6.1493 3.4026-.0065 6.157-2.7701 6.1506-6.1733-.0065-3.4032-2.771-6.1565-6.174-6.1498-3.403.0067-6.156 2.771-6.1496 6.1738M8 12.0077a4 4 0 1 1 4.008 3.9921A3.9996 3.9996 0 0 1 8 12.0077"/></svg></a>
+          <a href="https://in.tradingview.com/u/Tikalgo/" aria-label="TradingView" title="TradingView" rel="noopener" target="_blank" style="--brand:#FFFFFF"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" role="img" aria-hidden="true"><path d="M15.8654 8.2789c0 1.3541-1.0978 2.4519-2.452 2.4519-1.354 0-2.4519-1.0978-2.4519-2.452 0-1.354 1.0978-2.4518 2.452-2.4518 1.3541 0 2.4519 1.0977 2.4519 2.4519zM9.75 6H0v4.9038h4.8462v7.2692H9.75Zm8.5962 0H24l-5.1058 12.173h-5.6538z"/></svg></a>
+        </nav>
+      </div>
+      <p class="copy">© <span id="year">2026</span> TIKALGO. <span data-i18n="foot.rights">All rights reserved.</span></p>
+    </div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+  <script src="assets/landing.js" defer></script>
+  <script src="assets/membership.js" defer></script>
+  <script src="assets/tika-chat.js" defer></script>
+</body>
+</html>

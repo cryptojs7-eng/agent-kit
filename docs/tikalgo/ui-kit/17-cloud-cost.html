@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Infrastructure cost · TIKALGO admin</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="assets/tikalgo.js"></script>
+</head>
+<body class="min-h-screen bg-neutral-50 font-sans text-neutral-900 antialiased">
+  <main class="mx-auto max-w-6xl px-4 py-16">
+    <header class="flex flex-wrap items-end justify-between gap-4">
+      <div><h1 class="text-2xl font-semibold">Infrastructure cost</h1><p class="mt-1 text-sm text-neutral-500">October 2026</p></div>
+      <div class="flex items-center gap-2">
+        <select class="rounded-lg border border-neutral-300 bg-white px-3 py-1.5 text-sm"><option>October 2026</option><option>September 2026</option><option>August 2026</option></select>
+        <button class="rounded-lg border border-neutral-300 bg-white px-3 py-1.5 text-sm font-medium hover:bg-neutral-50">Set a budget</button>
+      </div>
+    </header>
+
+    <div class="mt-8 grid gap-4 md:grid-cols-3">
+      <article class="rounded-xl border border-neutral-200 bg-white p-5"><p class="text-sm text-neutral-500">Month to date</p><div class="mt-2 flex items-center gap-2"><p class="font-mono text-3xl font-semibold">$412</p><span class="rounded-full bg-down-soft px-2 py-0.5 text-xs font-medium text-down">+9%</span></div></article>
+      <article class="rounded-xl border border-neutral-200 bg-white p-5"><p class="text-sm text-neutral-500">Forecast for the month</p><p class="mt-2 font-mono text-3xl font-semibold">$1,190</p><p class="mt-1 text-xs text-neutral-400">Linear projection of the daily average so far.</p></article>
+      <article class="rounded-xl border border-neutral-200 bg-white p-5"><p class="text-sm text-neutral-500">Budget</p><p class="mt-2 font-mono text-3xl font-semibold">$500</p>
+        <div class="mt-3 h-1.5 rounded-full bg-neutral-100"><div class="h-full rounded-full bg-amber-500" style="width:82%"></div></div><p class="mt-1 text-xs text-amber-600">82% used</p></article>
+    </div>
+
+    <div class="mt-6 overflow-x-auto rounded-xl border border-neutral-200 bg-white">
+      <table class="w-full text-sm">
+        <thead class="border-b border-neutral-200 text-xs uppercase tracking-wider text-neutral-500"><tr>
+          <th class="p-3 text-start font-medium">Service</th><th class="p-3 text-end font-medium">This month</th><th class="p-3 text-end font-medium">Last month</th><th class="p-3 text-end font-medium">Change</th><th class="p-3 text-start font-medium">Share</th></tr></thead>
+        <tbody id="svc" class="divide-y divide-neutral-100"></tbody>
+      </table>
+    </div>
+    <p class="mt-4 text-xs text-neutral-500">Amounts exclude tax. Data refreshes daily at 04:00 UTC. <a href="#" class="font-medium text-neutral-900 underline underline-offset-2">Detailed breakdown</a></p>
+  </main>
+  <script>
+    const svc = [['VPS (Hetzner)', 168, 160], ['Market-data feeds', 112, 98], ['TimescaleDB storage', 54, 51], ['Backups & object storage', 38, 41], ['News & macro APIs', 26, 26], ['Monitoring & alerts', 14, 12]];
+    const total = svc.reduce((s, x) => s + x[1], 0);
+    const max = Math.max(...svc.map((x) => x[1]));
+    document.getElementById('svc').innerHTML = svc.map(([n, cur, prev]) => {
+      const ch = ((cur - prev) / prev) * 100, share = Math.round((cur / total) * 100);
+      const arrow = ch > 0 ? `<span class="text-down">▲ ${ch.toFixed(0)}%</span>` : ch < 0 ? `<span class="text-brand-dark">▼ ${(-ch).toFixed(0)}%</span>` : '<span class="text-neutral-400">0%</span>';
+      return `<tr class="${cur === max ? 'bg-neutral-50' : ''}"><td class="p-3 font-medium">${n}</td><td class="p-3 text-end font-mono">$${cur}</td><td class="p-3 text-end font-mono text-neutral-500">$${prev}</td><td class="p-3 text-end font-mono text-xs">${arrow}</td>
+        <td class="p-3"><div class="flex items-center gap-2"><div class="h-1.5 w-32 rounded-full bg-neutral-100"><div class="h-full rounded-full bg-neutral-900" style="width:${share}%"></div></div><span class="font-mono text-xs text-neutral-500">${share}%</span></div></td></tr>`;
+    }).join('');
+  </script>
+</body>
+</html>

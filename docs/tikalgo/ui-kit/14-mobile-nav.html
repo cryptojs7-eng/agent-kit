@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Mobile navigation · TIKALGO</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="assets/tikalgo.js"></script>
+</head>
+<body class="min-h-screen bg-neutral-200 font-sans text-neutral-900 antialiased">
+  <main class="grid min-h-screen place-items-center px-4 py-12">
+    <div class="relative flex h-[680px] w-[340px] flex-col overflow-hidden rounded-[2.5rem] border-[10px] border-neutral-900 bg-white shadow-2xl">
+      <div class="flex-1 overflow-y-auto px-5 pb-28 pt-8">
+        <div class="flex items-center gap-2"><img src="assets/tikalgo-mark.svg" alt="" class="size-7 rounded-lg"><h1 id="title" class="text-lg font-semibold">Home</h1></div>
+        <div class="mt-6 h-28 rounded-2xl bg-ink"></div>
+        <div class="mt-4 grid grid-cols-2 gap-3"><div class="h-20 rounded-xl bg-neutral-100"></div><div class="h-20 rounded-xl bg-neutral-100"></div></div>
+        <div class="mt-4 space-y-3"><div class="h-14 rounded-xl bg-neutral-100"></div><div class="h-14 rounded-xl bg-neutral-100"></div><div class="h-14 rounded-xl bg-neutral-100"></div><div class="h-14 rounded-xl bg-neutral-100"></div></div>
+      </div>
+      <nav class="absolute inset-x-0 bottom-0 border-t border-neutral-200 bg-white/95 backdrop-blur" aria-label="Main">
+        <ul class="flex items-end justify-around px-2 pt-2">
+          <li><button class="tab flex w-14 flex-col items-center gap-0.5" data-title="Home" aria-current="page">
+            <svg class="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m3 11 9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg><span class="text-[10px]">Home</span><span class="dot size-1 rounded-full"></span></button></li>
+          <li><button class="tab flex w-14 flex-col items-center gap-0.5" data-title="Markets">
+            <svg class="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19V9m6 10V5m6 14v-7m4 7H2"/></svg><span class="text-[10px]">Markets</span><span class="dot size-1 rounded-full"></span></button></li>
+          <li><button class="-mt-6 grid size-14 place-items-center rounded-full bg-ink text-white shadow-lg ring-4 ring-white" aria-label="New trade">
+            <svg class="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button></li>
+          <li><button class="tab flex w-14 flex-col items-center gap-0.5" data-title="AI Signals" data-notify>
+            <span class="relative"><svg class="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg><span class="badge absolute -end-0.5 -top-0.5 size-2.5 rounded-full bg-down ring-2 ring-white"></span></span><span class="text-[10px]">Signals</span><span class="dot size-1 rounded-full"></span></button></li>
+          <li><button class="tab flex w-14 flex-col items-center gap-0.5" data-title="Profile">
+            <svg class="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span class="text-[10px]">Profile</span><span class="dot size-1 rounded-full"></span></button></li>
+        </ul>
+        <div class="h-6" aria-hidden="true"></div><!-- safe-area strip; in the PWA use pb-[env(safe-area-inset-bottom)] -->
+      </nav>
+    </div>
+  </main>
+  <script>
+    const tabs = [...document.querySelectorAll('.tab')];
+    function activate(tab) {
+      tabs.forEach((t) => {
+        const on = t === tab;
+        t.classList.toggle('text-neutral-900', on);
+        t.classList.toggle('text-neutral-400', !on);
+        t.querySelector('.dot').classList.toggle('bg-neutral-900', on);
+        on ? t.setAttribute('aria-current', 'page') : t.removeAttribute('aria-current');
+      });
+      document.getElementById('title').textContent = tab.dataset.title;
+      if (tab.hasAttribute('data-notify')) { tab.querySelector('.badge')?.remove(); tab.removeAttribute('data-notify'); }
+    }
+    tabs.forEach((t) => t.addEventListener('click', () => activate(t)));
+    activate(tabs[0]);
+  </script>
+</body>
+</html>

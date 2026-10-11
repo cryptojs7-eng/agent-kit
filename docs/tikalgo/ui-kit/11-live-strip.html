@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Live activity · TIKALGO</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="assets/tikalgo.js"></script>
+</head>
+<body class="min-h-screen bg-white font-sans antialiased">
+  <div class="py-24">
+    <section class="w-full bg-neutral-950 py-8 text-white">
+      <div class="mx-auto flex max-w-5xl flex-wrap items-center gap-8 px-4">
+        <div>
+          <span class="inline-flex items-center gap-2 rounded-full bg-white/10 px-2.5 py-1 text-xs font-medium"><span class="relative flex size-2"><span class="absolute inline-flex size-full animate-ping rounded-full bg-brand opacity-75 motion-reduce:animate-none"></span><span class="relative inline-flex size-2 rounded-full bg-brand"></span></span>Live</span>
+          <p id="counter" class="mt-3 rounded font-mono text-4xl font-semibold tabular-nums transition-colors">0</p>
+          <p class="text-xs text-white/50">market events processed today</p>
+        </div>
+        <div class="hidden h-16 w-px bg-white/15 sm:block"></div>
+        <div class="space-y-3">
+          <div><p class="font-mono text-xl font-medium">5</p><p class="text-xs text-white/50">markets online</p></div>
+          <div><p id="tps" class="font-mono text-xl font-medium">0</p><p class="text-xs text-white/50">events / second</p></div>
+        </div>
+        <div class="ms-auto">
+          <div id="bars" class="flex h-14 items-end gap-1" aria-label="Events per minute, last 12 minutes" role="img"></div>
+          <p class="mt-2 text-end text-xs text-white/50">last 12 min</p>
+        </div>
+      </div>
+    </section>
+    <p class="mx-auto mt-4 max-w-5xl px-4 text-xs text-neutral-400">Simulated feed for the prototype. In production, subscribe to the existing WebSocket metrics channel.</p>
+  </div>
+  <script>
+    const fmt = new Intl.NumberFormat('en-US');
+    let count = 1284310;
+    const counter = document.getElementById('counter');
+    counter.textContent = fmt.format(count);
+    setInterval(() => {
+      count += Math.floor(Math.random() * 40) + 5;
+      counter.textContent = fmt.format(count);
+      counter.classList.add('text-brand');
+      setTimeout(() => counter.classList.remove('text-brand'), 150);
+    }, 250);
+
+    const tps = document.getElementById('tps');
+    const updTps = () => (tps.textContent = fmt.format(140 + Math.floor(Math.random() * 60)));
+    updTps(); setInterval(updTps, 2000);
+
+    const bars = document.getElementById('bars');
+    const heights = Array.from({ length: 12 }, () => 20 + Math.random() * 80);
+    function drawBars() {
+      bars.innerHTML = heights.map((h, i) =>
+        `<span class="w-2 rounded-sm ${i === heights.length - 1 ? 'bg-brand' : 'bg-white/30'}" style="height:${h}%"></span>`).join('');
+    }
+    drawBars();
+    setInterval(() => { heights.shift(); heights.push(20 + Math.random() * 80); drawBars(); }, 5000);
+  </script>
+</body>
+</html>

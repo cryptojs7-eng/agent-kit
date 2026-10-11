@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Survey results · TIKALGO</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="assets/tikalgo.js"></script>
+</head>
+<body class="min-h-screen bg-neutral-50 font-sans text-neutral-900 antialiased">
+  <section class="mx-auto max-w-2xl px-4 py-20">
+    <article class="rounded-2xl border border-neutral-200 bg-white p-6">
+      <h2 class="text-lg font-semibold">Which TIKALGO feature do you rely on most?</h2>
+      <p class="mt-1 text-sm text-neutral-500">1,042 responses · fieldwork Sep 20 – Oct 4, 2026</p>
+      <p class="mt-1 text-xs text-neutral-400">Multiple answers allowed</p>
+      <div id="results" class="mt-6 space-y-2"></div>
+      <hr class="my-6 border-neutral-100">
+      <footer class="grid gap-4 text-xs text-neutral-500 sm:grid-cols-2">
+        <p>Method: in-app survey of active users; results are not weighted. Percentages can add up to more than 100%.</p>
+        <p class="flex gap-4 sm:justify-end"><a href="#" class="font-medium text-neutral-900 underline underline-offset-2">Raw data (CSV)</a><a href="#" class="font-medium text-neutral-900 underline underline-offset-2">Previous wave</a></p>
+      </footer>
+    </article>
+  </section>
+  <script>
+    const rows = [
+      ['AI Active Signals', 64, 667, 5], ['TIKALGO AI explanations', 48, 500, 9], ['Paper trading', 41, 427, -2],
+      ['Tika tutor', 33, 344, 4], ['Backtest lab', 27, 281, 1], ['Whale & on-chain alerts', 19, 198, -3],
+    ];
+    function row([label, pct, n, chg], lead) {
+      const content = (light) => `
+        <span class="font-medium">${label}</span>
+        <span class="flex items-center gap-3 font-mono"><span>${pct}% <span class="opacity-60">(${n})</span></span>
+          <span class="w-10 text-end text-[11px] ${light ? 'text-white/80' : chg >= 0 ? 'text-brand-dark' : 'text-down'}">${chg >= 0 ? '+' : ''}${chg}</span></span>`;
+      const rtl = document.documentElement.dir === 'rtl';
+      const clip = rtl ? `inset(0 0 0 ${100 - pct}%)` : `inset(0 ${100 - pct}% 0 0)`;
+      return `<div class="relative overflow-hidden rounded-xl border ${lead ? 'border-neutral-900' : 'border-neutral-200'}">
+        <div class="absolute inset-y-0 start-0 ${lead ? 'bg-neutral-900' : 'bg-neutral-100'}" style="width:${pct}%"></div>
+        <div class="relative flex items-center justify-between gap-3 px-4 py-2.5 text-sm">${content(false)}</div>
+        ${lead ? `<div class="absolute inset-0 flex items-center justify-between gap-3 px-4 py-2.5 text-sm text-white" style="clip-path:${clip}" aria-hidden="true">${content(true)}</div>` : ''}
+      </div>`;
+    }
+    function render() {
+      document.getElementById('results').innerHTML = rows.map((r, i) => row(r, i === 0)).join('') +
+        '<p class="text-end text-[11px] text-neutral-400">Change since last wave (pts)</p>';
+    }
+    render();
+    new MutationObserver(render).observe(document.documentElement, { attributes: true, attributeFilter: ['dir'] });
+  </script>
+</body>
+</html>
