@@ -17,7 +17,7 @@
       'ch1.lead': 'TIKALGO reads price as a living map — swing points, BOS and CHOCH, liquidity pools, order blocks and fair value gaps — and the forces moving between them.',
       'ch2.eyebrow': 'Chapter 02 — Intelligence', 'ch2.title': 'Every signal, connected.',
       'ch2.lead': 'Independent analytical layers feed one decision context. Indicators that say the same thing count once — only independent evidence adds conviction.',
-      'ch3.eyebrow': 'Chapter 03 — Markets', 'ch3.title': 'One lens. Five markets.', 'ch3.note': 'Illustrative visualization — not live market data.',
+      'ch3.eyebrow': 'Chapter 03 — Markets', 'ch3.title': 'One lens. Five markets.', 'ch3.note': 'Live market data', 'live.live': 'LIVE', 'live.loading': 'connecting to live data…', 'live.tape': 'Live markets — crypto, forex, metals, US stocks & ETFs',
       'ch4.eyebrow': 'Chapter 04 — Process', 'ch4.title': 'From data to decision.',
       'ch4.lead': 'Every decision passes the same disciplined path. The AI recommends; the Risk Engine has the final veto.',
       'ch4.warn': '⚠ AI can make mistakes. Trading involves substantial risk. Risk management remains essential, and every decision should be reviewed.',
@@ -31,6 +31,17 @@
       'cta.t1': 'Your next perspective', 'cta.t2': 'starts here.', 'cta.lead': 'A connected approach to financial intelligence and AI-assisted trading.',
       'foot.tag': 'Trade smarter. Trade with confidence.', 'foot.rights': 'All rights reserved.',
       'foot.risk': 'Trading involves substantial risk of loss. Nothing on this site is financial advice. Past performance does not guarantee future results.',
+      'nav.join': 'Membership',
+      'ch10.eyebrow': 'Chapter 10 — Membership', 'ch10.title': 'Request membership.',
+      'ch10.lead': 'TIKALGO membership is reviewed. Send your request; after an admin approves it, your account is created and activated, and we contact you with your sign-in details.',
+      'ch10.s1': 'Submit the form', 'ch10.s2': 'Admin review', 'ch10.s3': 'Account created & activated',
+      'contact.t': 'Contact channels',
+      'f.name': 'Full name', 'f.age': 'Age', 'f.email': 'Email', 'f.mobile': 'Mobile (with country code)', 'f.whatsapp': 'WhatsApp', 'f.same': 'Same as mobile',
+      'f.telegram': 'Telegram username', 'f.plan': 'Preferred plan', 'f.pw': 'Weekly', 'f.pm': 'Monthly', 'f.py': 'Yearly', 'f.contact': 'Preferred contact',
+      'f.terms': 'I am 18 or older and accept the Terms and the Privacy Policy.',
+      'f.risk': 'I understand that trading involves substantial risk and nothing on TIKALGO is financial advice.',
+      'f.submit': 'Send membership request', 'f.sending': 'Sending…',
+      'f.fine': 'We use your details only to review your request and contact you. Already a member? Use Sign In.',
     },
     fa: {
       'nav.platform': 'پلتفرم', 'nav.markets': 'بازارها', 'nav.ai': 'TIKALGO AI', 'nav.integrations': 'اتصال‌ها', 'nav.plans': 'پلن‌ها',
@@ -43,7 +54,7 @@
       'ch1.lead': 'تیکالگو قیمت را مثل یک نقشهٔ زنده می‌خواند: سقف و کف‌ها، BOS و CHOCH، استخرهای نقدینگی، اوردر بلاک‌ها و FVGها، و نیروهایی که بین آن‌ها حرکت می‌کنند.',
       'ch2.eyebrow': 'فصل ۰۲ — هوش', 'ch2.title': 'همهٔ سیگنال‌ها، به هم پیوسته.',
       'ch2.lead': 'لایه‌های تحلیلی مستقل به یک زمینهٔ تصمیم واحد می‌رسند. اندیکاتورهایی که یک حرف را می‌زنند یک بار شمرده می‌شوند؛ فقط شواهد مستقل اطمینان را بالا می‌برند.',
-      'ch3.eyebrow': 'فصل ۰۳ — بازارها', 'ch3.title': 'یک نگاه. پنج بازار.', 'ch3.note': 'نمایش تصویری — دادهٔ زندهٔ بازار نیست.',
+      'ch3.eyebrow': 'فصل ۰۳ — بازارها', 'ch3.title': 'یک نگاه. پنج بازار.', 'ch3.note': 'دادهٔ زندهٔ بازار', 'live.live': 'زنده', 'live.loading': 'در حال اتصال به دادهٔ زنده…', 'live.tape': 'بازارهای زنده — کریپتو، فارکس، فلزات، سهام آمریکا و ETF',
       'ch4.eyebrow': 'فصل ۰۴ — فرایند', 'ch4.title': 'از داده تا تصمیم.',
       'ch4.lead': 'هر تصمیم از یک مسیر منضبط عبور می‌کند. هوش مصنوعی پیشنهاد می‌دهد؛ حق وتوی نهایی با موتور ریسک است.',
       'ch4.warn': '⚠ هوش مصنوعی ممکن است اشتباه کند. معامله ریسک زیادی دارد؛ مدیریت ریسک ضروری است و هر تصمیم باید بررسی شود.',
@@ -57,6 +68,17 @@
       'cta.t1': 'نگاه تازهٔ شما', 'cta.t2': 'از اینجا شروع می‌شود.', 'cta.lead': 'رویکردی پیوسته به هوش مالی و معامله با کمک هوش مصنوعی.',
       'foot.tag': 'هوشمندانه‌تر معامله کنید. با اطمینان معامله کنید.', 'foot.rights': 'تمام حقوق محفوظ است.',
       'foot.risk': 'معامله با ریسک قابل‌توجه زیان همراه است. هیچ محتوایی در این سایت توصیهٔ مالی نیست. عملکرد گذشته تضمینی برای نتایج آینده نیست.',
+      'nav.join': 'عضویت',
+      'ch10.eyebrow': 'فصل ۱۰ — عضویت', 'ch10.title': 'درخواست عضویت.',
+      'ch10.lead': 'عضویت در TIKALGO با بررسی انجام می‌شود. درخواست خود را بفرستید؛ پس از تأیید مدیر، حساب شما ساخته و فعال می‌شود و اطلاعات ورود برایتان ارسال می‌شود.',
+      'ch10.s1': 'ارسال فرم', 'ch10.s2': 'بررسی توسط مدیر', 'ch10.s3': 'ساخت و فعال‌سازی حساب',
+      'contact.t': 'راه‌های ارتباطی',
+      'f.name': 'نام و نام خانوادگی', 'f.age': 'سن', 'f.email': 'ایمیل', 'f.mobile': 'موبایل (با کد کشور)', 'f.whatsapp': 'واتس‌اپ', 'f.same': 'همان شمارهٔ موبایل',
+      'f.telegram': 'نام کاربری تلگرام', 'f.plan': 'پلن مورد نظر', 'f.pw': 'هفتگی', 'f.pm': 'ماهانه', 'f.py': 'سالانه', 'f.contact': 'راه ارتباطی ترجیحی',
+      'f.terms': '۱۸ سال یا بیشتر سن دارم و شرایط استفاده و سیاست حریم خصوصی را می‌پذیرم.',
+      'f.risk': 'می‌دانم معامله ریسک قابل‌توجهی دارد و هیچ محتوایی در TIKALGO توصیهٔ مالی نیست.',
+      'f.submit': 'ارسال درخواست عضویت', 'f.sending': 'در حال ارسال…',
+      'f.fine': 'اطلاعات شما فقط برای بررسی درخواست و تماس با شما استفاده می‌شود. عضو هستید؟ از «ورود» استفاده کنید.',
     },
   };
   const DATA = {
@@ -99,14 +121,17 @@
         ['user', 'Why did the AI say WAIT on BTC today?'],
         ['tika', 'The 4h trend was up, but funding was extreme and the regime was weakening — two independent warnings. Waiting is a valid decision, not a failure.'],
       ],
-      venues: [['Hyperliquid', 'Evaluation', 'eval'], ['CoinEx', 'Evaluation', 'eval'], ['BingX', 'Evaluation', 'eval'], ['MT5 brokers', 'Planned', 'eval'], ['LBank', 'Market data only', 'data']],
+      venues: [
+        { g: 'Crypto exchanges', items: [['XT.com', 'Evaluation', 'eval', 'assets/venues/xt.png'], ['Binance', 'Planned', 'soon', 'assets/venues/binance.svg'], ['Bybit', 'Planned', 'soon', 'assets/venues/bybit.png'], ['OKX', 'Planned', 'soon', 'assets/venues/okx.png'], ['Bitget', 'Planned', 'soon', 'assets/venues/bitget.png'], ['KuCoin', 'Planned', 'soon', 'assets/venues/kucoin.png'], ['Gate', 'Planned', 'soon', 'assets/venues/gate.png'], ['Hyperliquid', 'Evaluation', 'eval', 'assets/venues/hyperliquid.png'], ['BingX', 'Evaluation', 'eval', 'assets/venues/bingx.png'], ['LBank', 'Market data only', 'data', 'assets/venues/lbank.png']] },
+        { g: 'Forex · Gold & metals · US stocks & ETFs', items: [['MetaTrader 5 brokers', 'Forex · Metals · CFDs — planned', 'soon', 'assets/venues/metatrader5.png'], ['OANDA', 'Forex · Gold — planned', 'soon', 'assets/venues/oanda.png'], ['Interactive Brokers', 'US stocks · ETFs — planned', 'soon', 'assets/venues/interactive-brokers.png']] },
+      ],
       plans: [
-        { n: 'Weekly', p: 199, per: '/week', bill: 'Billed weekly · cancel anytime', d: 'Full access for a short, focused period.' },
-        { n: 'Monthly', p: 999, per: '/month', bill: 'Billed monthly', d: 'Full access with monthly flexibility.' },
-        { n: 'Yearly', p: 799, per: '/month', bill: 'Billed yearly: TOTAL · save 20%', total: 799 * 12, d: 'Best value for committed traders.', pop: true },
+        { id: 'weekly', n: 'Weekly', p: 199, per: '/week', bill: 'Billed weekly · cancel anytime', d: 'Full access for a short, focused period.' },
+        { id: 'monthly', n: 'Monthly', p: 999, per: '/month', bill: 'Billed monthly', d: 'Full access with monthly flexibility.' },
+        { id: 'yearly', n: 'Yearly', p: 799, per: '/month', bill: 'Billed yearly: TOTAL · save 20%', total: 799 * 12, d: 'Best value for committed traders.', pop: true },
       ],
       features: ['AI Active Signals in all 5 markets', 'TIKALGO AI decisions with explanations', 'Unlimited paper trading & backtest lab', 'Journal, trade autopsy & risk manager', 'Tika AI tutor'],
-      planCta: 'Sign in to choose', popular: 'Best value', perMap: { '/week': '/week', '/month': '/month' },
+      planCta: 'Request membership', popular: 'Best value', perMap: { '/week': '/week', '/month': '/month' },
     },
     fa: {
       layers: ['تحلیل تکنیکال', 'SMC و ICT', 'نقدینگی', 'جریان سفارش · CVD', 'اوپن اینترست', 'فاندینگ', 'لیکوییدیشن', 'نهنگ‌ها و آنچین', 'ماکرو', 'اخبار و احساسات', 'رژیم بازار', 'موتور ریسک'],
@@ -147,14 +172,17 @@
         ['user', 'چرا امروز هوش مصنوعی روی بیت‌کوین گفت صبر کن؟'],
         ['tika', 'روند ۴ ساعته صعودی بود، اما فاندینگ در حد افراطی بود و رژیم در حال ضعیف شدن؛ دو هشدار مستقل. صبر کردن یک تصمیم معتبر است، نه شکست.'],
       ],
-      venues: [['Hyperliquid', 'در حال ارزیابی', 'eval'], ['CoinEx', 'در حال ارزیابی', 'eval'], ['BingX', 'در حال ارزیابی', 'eval'], ['بروکرهای MT5', 'برنامه‌ریزی‌شده', 'eval'], ['LBank', 'فقط دادهٔ بازار', 'data']],
+      venues: [
+        { g: 'صرافی‌های کریپتو', items: [['XT.com', 'در حال ارزیابی', 'eval', 'assets/venues/xt.png'], ['Binance', 'برنامه‌ریزی‌شده', 'soon', 'assets/venues/binance.svg'], ['Bybit', 'برنامه‌ریزی‌شده', 'soon', 'assets/venues/bybit.png'], ['OKX', 'برنامه‌ریزی‌شده', 'soon', 'assets/venues/okx.png'], ['Bitget', 'برنامه‌ریزی‌شده', 'soon', 'assets/venues/bitget.png'], ['KuCoin', 'برنامه‌ریزی‌شده', 'soon', 'assets/venues/kucoin.png'], ['Gate', 'برنامه‌ریزی‌شده', 'soon', 'assets/venues/gate.png'], ['Hyperliquid', 'در حال ارزیابی', 'eval', 'assets/venues/hyperliquid.png'], ['BingX', 'در حال ارزیابی', 'eval', 'assets/venues/bingx.png'], ['LBank', 'فقط دادهٔ بازار', 'data', 'assets/venues/lbank.png']] },
+        { g: 'فارکس · طلا و فلزات · سهام آمریکا و ETF', items: [['بروکرهای MetaTrader 5', 'فارکس · فلزات · CFD — برنامه‌ریزی‌شده', 'soon', 'assets/venues/metatrader5.png'], ['OANDA', 'فارکس · طلا — برنامه‌ریزی‌شده', 'soon', 'assets/venues/oanda.png'], ['Interactive Brokers', 'سهام آمریکا · ETF — برنامه‌ریزی‌شده', 'soon', 'assets/venues/interactive-brokers.png']] },
+      ],
       plans: [
-        { n: 'هفتگی', p: 199, per: '/week', bill: 'پرداخت هفتگی · لغو در هر زمان', d: 'دسترسی کامل برای یک دورهٔ کوتاه و متمرکز.' },
-        { n: 'ماهانه', p: 999, per: '/month', bill: 'پرداخت ماهانه', d: 'دسترسی کامل با انعطاف ماهانه.' },
-        { n: 'سالانه', p: 799, per: '/month', bill: 'پرداخت سالانه: TOTAL · ۲۰٪ صرفه‌جویی', total: 799 * 12, d: 'بهترین ارزش برای معامله‌گران جدی.', pop: true },
+        { id: 'weekly', n: 'هفتگی', p: 199, per: '/week', bill: 'پرداخت هفتگی · لغو در هر زمان', d: 'دسترسی کامل برای یک دورهٔ کوتاه و متمرکز.' },
+        { id: 'monthly', n: 'ماهانه', p: 999, per: '/month', bill: 'پرداخت ماهانه', d: 'دسترسی کامل با انعطاف ماهانه.' },
+        { id: 'yearly', n: 'سالانه', p: 799, per: '/month', bill: 'پرداخت سالانه: TOTAL · ۲۰٪ صرفه‌جویی', total: 799 * 12, d: 'بهترین ارزش برای معامله‌گران جدی.', pop: true },
       ],
       features: ['سیگنال‌های هوشمند در هر ۵ بازار', 'تصمیم‌ها و توضیحات TIKALGO AI', 'معاملهٔ کاغذی و آزمایشگاه بک‌تست نامحدود', 'ژورنال، کالبدشکافی معامله و مدیر ریسک', 'مربی هوشمند تیکا'],
-      planCta: 'برای انتخاب وارد شوید', popular: 'بهترین ارزش', perMap: { '/week': '/هفته', '/month': '/ماه' },
+      planCta: 'درخواست عضویت', popular: 'بهترین ارزش', perMap: { '/week': '/هفته', '/month': '/ماه' },
     },
   };
   // Demo FX rates and tax notes. In production, read them from the billing API.
@@ -236,15 +264,11 @@
     $('#stats').innerHTML = d.stats.map(([v, suf, l]) => `<div class="stat${rv()}"><div class="v"><span class="count" data-to="${v}">0</span>${suf}</div><div class="l">${l}</div></div>`).join('');
   }
 
-  function sparkPath(seed, up) {
-    let y = 30, d = 'M0 30';
-    for (let i = 1; i <= 20; i++) { y += Math.sin(seed * 7 + i * 1.3) * 7 + (up ? -0.9 : 0.6); y = Math.max(6, Math.min(40, y)); d += ` L${i * 10} ${y.toFixed(1)}`; }
-    return d;
-  }
   function renderTools() {
     const col = { g: '#2FD08A', o: '#FF7A1A', r: '#F6465D' };
     $('#tools').innerHTML = DATA[lang].tools.map(([h, p, c], i) => `<article class="tool${rv()}"><h5>${h}</h5><p>${p}</p>
-      <svg viewBox="0 0 200 46" preserveAspectRatio="none" aria-hidden="true"><path class="spark" d="${sparkPath(i + 1, c !== 'r')}" stroke="${col[c]}"/></svg></article>`).join('');
+      <svg viewBox="0 0 200 46" preserveAspectRatio="none" aria-hidden="true"><path class="spark" d="M0 23 L200 23" stroke="${col[c]}" stroke-opacity=".35"/></svg><div class="spark-l"></div></article>`).join('');
+    paintSparks();
   }
 
   function renderTika() {
@@ -252,7 +276,8 @@
   }
 
   function renderVenues() {
-    $('#venues').innerHTML = DATA[lang].venues.map(([n, s, c]) => `<div class="venue"><span>${n}</span><span class="s ${c}">${s}</span></div>`).join('');
+    $('#venues').innerHTML = DATA[lang].venues.map(({ g, items }) => `<div class="vgroup"><h4>${g}</h4><div class="vlist">${items.map(([n, s, c, logo]) =>
+      `<div class="venue"><span class="vn">${logo ? `<img src="${logo}" alt="${n} logo" width="22" height="22" loading="lazy">` : ''}${n}</span><span class="s ${c}">${s}</span></div>`).join('')}</div></div>`).join('');
   }
 
   function renderPlans() {
@@ -269,7 +294,7 @@
         <div class="seat">${p.bill.replace('TOTAL', `<span dir="ltr">${fmt(p.total || 0)}</span>`)}</div>
         <p class="desc">${p.d}</p>
         <ul>${d.features.map((f) => `<li>${f}</li>`).join('')}</ul>
-        <a href="/login" class="btn ${p.pop ? 'btn-primary' : 'btn-ghost'}">${d.planCta}</a>
+        <a href="#join" data-plan="${p.id}" class="btn ${p.pop ? 'btn-primary' : 'btn-ghost'}">${d.planCta}</a>
       </article>`).join('');
     $('#taxNote').textContent = c.tax[lang];
   }
@@ -313,15 +338,6 @@
     const ctx = cv.getContext('2d'); ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     return { ctx, w: r.width, h: r.height };
   }
-  function makeCandles(n, start = 100, vol = 1.6, drift = 0.25) {
-    const out = []; let p = start;
-    for (let i = 0; i < n; i++) {
-      const o = p, c = o + (Math.random() - 0.5 + drift * 0.1) * vol * 2 + drift * 0.4;
-      const hi = Math.max(o, c) + Math.random() * vol, lo = Math.min(o, c) - Math.random() * vol;
-      out.push({ o, c, hi, lo }); p = c;
-    }
-    return out;
-  }
   function drawCandles(ctx, w, h, cs, alpha = 1, curve = true, levels = true) {
     ctx.clearRect(0, 0, w, h);
     const min = Math.min(...cs.map((c) => c.lo)), max = Math.max(...cs.map((c) => c.hi));
@@ -331,7 +347,7 @@
       ctx.setLineDash([2, 6]); ctx.lineWidth = 1;
       [['BSL', max, '#2FD08A'], ['EQ', (max + min) / 2, '#E9C46A'], ['SSL', min, '#F6465D']].forEach(([t, v, col]) => {
         ctx.strokeStyle = col + '55'; ctx.beginPath(); ctx.moveTo(0, y(v)); ctx.lineTo(w, y(v)); ctx.stroke();
-        ctx.fillStyle = col + '99'; ctx.font = '10px JetBrains Mono, monospace'; ctx.fillText(t, w - 34, y(v) - 6);
+        ctx.fillStyle = col + '99'; ctx.font = '10px "TIKALGO Mono", monospace'; ctx.fillText(t, w - 34, y(v) - 6);
       });
       ctx.setLineDash([]);
     }
@@ -350,23 +366,123 @@
       ctx.stroke();
     }
   }
-  function animatedChart(cv, n, opts = {}) {
-    let cs = makeCandles(n, 100, opts.vol || 1.6, opts.drift ?? 0.25), dims = fitCanvas(cv), visible = true;
-    const draw = () => drawCandles(dims.ctx, dims.w, dims.h, cs, opts.alpha || 1, opts.curve !== false, opts.levels !== false);
-    draw();
-    new ResizeObserver(() => { dims = fitCanvas(cv); draw(); }).observe(cv);
-    new IntersectionObserver(([e]) => (visible = e.isIntersecting)).observe(cv);
-    if (!REDUCED) setInterval(() => {
-      if (!visible || document.hidden) return;
-      const last = cs[cs.length - 1];
-      const nx = makeCandles(1, last.c, opts.vol || 1.6, opts.drift ?? 0.25)[0];
-      cs = [...cs.slice(1), nx]; draw();
-    }, opts.every || 900);
-    return { reseed: (o = {}) => { cs = makeCandles(n, 100, o.vol || 1.6, o.drift ?? 0.25); draw(); } };
+  /* ---------------- live market data ----------------
+   * Real candles only. Order: TIKALGO's own feed (/api/market/candles, Binance kline format),
+   * then Binance public market data (crypto). Nothing is simulated: if no source answers,
+   * the chart says so instead of drawing invented prices. */
+  const BINANCE_REST = 'https://data-api.binance.vision/api/v3/klines';
+  const BINANCE_WS = 'wss://data-stream.binance.vision/ws/';
+  const toCandle = (k) => ({ t: +k[0], o: +k[1], hi: +k[2], lo: +k[3], c: +k[4] });
+  async function getJSON(url, ms = 8000) {
+    const ctl = new AbortController(), t = setTimeout(() => ctl.abort(), ms);
+    try { const r = await fetch(url, { signal: ctl.signal }); if (!r.ok) throw new Error(r.status); return await r.json(); } finally { clearTimeout(t); }
   }
+  async function loadCandles(src, interval, n) {
+    const q = `interval=${interval}&limit=${n}`;
+    const tries = [['TIKALGO', `/api/market/candles?symbol=${encodeURIComponent(src.feed)}&${q}`]];
+    if (src.binance) tries.push(['Binance', `${BINANCE_REST}?symbol=${src.binance}&${q}`]);
+    for (const [name, url] of tries) {
+      try {
+        const j = await getJSON(url); const rows = Array.isArray(j) ? j : j && j.candles;
+        if (Array.isArray(rows) && rows.length > 5) return { name, cs: rows.map(toCandle).filter((c) => c.hi >= c.lo && c.c > 0) };
+      } catch { /* next source */ }
+    }
+    return null;
+  }
+  const fmtPx = (v) => (v >= 1000 ? v.toLocaleString('en-US', { maximumFractionDigits: 2 }) : v >= 1 ? v.toFixed(v >= 100 ? 2 : 4) : v.toPrecision(4));
+
+  function liveChart(cv, opts = {}) {
+    let cs = [], dims = fitCanvas(cv), visible = true, ws = null, poll = null, gen = 0, src = opts.src, srcName = '', raf = 0;
+    const draw = () => {
+      raf = 0; if (!cs.length) { dims.ctx.clearRect(0, 0, dims.w, dims.h); return; }
+      drawCandles(dims.ctx, dims.w, dims.h, cs, opts.alpha || 1, opts.curve !== false, opts.levels !== false);
+      if (opts.onTick) opts.onTick(cs[cs.length - 1], cs, srcName);
+    };
+    const queue = () => { if (!raf && visible && !document.hidden) raf = requestAnimationFrame(draw); };
+    const stop = () => { if (ws) { ws.onclose = null; ws.close(); ws = null; } clearInterval(poll); poll = null; };
+    const apply = (c) => {
+      const last = cs[cs.length - 1];
+      if (last && c.t === last.t) cs[cs.length - 1] = c; else if (!last || c.t > last.t) cs = [...cs.slice(-(opts.n - 1)), c];
+      queue();
+    };
+    const startPoll = (my) => {
+      poll = setInterval(async () => {
+        if (my !== gen || document.hidden || !visible) return;
+        const r = await loadCandles(src, opts.interval, 3); if (my === gen && r) r.cs.forEach(apply);
+      }, 20000);
+    };
+    async function start(newSrc) {
+      stop(); src = newSrc || src; const my = ++gen; cs = []; queue();
+      if (opts.onState) opts.onState('loading', src);
+      const r = await loadCandles(src, opts.interval, opts.n);
+      if (my !== gen) return;
+      if (!r) { srcName = ''; if (opts.onState) opts.onState('offline', src); return; }
+      cs = r.cs; srcName = r.name; queue(); if (opts.onState) opts.onState('live', src, r.name);
+      if (REDUCED) return;
+      if (r.name === 'Binance' && 'WebSocket' in window) {
+        try {
+          ws = new WebSocket(`${BINANCE_WS}${src.binance.toLowerCase()}@kline_${opts.interval}`);
+          ws.onmessage = (e) => { try { const k = JSON.parse(e.data).k; if (k && my === gen) apply({ t: k.t, o: +k.o, hi: +k.h, lo: +k.l, c: +k.c }); } catch { /* ignore */ } };
+          ws.onclose = () => { ws = null; if (my === gen && !poll) startPoll(my); };
+        } catch { startPoll(my); }
+      } else startPoll(my);
+    }
+    new ResizeObserver(() => { dims = fitCanvas(cv); draw(); }).observe(cv);
+    new IntersectionObserver(([e]) => { visible = e.isIntersecting; if (visible) queue(); }).observe(cv);
+    start();
+    return { switchTo: start, stop };
+  }
+
+  // Market tabs → real instruments. Crypto streams from Binance when TIKALGO's feed is not
+  // reachable; forex, metals, stocks and ETFs come from the TIKALGO feed (MT5/broker data),
+  // and otherwise from TradingView's official live widget.
+  const MARKET_SRC = [
+    { feed: 'BTCUSDT', binance: 'BTCUSDT', label: 'BTC/USDT', tv: 'BINANCE:BTCUSDT' },
+    { feed: 'EURUSD', label: 'EUR/USD', tv: 'FX:EURUSD' },
+    { feed: 'XAUUSD', label: 'XAU/USD', tv: 'OANDA:XAUUSD' },
+    { feed: 'AAPL', label: 'AAPL', tv: 'NASDAQ:AAPL' },
+    { feed: 'SPY', label: 'SPY', tv: 'AMEX:SPY' },
+  ];
   let marketChart;
-  const MARKET_PROFILE = [{ vol: 2.6, drift: 0.3 }, { vol: 0.9, drift: 0.05 }, { vol: 1.3, drift: 0.2 }, { vol: 1.5, drift: 0.15 }, { vol: 0.8, drift: 0.22 }];
-  function seedMarket() { marketChart && marketChart.reseed(MARKET_PROFILE[marketIdx]); }
+  function tvWidget(box, kind, cfg) {
+    box.innerHTML = '';
+    const wrap = document.createElement('div'); wrap.className = 'tradingview-widget-container';
+    const inner = document.createElement('div'); inner.className = 'tradingview-widget-container__widget'; wrap.appendChild(inner);
+    const sc = document.createElement('script'); sc.async = true; sc.src = `https://s3.tradingview.com/external-embedding/embed-widget-${kind}.js`;
+    sc.textContent = JSON.stringify(cfg); wrap.appendChild(sc); box.appendChild(wrap);
+  }
+  function marketState(state, src, name) {
+    const note = $('#marketNote'), tv = $('#marketTV'), t = T[lang];
+    if (state === 'loading') { note.textContent = `${src.label} · ${t['live.loading']}`; tv.hidden = true; $('#marketCanvas').hidden = false; return; }
+    if (state === 'live') { note.innerHTML = `<i class="dot-live"></i>${t['live.live']} · ${src.label} · 15m · ${name}`; return; }
+    // No candle source answered: show TradingView's live chart for the same instrument.
+    $('#marketCanvas').hidden = true; tv.hidden = false;
+    note.innerHTML = `<i class="dot-live"></i>${t['live.live']} · ${src.label} · TradingView`;
+    tvWidget(tv, 'mini-symbol-overview', { symbol: src.tv, width: '100%', height: '100%', locale: lang === 'fa' ? 'fa_IR' : 'en', dateRange: '1D', colorTheme: 'dark', isTransparent: true, autosize: true, trendLineColor: '#2FD08A', underLineColor: 'rgba(47,208,138,.15)' });
+  }
+  function seedMarket() { marketChart && marketChart.switchTo(MARKET_SRC[marketIdx]); }
+
+  // Tool-card sparklines: real 24h closes of liquid instruments (direction decides the color).
+  const SPARK_SYMS = ['BTCUSDT', 'ETHUSDT', 'SOLUSDT', 'BNBUSDT', 'XRPUSDT', 'PAXGUSDT', 'DOGEUSDT', 'ADAUSDT'];
+  const sparkCache = {};
+  async function liveSparks() {
+    await Promise.all(SPARK_SYMS.map(async (sym) => {
+      if (sparkCache[sym]) return;
+      try { const j = await getJSON(`${BINANCE_REST}?symbol=${sym}&interval=1h&limit=24`); sparkCache[sym] = j.map((k) => +k[4]); } catch { /* leave empty */ }
+    }));
+    paintSparks();
+  }
+  function paintSparks() {
+    $$('#tools .tool').forEach((card, i) => {
+      const sym = SPARK_SYMS[i % SPARK_SYMS.length], v = sparkCache[sym], path = card.querySelector('.spark'), lab = card.querySelector('.spark-l');
+      if (!v || !v.length || !path) return;
+      const min = Math.min(...v), max = Math.max(...v), up = v[v.length - 1] >= v[0];
+      path.setAttribute('d', v.map((x, j) => `${j ? 'L' : 'M'}${(j * 200 / (v.length - 1)).toFixed(1)} ${(40 - ((x - min) / (max - min || 1)) * 34).toFixed(1)}`).join(' '));
+      path.setAttribute('stroke', up ? '#2FD08A' : '#F6465D'); path.style.strokeDasharray = 'none'; path.style.strokeDashoffset = 0;
+      const chg = ((v[v.length - 1] / v[0] - 1) * 100).toFixed(2);
+      lab.innerHTML = `<span>${sym.replace('USDT', '')} · 24h</span><span class="${up ? 'up' : 'dn'}" dir="ltr">${up ? '+' : ''}${chg}%</span>`;
+    });
+  }
 
   /* ---------------- motion ---------------- */
   function counters() {
@@ -424,9 +540,19 @@
   }
   function boot() {
     renderAll();
-    animatedChart($('#heroCanvas'), 70, { alpha: 0.55, every: 1100 });
-    marketChart = animatedChart($('#marketCanvas'), 48, MARKET_PROFILE[0]);
-    animatedChart($('#ctaCanvas'), 60, { alpha: 0.35, levels: false, every: 1300 });
+    const BTC = MARKET_SRC[0];
+    liveChart($('#heroCanvas'), { src: BTC, interval: '1m', n: 90, alpha: 0.55, onState: (st) => $('#heroCanvas').classList.toggle('off', st === 'offline'),
+      onTick: (c, cs, name) => { const el = $('#heroTick'); if (!el) return; const ch = ((c.c / cs[0].o - 1) * 100).toFixed(2); el.hidden = false;
+        el.innerHTML = `<i class="dot-live"></i>BTC/USDT <b dir="ltr">${fmtPx(c.c)}</b> <span class="${ch >= 0 ? 'up' : 'dn'}" dir="ltr">${ch >= 0 ? '+' : ''}${ch}%</span><small>${name} · 90m</small>`; } });
+    marketChart = liveChart($('#marketCanvas'), { src: MARKET_SRC[0], interval: '15m', n: 64, onState: marketState });
+    liveChart($('#ctaCanvas'), { src: { feed: 'ETHUSDT', binance: 'ETHUSDT' }, interval: '5m', n: 80, alpha: 0.35, levels: false, onState: (st) => $('#ctaCanvas').classList.toggle('off', st === 'offline') });
+    liveSparks();
+    tvWidget($('#tapeTV'), 'ticker-tape', { symbols: [
+      { proName: 'BINANCE:BTCUSDT', title: 'BTC' }, { proName: 'BINANCE:ETHUSDT', title: 'ETH' }, { proName: 'FX:EURUSD', title: 'EUR/USD' },
+      { proName: 'FX:GBPUSD', title: 'GBP/USD' }, { proName: 'FX:USDJPY', title: 'USD/JPY' }, { proName: 'OANDA:XAUUSD', title: 'Gold' },
+      { proName: 'OANDA:XAGUSD', title: 'Silver' }, { proName: 'FOREXCOM:SPXUSD', title: 'S&P 500' }, { proName: 'FOREXCOM:NSXUSD', title: 'Nasdaq 100' },
+      { proName: 'NASDAQ:AAPL', title: 'Apple' }, { proName: 'NASDAQ:NVDA', title: 'NVIDIA' }, { proName: 'NASDAQ:TSLA', title: 'Tesla' }, { proName: 'AMEX:SPY', title: 'SPY' } ],
+      showSymbolLogo: true, isTransparent: true, displayMode: 'adaptive', colorTheme: 'dark', locale: 'en' });
     $('#currency').addEventListener('change', renderPlans);
     $$('.lang button').forEach((b) => b.addEventListener('click', () => {
       lang = b.dataset.lang; try { localStorage.setItem('tk-lang', lang); } catch { /* ignore */ }

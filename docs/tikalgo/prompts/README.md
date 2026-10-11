@@ -7,6 +7,7 @@ All TIKALGO prompts as separate Markdown files, so each part of the project can 
 | [`master/`](./master/) | One file per section of the executable master prompt (bootstrap, resume, phases, catalogs, LBank, TIKALGO AI …) | [`../TIKALGO_MASTER_PROMPT.md`](../TIKALGO_MASTER_PROMPT.md). Regenerate with `python3 split_master.py` |
 | [`briefs/`](./briefs/) | The project owner's original briefs, verbatim, each with a link to its executable prompt/spec | These files |
 | [`ui/`](./ui/) | Tailwind UI component prompts (built versions: [`../ui-kit/`](../ui-kit/), see `ui-kit/INSTALL.md`) with "where in TIKALGO" and adaptation rules | These files |
+| [`landing/`](./landing/) | Public landing page v2 brief (30 items) + status matrix; install prompts in [`../landing/INSTALL_PROMPT.md`](../landing/INSTALL_PROMPT.md) | These files |
 | [`ops/`](./ops/) | Operational templates: LBank emails, Claude Code permissions, API-key removal | These files |
 
 Related:
