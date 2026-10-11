@@ -64,14 +64,14 @@
       'Members use the "Sign In" button at the top of the page. Not a member yet? Send a membership request; accounts are activated after admin approval.',
       'اعضا از دکمهٔ «ورود» بالای صفحه استفاده می‌کنند. هنوز عضو نیستید؟ درخواست عضویت بفرستید؛ حساب‌ها پس از تأیید مدیر فعال می‌شوند.'],
     [['contact', 'telegram', 'instagram', 'youtube', 'twitter', 'tradingview', 'support', 'تماس', 'ارتباط', 'تلگرام', 'اینستاگرام', 'یوتیوب', 'پشتیبانی'],
-      'Contact channels: Telegram t.me/Tikalgoai · X x.com/TikalgoAi · Instagram instagram.com/tikalgoai · YouTube youtube.com/@tikalgoai · TradingView in.tradingview.com/u/Tikalgo',
-      'راه‌های ارتباطی: تلگرام t.me/Tikalgoai · ایکس x.com/TikalgoAi · اینستاگرام instagram.com/tikalgoai · یوتیوب youtube.com/@tikalgoai · تریدینگ‌ویو in.tradingview.com/u/Tikalgo'],
+      'Contact channels: Admin on Telegram @ad_tikalgo (t.me/ad_tikalgo) · Telegram channel t.me/Tikalgoai · X x.com/TikalgoAi · Instagram instagram.com/tikalgoai · YouTube youtube.com/@tikalgoai · TradingView in.tradingview.com/u/Tikalgo',
+      'راه‌های ارتباطی: ادمین در تلگرام ‎@ad_tikalgo (t.me/ad_tikalgo) · کانال تلگرام t.me/Tikalgoai · ایکس x.com/TikalgoAi · اینستاگرام instagram.com/tikalgoai · یوتیوب youtube.com/@tikalgoai · تریدینگ‌ویو in.tradingview.com/u/Tikalgo'],
     [['tika', 'who are you', 'تیکا', 'تو کی هستی'],
       'I am Tika, the TIKALGO tutor. I explain the platform and trading concepts in a simple way. I am educational and read-only: I never place trades or give personal investment advice.',
       'من تیکا هستم، مربی تیکالگو. پلتفرم و مفاهیم معامله را ساده توضیح می‌دهم. آموزشی و فقط‌خواندنی هستم: هرگز معامله ثبت نمی‌کنم و توصیهٔ سرمایه‌گذاری شخصی نمی‌دهم.'],
     [['contact', 'support', 'telegram', 'instagram', 'youtube', 'تماس', 'پشتیبانی', 'تلگرام'],
-      'You can reach TIKALGO on Telegram (t.me/Tikalgoai), X (@TikalgoAi), Instagram (@tikalgoai), YouTube (@tikalgoai) and TradingView (Tikalgo). Links are in the footer.',
-      'می‌توانید از طریق تلگرام (t.me/Tikalgoai)، ایکس (@TikalgoAi)، اینستاگرام (@tikalgoai)، یوتیوب (@tikalgoai) و تریدینگ‌ویو (Tikalgo) با تیکالگو در ارتباط باشید. لینک‌ها در پایین صفحه هستند.'],
+      'You can message the TIKALGO admin on Telegram (@ad_tikalgo), or follow us on Telegram (t.me/Tikalgoai), X (@TikalgoAi), Instagram (@tikalgoai), YouTube (@tikalgoai) and TradingView (Tikalgo). Links are in the footer.',
+      'می‌توانید به ادمین تیکالگو در تلگرام (‎@ad_tikalgo) پیام دهید، یا از طریق کانال تلگرام (t.me/Tikalgoai)، ایکس (@TikalgoAi)، اینستاگرام (@tikalgoai)، یوتیوب (@tikalgoai) و تریدینگ‌ویو (Tikalgo) با تیکالگو در ارتباط باشید. لینک‌ها در پایین صفحه هستند.'],
   ];
   const ADVICE = /(should i (buy|sell|long|short)|buy now|sell now|signal for|price target|will .* (go up|pump|dump)|بخرم|بفروشم|لانگ بگیرم|شورت بگیرم|الان بخر|سیگنال بده|پامپ|دامپ)/i;
   const SECRET = /(source code|architecture|server|api key|password|prompt|سورس|معماری|سرور|رمز|کلید api|پرامپت)/i;

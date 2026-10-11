@@ -18,7 +18,7 @@
       done: (id) => `<b>Request received${id ? ` (#${id})` : ''}.</b><br>Your request is pending admin review. After approval your account is created and activated, and we contact you by your preferred channel with sign-in details.`,
       dup: 'A request with this email or mobile is already under review. We will contact you.',
       rate: 'Too many requests. Please try again later.',
-      fail: 'Your request could not be sent. Please try again, or message us on Telegram: t.me/Tikalgoai',
+      fail: 'Your request could not be sent. Please try again, or message the admin on Telegram: @ad_tikalgo (t.me/ad_tikalgo)',
     },
     fa: {
       name: 'نام و نام خانوادگی را وارد کنید.', age: 'سن باید بین ۱۸ تا ۱۰۰ باشد.', email: 'یک ایمیل معتبر وارد کنید.',
@@ -27,7 +27,7 @@
       done: (id) => `<b>درخواست شما ثبت شد${id ? ` (شماره ${id})` : ''}.</b><br>درخواست در انتظار بررسی مدیر است. پس از تأیید، حساب شما ساخته و فعال می‌شود و اطلاعات ورود از راه ارتباطی انتخابی‌تان ارسال می‌شود.`,
       dup: 'درخواستی با این ایمیل یا موبایل در حال بررسی است. با شما تماس می‌گیریم.',
       rate: 'تعداد درخواست‌ها زیاد است. کمی بعد دوباره تلاش کنید.',
-      fail: 'ارسال درخواست ممکن نشد. دوباره تلاش کنید یا در تلگرام پیام دهید: t.me/Tikalgoai',
+      fail: 'ارسال درخواست ممکن نشد. دوباره تلاش کنید یا به ادمین در تلگرام پیام دهید: ‎@ad_tikalgo',
     },
   };
 

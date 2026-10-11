@@ -191,7 +191,8 @@ CREATE UNIQUE INDEX ux_app_pending_mobile ON membership_applications (mobile)   
 ## ۷. راه‌های ارتباطی (در فوتر و بخش عضویت)
 | شبکه | آدرس |
 |---|---|
-| تلگرام | https://t.me/Tikalgoai |
+| **ادمین (تلگرام)** | https://t.me/ad_tikalgo (‎@ad_tikalgo): پشتیبانی و پیگیری درخواست عضویت |
+| کانال تلگرام | https://t.me/Tikalgoai |
 | X | https://x.com/TikalgoAi |
 | اینستاگرام | https://www.instagram.com/tikalgoai |
 | یوتیوب | https://youtube.com/@tikalgoai |
