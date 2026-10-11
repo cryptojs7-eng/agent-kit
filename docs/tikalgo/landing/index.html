@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>TIKALGO — See the Market Differently</title>
+  <meta name="description" content="TIKALGO is a multi-market AI trading intelligence platform: AI Active Signals, an offline TIKALGO AI decision engine, independent risk control and Tika, your AI trading tutor — across crypto, forex, gold, US stocks and ETFs.">
+  <meta name="theme-color" content="#050C09">
+  <meta property="og:title" content="TIKALGO — See the Market Differently">
+  <meta property="og:description" content="Regime-aware, risk-first AI trading intelligence across crypto, forex, gold, US stocks and ETFs.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="assets/bull-bear.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Vazirmatn:wght@400;600;800&family=JetBrains+Mono:wght@400;500&display=swap">
+  <link rel="preload" as="image" href="assets/bull-bear.jpg">
+  <link rel="stylesheet" href="assets/landing.css">
+</head>
+<body>
+  <!-- NAV — login only (no public sign-up) -->
+  <header class="nav" id="nav">
+    <div class="container nav-inner">
+      <a href="#top" class="nav-logo" aria-label="TIKALGO home"><img src="assets/tikalgo-logo-on-dark.svg" alt="tikalgo"></a>
+      <nav class="nav-links" aria-label="Main">
+        <a href="#intelligence" data-i18n="nav.platform">Platform</a>
+        <a href="#markets" data-i18n="nav.markets">Markets</a>
+        <a href="#ai" data-i18n="nav.ai">TIKALGO AI</a>
+        <a href="#ecosystem" data-i18n="nav.integrations">Integrations</a>
+        <a href="#plans" data-i18n="nav.plans">Plans</a>
+      </nav>
+      <div class="nav-right">
+        <div class="lang" role="group" aria-label="Language">
+          <button type="button" data-lang="en" aria-pressed="true">EN</button>
+          <button type="button" data-lang="fa" aria-pressed="false">فا</button>
+        </div>
+        <a href="/login" class="btn btn-primary" data-i18n="cta.login">Sign In</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- HERO -->
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-bg" id="heroBg" aria-hidden="true"></div>
+      <canvas id="heroCanvas" aria-hidden="true"></canvas>
+      <div class="container hero-content">
+        <p class="eyebrow reveal" data-i18n="hero.eyebrow">AI-assisted market intelligence</p>
+        <h1 class="h-xl" id="hero-title">
+          <span class="line"><span class="grad-text" data-i18n="hero.t1">See the Market</span></span>
+          <span class="line"><span class="green-text" data-i18n="hero.t2">Differently.</span></span>
+        </h1>
+        <p class="lead reveal" data-i18n="hero.lead">One intelligent ecosystem that connects market structure, liquidity, order flow, macro and news — and turns them into explainable, risk-checked decisions across crypto, forex, gold, US stocks and ETFs.</p>
+        <div class="hero-ctas reveal">
+          <a href="#intelligence" class="btn btn-primary" data-i18n="cta.discover">Discover TIKALGO</a>
+          <a href="/login" class="btn btn-ghost" data-i18n="cta.login">Sign In</a>
+        </div>
+        <div class="hero-badges reveal">
+          <span class="badge">CRYPTO</span><span class="badge">FOREX</span><span class="badge">GOLD</span><span class="badge">US STOCKS</span><span class="badge">ETFs</span>
+          <span class="badge ai" data-i18n="hero.badgeAi">TIKALGO AI · OFFLINE</span>
+        </div>
+      </div>
+      <div class="scroll-hint" aria-hidden="true"><span>SCROLL</span><span class="mouse"></span></div>
+    </section>
+
+    <!-- CH 01 — STRUCTURE -->
+    <section class="chapter" id="structure" aria-labelledby="ch1">
+      <div class="grid-bg"></div>
+      <svg class="structure-svg" viewBox="0 0 1200 600" preserveAspectRatio="none" aria-hidden="true">
+        <line class="lvl" x1="0" y1="120" x2="1200" y2="120" stroke="#2FD08A" stroke-opacity=".5"/>
+        <line class="lvl" x1="0" y1="250" x2="1200" y2="250" stroke="#E9C46A" stroke-opacity=".5"/>
+        <line class="lvl" x1="0" y1="380" x2="1200" y2="380" stroke="#8FA59A" stroke-opacity=".5"/>
+        <line class="lvl" x1="0" y1="500" x2="1200" y2="500" stroke="#F6465D" stroke-opacity=".5"/>
+        <text x="16" y="110" fill="#2FD08A" data-i18n="s.bsl">Buy-side liquidity</text>
+        <text x="16" y="240" fill="#E9C46A" data-i18n="s.ob">Order block</text>
+        <text x="16" y="370" fill="#8FA59A" data-i18n="s.fvg">Fair value gap</text>
+        <text x="16" y="490" fill="#F6465D" data-i18n="s.ssl">Sell-side liquidity</text>
+        <path id="structPath" d="M0 520 L110 400 L190 450 L320 250 L400 320 L540 130 L630 210 L780 80 L900 150 L1040 60 L1200 40" fill="none" stroke="#3DDC2F" stroke-width="2.5" stroke-linejoin="round"/>
+        <circle id="structDot" r="5" fill="#3DDC2F" cx="0" cy="520"/>
+      </svg>
+      <div class="container chapter-head" style="position:relative">
+        <p class="eyebrow reveal" data-i18n="ch1.eyebrow">Chapter 01 — Structure</p>
+        <h2 class="h-lg reveal" id="ch1" data-i18n="ch1.title">Beyond the candle lies the structure.</h2>
+        <p class="lead reveal" data-i18n="ch1.lead">TIKALGO reads price as a living map — swing points, BOS and CHOCH, liquidity pools, order blocks and fair value gaps — and the forces moving between them.</p>
+      </div>
+    </section>
+
+    <!-- CH 02 — INTELLIGENCE -->
+    <section class="chapter" id="intelligence" aria-labelledby="ch2">
+      <div class="container">
+        <div class="chapter-head">
+          <p class="eyebrow reveal" data-i18n="ch2.eyebrow">Chapter 02 — Intelligence</p>
+          <h2 class="h-lg reveal" id="ch2" data-i18n="ch2.title">Every signal, connected.</h2>
+          <p class="lead reveal" data-i18n="ch2.lead">Independent analytical layers feed one decision context. Indicators that say the same thing count once — only independent evidence adds conviction.</p>
+        </div>
+        <div class="network reveal"><svg id="network" viewBox="0 0 1200 640" role="img" aria-label="Analytical layers connected to TIKALGO AI"></svg></div>
+        <div class="marquee" aria-hidden="true"><div class="marquee-track" id="marquee"></div></div>
+      </div>
+    </section>
+
+    <!-- CH 03 — MARKETS -->
+    <section class="chapter" id="markets" aria-labelledby="ch3">
+      <div class="container">
+        <div class="chapter-head">
+          <p class="eyebrow reveal" data-i18n="ch3.eyebrow">Chapter 03 — Markets</p>
+          <h2 class="h-lg reveal" id="ch3" data-i18n="ch3.title">One lens. Five markets.</h2>
+          <div class="tabs reveal" role="tablist" id="marketTabs"></div>
+        </div>
+        <div class="market-card reveal">
+          <div class="market-chart"><canvas id="marketCanvas"></canvas><span class="note" data-i18n="ch3.note">Illustrative visualization — not live market data.</span></div>
+          <div class="market-info" id="marketInfo" aria-live="polite"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CH 04 — PROCESS -->
+    <section class="chapter" id="process" aria-labelledby="ch4">
+      <div class="container process">
+        <div class="process-left">
+          <p class="eyebrow reveal" data-i18n="ch4.eyebrow">Chapter 04 — Process</p>
+          <h2 class="h-lg reveal" id="ch4" data-i18n="ch4.title">From data to decision.</h2>
+          <p class="lead reveal" data-i18n="ch4.lead">Every decision passes the same disciplined path. The AI recommends; the Risk Engine has the final veto.</p>
+          <div class="warn reveal" data-i18n="ch4.warn">⚠ AI can make mistakes. Trading involves substantial risk. Risk management remains essential, and every decision should be reviewed.</div>
+        </div>
+        <div class="steps" id="steps"><div class="rail"><div class="rail-fill" id="railFill"></div></div></div>
+      </div>
+    </section>
+
+    <!-- CH 05 — TIKALGO AI -->
+    <section class="chapter" id="ai" aria-labelledby="ch5">
+      <div class="grid-bg"></div>
+      <div class="container" style="position:relative">
+        <div class="chapter-head">
+          <p class="eyebrow reveal" style="color:var(--orange)" data-i18n="ch5.eyebrow">Chapter 05 — TIKALGO AI</p>
+          <h2 class="h-lg reveal" id="ch5" data-i18n="ch5.title">An AI that knows when to wait.</h2>
+          <p class="lead reveal" data-i18n="ch5.lead">TIKALGO AI is a local, offline decision engine above our quantitative engines. It weighs independent evidence, challenges itself, measures uncertainty — and only proposes a trade when there is real, cost-adjusted edge.</p>
+        </div>
+        <div class="ai-grid">
+          <div class="card reveal">
+            <div class="ai-points" id="aiPoints"></div>
+          </div>
+          <div class="card reveal" aria-label="Example decision trace">
+            <div class="trace" id="trace"></div>
+          </div>
+        </div>
+        <div class="stats" id="stats"></div>
+      </div>
+    </section>
+
+    <!-- CH 06 — TOOLKIT -->
+    <section class="chapter" id="toolkit" aria-labelledby="ch6">
+      <div class="container">
+        <div class="chapter-head">
+          <p class="eyebrow reveal" data-i18n="ch6.eyebrow">Chapter 06 — Toolkit</p>
+          <h2 class="h-lg reveal" id="ch6" data-i18n="ch6.title">Instruments of clarity.</h2>
+        </div>
+        <div class="tools" id="tools"></div>
+      </div>
+    </section>
+
+    <!-- CH 07 — TIKA -->
+    <section class="chapter" id="tika" aria-labelledby="ch7">
+      <div class="container">
+        <div class="chapter-head">
+          <p class="eyebrow reveal" data-i18n="ch7.eyebrow">Chapter 07 — Tika</p>
+          <h2 class="h-lg reveal" id="ch7" data-i18n="ch7.title">Meet Tika, your AI trading tutor.</h2>
+        </div>
+        <div class="tika">
+          <img src="assets/tika.png" alt="Tika, the TIKALGO assistant" class="tika-avatar reveal" width="180" height="180">
+          <div class="bubbles" id="bubbles"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CH 08 — ECOSYSTEM -->
+    <section class="chapter" id="ecosystem" aria-labelledby="ch8">
+      <div class="container">
+        <div class="chapter-head">
+          <p class="eyebrow reveal" data-i18n="ch8.eyebrow">Chapter 08 — Ecosystem</p>
+          <h2 class="h-lg reveal" id="ch8" data-i18n="ch8.title">Connected to where you trade.</h2>
+        </div>
+        <div class="eco reveal">
+          <div class="eco-node"><img src="assets/tikalgo-logo-on-dark.svg" alt="tikalgo"></div>
+          <div class="eco-link" aria-hidden="true"></div>
+          <div class="venues" id="venues"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CH 09 — PLANS (from prompts/ui/05_REGIONAL_PRICING; buttons go to login — no public sign-up) -->
+    <section class="chapter" id="plans" aria-labelledby="ch9">
+      <div class="container">
+        <div class="chapter-head">
+          <p class="eyebrow reveal" data-i18n="ch9.eyebrow">Chapter 09 — Plans</p>
+          <h2 class="h-lg reveal" id="ch9" data-i18n="ch9.title">Start in paper. Grow with proof.</h2>
+          <p class="lead reveal" data-i18n="ch9.lead">Every plan starts in PAPER mode. LIVE trading is enabled only after validation and your explicit approval.</p>
+        </div>
+        <div class="plan-bar reveal">
+          <label class="cur"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>
+            <span class="sr-only" data-i18n="ch9.currency">Currency</span>
+            <select id="currency">
+              <option value="USD">US Dollar</option><option value="USDT">USDT (crypto)</option><option value="EUR">Euro</option>
+              <option value="GBP">British Pound</option><option value="JPY">Japanese Yen</option><option value="INR">Indian Rupee</option>
+            </select></label>
+        </div>
+        <div class="plans" id="plansGrid"></div>
+        <p class="tax reveal" id="taxNote"></p>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="chapter cta" aria-labelledby="cta">
+      <canvas id="ctaCanvas" aria-hidden="true"></canvas>
+      <div class="container inner">
+        <h2 class="h-lg reveal" id="cta"><span class="grad-text" data-i18n="cta.t1">Your next perspective</span><br><span class="green-text" data-i18n="cta.t2">starts here.</span></h2>
+        <p class="lead reveal" data-i18n="cta.lead">A connected approach to financial intelligence and AI-assisted trading.</p>
+        <div class="hero-ctas reveal" style="justify-content:center">
+          <a href="/login" class="btn btn-primary" data-i18n="cta.enter">Sign In to TIKALGO</a>
+          <a href="#intelligence" class="btn btn-ghost" data-i18n="cta.discover2">Discover the platform</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="foot">
+        <div>
+          <img src="assets/tikalgo-logo-on-dark.svg" alt="tikalgo">
+          <p class="tag" data-i18n="foot.tag">Trade smarter. Trade with confidence.</p>
+          <p class="risk" data-i18n="foot.risk">Trading involves substantial risk of loss. Nothing on this site is financial advice. Past performance does not guarantee future results.</p>
+        </div>
+        <nav class="socials" aria-label="Social">
+          <a href="https://youtube.com/@tikalgoai" aria-label="YouTube" rel="noopener" target="_blank"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M23 7.2a3 3 0 0 0-2.1-2.1C19 4.6 12 4.6 12 4.6s-7 0-8.9.5A3 3 0 0 0 1 7.2 31 31 0 0 0 .5 12 31 31 0 0 0 1 16.8a3 3 0 0 0 2.1 2.1c1.9.5 8.9.5 8.9.5s7 0 8.9-.5a3 3 0 0 0 2.1-2.1 31 31 0 0 0 .5-4.8 31 31 0 0 0-.5-4.8ZM9.7 15.1V8.9l5.8 3.1-5.8 3.1Z"/></svg></a>
+          <a href="https://t.me/Tikalgoai" aria-label="Telegram" rel="noopener" target="_blank"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M21.9 4.3 18.6 20c-.2 1.1-.9 1.4-1.8.9l-5-3.7-2.4 2.3c-.3.3-.5.5-1 .5l.4-5.1 9.2-8.3c.4-.4-.1-.6-.6-.2L6 13.5 1.1 12c-1.1-.3-1.1-1.1.2-1.6L20.5 3c.9-.3 1.7.2 1.4 1.3Z"/></svg></a>
+          <a href="https://x.com/TikalgoAi" aria-label="X" rel="noopener" target="_blank"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.2 2.3h3.4l-7.4 8.4 8.7 11.5h-6.8l-5.3-7-6.1 7H1.3l7.9-9L.8 2.3h7l4.8 6.4 5.6-6.4Zm-1.2 17.9h1.9L7 4.2H5l12 16Z"/></svg></a>
+          <a href="https://www.instagram.com/tikalgoai" aria-label="Instagram" rel="noopener" target="_blank"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg></a>
+          <a href="https://in.tradingview.com/u/Tikalgo/" aria-label="TradingView" rel="noopener" target="_blank"><svg width="20" height="14" viewBox="0 0 36 24" fill="currentColor"><path d="M14 22H7V11H0V4h14v18Zm14-18h8l-8 18h-8l8-18Z"/><circle cx="20" cy="8" r="4"/></svg></a>
+        </nav>
+      </div>
+      <p class="copy">© <span id="year">2026</span> TIKALGO. <span data-i18n="foot.rights">All rights reserved.</span></p>
+    </div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+  <script src="assets/landing.js" defer></script>
+  <script src="assets/tika-chat.js" defer></script>
+</body>
+</html>
