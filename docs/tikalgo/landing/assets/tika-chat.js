@@ -6,7 +6,7 @@
  */
 (() => {
   const API = '/api/tika/chat';
-  const AVATAR = 'assets/tika.png';
+  const AVATAR = 'assets/tika.jpg';
   const $ = (s, r = document) => r.querySelector(s);
   const getLang = () => (document.documentElement.lang === 'fa' ? 'fa' : 'en');
 
@@ -131,8 +131,10 @@
       q = q.trim(); if (!q) return;
       add(q, 'me'); input.value = ''; history.push({ role: 'user', content: q });
       const typing = add('', 'bot'); typing.innerHTML = '<span class="tk-typing"><i></i><i></i><i></i></span>';
+      const headImg = $('.tk-head img', panel); fab.classList.add('speaking'); headImg.classList.add('speaking');
       const [reply] = await Promise.all([ask(q, history), new Promise((r) => setTimeout(r, 450))]);
       typing.textContent = reply; history.push({ role: 'assistant', content: reply }); log.scrollTop = log.scrollHeight;
+      fab.classList.remove('speaking'); headImg.classList.remove('speaking');
     }
     function open(on) {
       panel.classList.toggle('open', on); fab.setAttribute('aria-expanded', on); hint.classList.remove('show');

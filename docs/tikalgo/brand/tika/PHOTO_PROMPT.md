@@ -1,5 +1,7 @@
 # Tika — photorealistic avatar: image-generation prompt
 
+> **Status:** done. The approved photo and its crops are in `tika/photo/`; see the brand README. This brief stays for regenerating variants (listening, speaking, thinking) with the same person.
+
 The vector avatar (`tika-avatar*.svg`) is the in-app icon. This file is the brief for a
 **photorealistic** portrait of Tika, made with an image model (Nano Banana / Gemini Image,
 GPT-Image, Midjourney v7, Flux 1.1 Pro Ultra, Imagen 4).

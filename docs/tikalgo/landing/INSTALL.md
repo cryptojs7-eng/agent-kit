@@ -15,7 +15,7 @@
 | `assets/landing.css` | استایل (بدون فریم‌ورک؛ توکن‌های برند در `:root`) |
 | `assets/landing.js` | متن‌های EN/FA، بخش‌های پویا، نمودارهای canvas، پلن‌ها و قیمت‌ها، موشن |
 | `assets/tika-chat.js` | چت‌بات تیکا |
-| `assets/*.svg`، `tika.png`، `bull-bear.jpg` | لوگو، آواتار تیکا، تصویر هیرو (از پروژهٔ Lovable خودتان) |
+| `assets/*.svg`، `tika.jpg` و `tika-512.jpg` (عکس رسمی تیکا)، `bull-bear.jpg` | لوگو، آواتار تیکا، تصویر هیرو (از پروژهٔ Lovable خودتان) |
 | `reference-lovable-build/` | نسخهٔ build‌شدهٔ صفحهٔ Lovable، فقط برای مقایسه. **دیپلوی نشود** |
 
 ## بخش‌های صفحه

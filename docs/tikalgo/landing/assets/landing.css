@@ -161,7 +161,7 @@ html[dir="rtl"] .marquee-track { animation-direction: reverse; }
 /* Tika */
 .tika { display: grid; grid-template-columns: auto 1fr; gap: 34px; align-items: center; margin-top: 60px; }
 @media (max-width: 760px) { .tika { grid-template-columns: 1fr; justify-items: center; text-align: center; } }
-.tika-avatar { width: 180px; height: 180px; border-radius: 40px; box-shadow: 0 30px 80px -20px rgba(61, 220, 47, .35); animation: float 6s ease-in-out infinite; }
+.tika-avatar { width: 220px; height: 220px; object-fit: cover; border-radius: 44px; border: 2px solid rgba(61, 220, 47, .45); box-shadow: 0 30px 80px -20px rgba(61, 220, 47, .35); animation: float 6s ease-in-out infinite; }
 @keyframes float { 50% { transform: translateY(-10px); } }
 .bubbles { display: grid; gap: 12px; }
 .bubble { max-width: 560px; padding: 14px 18px; border-radius: 18px; border: 1px solid var(--line); background: var(--panel); line-height: 1.7; font-size: 15px; }
@@ -230,7 +230,7 @@ footer { border-top: 1px solid var(--line); padding: 50px 0 40px; background: #0
 .tk-panel { position: fixed; z-index: 61; bottom: 96px; inset-inline-end: 20px; width: min(380px, calc(100vw - 32px)); height: min(560px, calc(100svh - 130px)); display: flex; flex-direction: column; border-radius: 24px; border: 1px solid var(--line-2); background: rgba(7, 16, 12, .97); backdrop-filter: blur(16px); box-shadow: 0 30px 90px -20px rgba(0, 0, 0, .8); opacity: 0; transform: translateY(16px) scale(.98); pointer-events: none; transition: opacity .3s, transform .3s; }
 .tk-panel.open { opacity: 1; transform: none; pointer-events: auto; }
 .tk-head { display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-bottom: 1px solid var(--line); }
-.tk-head img { width: 42px; height: 42px; border-radius: 14px; }
+.tk-head img { width: 42px; height: 42px; border-radius: 14px; object-fit: cover; }
 .tk-head .name { font-weight: 800; }
 .tk-head .st { font-size: 12px; color: var(--green-2); display: flex; align-items: center; gap: 6px; }
 .tk-head .st::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--green-2); }
@@ -249,3 +249,6 @@ footer { border-top: 1px solid var(--line); padding: 50px 0 40px; background: #0
 .tk-form input:focus { border-color: var(--green-2); }
 .tk-form button { border: 0; border-radius: 14px; padding: 0 16px; background: var(--green-2); color: #04140B; font-weight: 800; cursor: pointer; }
 .tk-foot { padding: 0 16px 10px; font-size: 11px; color: #5E7468; }
+.tk-fab.speaking, .tk-head img.speaking { animation: tkspeak 1.2s ease-in-out infinite; }
+@keyframes tkspeak { 0%, 100% { box-shadow: 0 0 0 0 rgba(255, 122, 26, .0), 0 18px 50px -12px rgba(61, 220, 47, .55); } 50% { box-shadow: 0 0 0 6px rgba(255, 122, 26, .55), 0 18px 50px -12px rgba(61, 220, 47, .55); } }
+.tk-panel.open ~ .tk-fab { border-color: var(--green); }

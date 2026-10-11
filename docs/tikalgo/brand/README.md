@@ -35,7 +35,24 @@ Monogram letter corners are **softly rounded** (vector opening, r = 3.5 at 100-u
 | `png/mark-green-512.png`, `png/mark-light-512.png` | Alternate marks | Social / print |
 | `png/tikalgo-logo*.png`, `png/tikalgo-wordmark*.png` | Raster logos (transparent) | Docs, slides |
 
-## Tika — AI assistant avatar (`tika/`)
+## Tika — official photorealistic avatar (`tika/photo/`) ⭐
+The **official Tika avatar** is the photorealistic portrait:
+- black suit, white shirt, green tie;
+- green headset with an orange mic (the AI node);
+- gold "tiv" pin on the lapel;
+- fintech office background.
+
+| File | Use |
+|---|---|
+| `tika/photo/tika-photo-full.jpg` | Original 1254×1254 (marketing, about page) |
+| `tika/photo/tika-photo-bust-1024.*`, `-768.*` | Head-to-pin crop (hero sections, Tika page) |
+| `tika/photo/tika-photo-face-512/256/128/64.*` (jpg + webp) | Avatar crops (chat widget, voice UI, profile, notifications) |
+
+- Use the photo at **≥ 64 px**. Show it in a rounded square (radius ≈ 20%) or a circle.
+- The **listening** and **speaking** states are drawn in CSS around the photo: a green ring for listening, a pulsing orange ring for speaking.
+- Below 48 px, keep the vector avatar (`tika/tika-avatar.svg`), since the photo loses detail at that size.
+
+## Tika — vector avatar (small sizes / fallback) (`tika/`)
 **Tika is a woman.** A young, elegant professional drawn in a natural, human-proportioned
 style (not cartoon) on a **white rounded square** (thin `#E2E7E4` edge so it stays visible on
 white pages): **short, low-volume blonde bob** (jaw length, side part, drawn as fine strands),
