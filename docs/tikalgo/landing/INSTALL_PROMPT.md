@@ -1,5 +1,7 @@
 # پرامپت نصب برای Claude Code (روی سرور، `/root/tikalgo`)
 
+> نسخهٔ Gemini (Gemini CLI یا وب): [`INSTALL_PROMPT_GEMINI.md`](INSTALL_PROMPT_GEMINI.md)
+
 دو پرامپت آماده است:
 - **A** صفحهٔ فعلی را نصب می‌کند و بک‌اند لازمش را می‌سازد.
 - **B** بریف ۳۰ آیتمی v2 را مرحله‌به‌مرحله کامل می‌کند.
