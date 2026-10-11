@@ -11,7 +11,7 @@
 ثبت‌نام آزاد و پلن رایگان ندارد: عضویت فقط از راه **درخواست و تأیید مدیر** انجام می‌شود.
 
 > **پرامپت آمادهٔ نصب برای Claude Code:** [`INSTALL_PROMPT.md`](INSTALL_PROMPT.md) · **برای Gemini:** [`INSTALL_PROMPT_GEMINI.md`](INSTALL_PROMPT_GEMINI.md)
-> **بستهٔ آمادهٔ دیپلوی:** `tikalgo-landing.zip`، شامل `index.html` و `assets/`.
+> **بستهٔ آمادهٔ دیپلوی:** `tikalgo-landing.zip` (چک‌سام: `tikalgo-landing.zip.sha256`)، شامل `index.html` و `assets/` · **راهنمای انگلیسی دیپلوی با مسیرهای سرور:** [`DEPLOY_GUIDE_EN.md`](DEPLOY_GUIDE_EN.md)
 
 ---
 
