@@ -20,11 +20,19 @@ gemini            # first run: sign in with your Google account, or set GEMINI_A
 - کلید API را فقط در محیط سرور بگذارید: `export GEMINI_API_KEY=...` در `~/.bashrc`.
 - **هرگز کلید را داخل پرامپت، چت یا گیت نگذارید.**
 
-مخزن agent-kit را هم روی سرور بیاورید:
-```bash
-cd /root && git clone https://github.com/cryptojs7-eng/agent-kit.git
-cd agent-kit && git checkout claude/clever-brahmagupta-hmshh0   # or main after merge
-```
+**پیش‌نیاز:** فقط سرور شخصی شما `135.181.122.117`. نه GitHub و نه `git clone` لازم است.
+1. فایل‌های `tikalgo-landing.zip` و `tikalgo-landing.zip.sha256` را از کامپیوتر خودتان آپلود کنید:
+   ```bash
+   scp tikalgo-landing.zip tikalgo-landing.zip.sha256 root@135.181.122.117:/root/
+   ```
+   (یا با WinSCP یا FileZilla: SFTP، پورت 22، کاربر root، پوشهٔ `/root/`)
+2. روی سرور (`ssh root@135.181.122.117`):
+   ```bash
+   cd /root && sha256sum -c tikalgo-landing.zip.sha256        # tikalgo-landing.zip: OK
+   mkdir -p /root/tikalgo/public-landing
+   unzip -o /root/tikalgo-landing.zip -d /root/tikalgo/public-landing
+   ```
+همهٔ مسیرهای پایین به `/root/tikalgo/public-landing/` اشاره دارند. راهنمای کامل انگلیسی: `DEPLOY_GUIDE_EN.md`.
 
 ## ۲. فایل زمینهٔ دائمی `GEMINI.md`
 Gemini CLI فایل `GEMINI.md` را در هر جلسه خودکار می‌خواند. پس قوانین ثابت پروژه را یک بار آنجا بگذارید:
@@ -36,6 +44,7 @@ cat > /root/tikalgo/GEMINI.md <<'EOF'
 - No mock data, no fake success, no UI without a backend. If data is missing, show an honest empty state.
 - LIVE trading is OFF by default; new members start in PAPER. The AI never bypasses the Risk Engine or the Execution Gate.
 - No public self-registration and no free plan: accounts are created only when an admin approves a membership application.
+- This is the private server 135.181.122.117. Do not use GitHub: no clone, pull, download, git remote or push.
 - Never print, log or commit secrets (API keys, passwords, .env). Back up every file before changing it.
 - Before any destructive command (rm, DROP, migration down, service restart) explain it and wait for approval.
 - No profit claims and no AGI claims in any public text.
@@ -49,12 +58,12 @@ EOF
 داخل `gemini` در پوشهٔ `/root/tikalgo` بچسبانید. با `@` فایل‌ها مستقیم به زمینهٔ مدل اضافه می‌شوند.
 
 ```text
-@/root/agent-kit/docs/tikalgo/landing/INSTALL.md
-@/root/agent-kit/docs/tikalgo/landing/index.html
-@/root/agent-kit/docs/tikalgo/landing/assets/membership.js
+@/root/tikalgo/public-landing/INSTALL.md
+@/root/tikalgo/public-landing/index.html
+@/root/tikalgo/public-landing/assets/membership.js
 
 You are a senior full-stack engineer working on the TIKALGO project in /root/tikalgo.
-The new public landing page is in /root/agent-kit/docs/tikalgo/landing/ (index.html + assets/).
+The new public landing page is in /root/tikalgo/public-landing/ (index.html + assets/).
 Follow GEMINI.md rules. Work step by step; after each step show what you changed and wait for "OK" before
 the next step. Report in Persian.
 
@@ -109,17 +118,17 @@ Step 6 — Verify and report in Persian, with evidence (commands and outputs):
   - Membership: an empty submit shows field errors; a valid submit returns "pending" with an id; a duplicate returns 409; a 6th request in one hour returns 429.
   - An admin approval creates an active PAPER account and sends the activation link.
   - /register returns 404.
-  - List the changed files and backups, then git commit (no secrets).
+  - List the changed files and backups. If /root/tikalgo is a local git repo, commit locally (never push).
 ```
 
 ---
 
 ## ۴. پرامپت B: تکمیل بریف ۳۰ آیتمی (مرحله‌به‌مرحله)
 ```text
-@/root/agent-kit/docs/tikalgo/prompts/landing/LANDING_V2_SPEC.md
-@/root/agent-kit/docs/tikalgo/landing/index.html
-@/root/agent-kit/docs/tikalgo/landing/assets/landing.js
-@/root/agent-kit/docs/tikalgo/landing/assets/landing.css
+@/root/tikalgo/public-landing/LANDING_V2_SPEC.md
+@/root/tikalgo/public-landing/index.html
+@/root/tikalgo/public-landing/assets/landing.js
+@/root/tikalgo/public-landing/assets/landing.css
 
 Follow GEMINI.md rules. Extend THIS landing; do not rebuild it from scratch. Keep the same files, design
 tokens, and the self-hosted fonts TIKALGO Display/Sans/Sans FA/Mono. Colors: black, graphite and emerald,

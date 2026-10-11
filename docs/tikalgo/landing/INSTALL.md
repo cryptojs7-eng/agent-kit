@@ -211,10 +211,12 @@ CREATE UNIQUE INDEX ux_app_pending_mobile ON membership_applications (mobile)   
 
 ## ۹. دیپلوی روی سرور (Nginx)
 ```bash
-# On the server (the repo is cloned at /root/agent-kit or copy the zip)
+# On the server 135.181.122.117 (the zip was uploaded with scp, see DEPLOY_GUIDE_EN.md §0)
+# Upload from your computer:  scp tikalgo-landing.zip tikalgo-landing.zip.sha256 root@135.181.122.117:/root/
+cd /root && sha256sum -c tikalgo-landing.zip.sha256
+mkdir -p /root/tikalgo/public-landing && unzip -o /root/tikalgo-landing.zip -d /root/tikalgo/public-landing
 sudo mkdir -p /var/www/tikalgo-landing
-sudo unzip -o tikalgo-landing.zip -d /var/www/tikalgo-landing
-#   or: sudo cp -r docs/tikalgo/landing/{index.html,assets} /var/www/tikalgo-landing/
+sudo rsync -a --delete /root/tikalgo/public-landing/index.html /root/tikalgo/public-landing/assets /var/www/tikalgo-landing/   # only the page + assets, never the .md files
 sudo chown -R www-data:www-data /var/www/tikalgo-landing
 ```
 ```nginx

@@ -1,61 +1,63 @@
 # TIKALGO Public Landing — Apply & Deploy Guide (www.tikalgoai.com)
 
 This guide covers the whole job: copying the new public landing page into the TIKALGO project on
-the server, building the backend it needs, and deploying it to **https://www.tikalgoai.com**.
+the owner's **private server `135.181.122.117`**, building the backend it needs, and deploying it to
+**https://www.tikalgoai.com**. Everything happens on that server only: no GitHub, no `git clone`, and no
+downloads from a repository. The only transfer is uploading `tikalgo-landing.zip` from your computer.
 You can follow it by hand, or paste it into Claude Code or Gemini CLI running on the server
 (see §9).
 
 > **Path convention**
 > - Paths that start with `/root/tikalgo/` are the TIKALGO project on the server.
-> - Paths that start with `/root/agent-kit/` are this repository cloned on the server.
+> - `/root/tikalgo/public-landing/` is where the zip package is unpacked (§0).
 > - Some places are marked **(verify)**. There, the real file name depends on the existing
 >   TIKALGO code. Find the real path with the audit commands in §2 and use it.
 
 ---
 
-## 0. Deployment package: `tikalgo-landing.zip`
-Everything you need to deploy is in **one archive**:
-- **In the repository:** `docs/tikalgo/landing/tikalgo-landing.zip`, next to this guide.
-- **Download URL** (branch `claude/clever-brahmagupta-hmshh0`):
-  `https://github.com/cryptojs7-eng/agent-kit/raw/claude/clever-brahmagupta-hmshh0/docs/tikalgo/landing/tikalgo-landing.zip`
-- **Checksum:** `tikalgo-landing.zip.sha256`, in the same folder.
+## 0. Deployment package: `tikalgo-landing.zip` → server `135.181.122.117`
+Everything you need is in **one archive**, `tikalgo-landing.zip`, plus its checksum file
+`tikalgo-landing.zip.sha256`. Save both files on your computer.
 
-Contents of the zip, after unpacking:
+Contents of the zip:
 ```
 index.html
 assets/landing.css  assets/landing.js  assets/membership.js  assets/tika-chat.js
 assets/fonts/fonts.css  assets/fonts/*.woff2 (5)  assets/fonts/OFL-LICENSES.txt
 assets/venues/*.png|*.svg (13 official exchange/broker logos)
 assets/tika.jpg  assets/tika-512.jpg  assets/tikalgo-logo-on-dark.svg  assets/tikalgo-mark.svg  assets/favicon.svg  assets/bull-bear.jpg
-DEPLOY_GUIDE_EN.md  (this guide)
-INSTALL.md  INSTALL_PROMPT.md  INSTALL_PROMPT_GEMINI.md
+DEPLOY_GUIDE_EN.md  INSTALL.md  INSTALL_PROMPT.md  INSTALL_PROMPT_GEMINI.md  LANDING_V2_SPEC.md
 ```
 Only `index.html` and `assets/` are served to the public. The `.md` files are documentation and
 must **not** be copied into the web root.
 
-Upload and unpack on the server:
+**Upload from your computer.** Run this in the folder that holds the two files.
+- Windows: PowerShell or CMD.
+- macOS/Linux: Terminal.
 ```bash
-# from your computer
-scp tikalgo-landing.zip tikalgo-landing.zip.sha256 root@<SERVER_IP>:/root/
-# or, directly on the server
-cd /root && curl -fLO https://github.com/cryptojs7-eng/agent-kit/raw/claude/clever-brahmagupta-hmshh0/docs/tikalgo/landing/tikalgo-landing.zip           && curl -fLO https://github.com/cryptojs7-eng/agent-kit/raw/claude/clever-brahmagupta-hmshh0/docs/tikalgo/landing/tikalgo-landing.zip.sha256
+scp tikalgo-landing.zip tikalgo-landing.zip.sha256 root@135.181.122.117:/root/
+```
+If you prefer a graphical tool, WinSCP or FileZilla with SFTP work too:
+- host `135.181.122.117`, port 22, user `root`;
+- upload both files to `/root/`.
 
-# on the server: verify, then unpack into the TIKALGO project
+**On the server** (`ssh root@135.181.122.117`):
+```bash
 cd /root && sha256sum -c tikalgo-landing.zip.sha256          # must print: tikalgo-landing.zip: OK
+command -v unzip >/dev/null || sudo apt-get install -y unzip
 mkdir -p /root/tikalgo/public-landing
 unzip -o /root/tikalgo-landing.zip -d /root/tikalgo/public-landing
 ls /root/tikalgo/public-landing                              # index.html  assets/  *.md
 ```
-> **Landing source path:** in the rest of this guide, the source folder is
-> `/root/tikalgo/public-landing/` when you use the zip. If you cloned the repository instead, it is
-> `/root/agent-kit/docs/tikalgo/landing/`. Both contain the same `index.html` and `assets/`.
+> **Landing source path** in the rest of this guide: `/root/tikalgo/public-landing/`.
+> To update later, upload the new zip the same way, unpack it again, and repeat §5.
 
 ---
 
 ## 1. Source files (what is being deployed)
-Repository: `https://github.com/cryptojs7-eng/agent-kit`, folder `docs/tikalgo/landing/`.
+Paths are relative to `/root/tikalgo/public-landing/`.
 
-| File (relative to `docs/tikalgo/landing/`) | Purpose |
+| File | Purpose |
 |---|---|
 | `index.html` | The landing page (EN/FA, RTL) |
 | `assets/landing.css` | Styles; brand tokens live in `:root` |
@@ -67,16 +69,14 @@ Repository: `https://github.com/cryptojs7-eng/agent-kit`, folder `docs/tikalgo/l
 | `assets/tika.jpg`, `assets/tika-512.jpg` | Official Tika avatar |
 | `assets/tikalgo-logo-on-dark.svg`, `assets/tikalgo-mark.svg`, `assets/favicon.svg` | TIKALGO logo and favicon |
 | `assets/bull-bear.jpg` | Hero image |
-| `tikalgo-landing.zip` | All of the above as one archive |
 | `INSTALL.md` | Full technical reference (Persian): API contracts, DB schema, admin flow |
-| `reference-lovable-build/` | Reference only. **Do NOT deploy** |
+| `DEPLOY_GUIDE_EN.md`, `INSTALL_PROMPT*.md`, `LANDING_V2_SPEC.md` | This guide, AI-agent prompts, and the 30-item v2 brief |
 
 ## 2. Target paths on the server
-| What | Server path |
+| What | Path on `135.181.122.117` |
 |---|---|
 | TIKALGO project | `/root/tikalgo/` |
 | Landing source (from the zip, §0) | `/root/tikalgo/public-landing/` |
-| Landing source (cloned repo, alternative) | `/root/agent-kit/docs/tikalgo/landing/` |
 | Landing web root (served by Nginx) | `/var/www/tikalgo-landing/` → `index.html` + `assets/` |
 | Nginx site config | `/etc/nginx/sites-available/tikalgoai.com` (verify), linked in `/etc/nginx/sites-enabled/` |
 | Nginx rate-limit zone | `/etc/nginx/conf.d/tikalgo-ratelimit.conf` (new file) |
@@ -100,18 +100,10 @@ pm2 ls 2>/dev/null; systemctl list-units --type=service | grep -i tikalgo
 
 ---
 
-## 3. Get the files onto the server
+## 3. Files on the server
+The package is already unpacked in `/root/tikalgo/public-landing/` (§0). Check it:
 ```bash
-cd /root
-git clone https://github.com/cryptojs7-eng/agent-kit.git 2>/dev/null || (cd agent-kit && git pull)
-cd /root/agent-kit
-git checkout claude/clever-brahmagupta-hmshh0     # or: git checkout main  (after the PR is merged)
-ls docs/tikalgo/landing/index.html docs/tikalgo/landing/assets/
-```
-Or, without git, upload `tikalgo-landing.zip` and unpack it:
-```bash
-mkdir -p /root/agent-kit/docs/tikalgo/landing
-unzip -o tikalgo-landing.zip -d /root/agent-kit/docs/tikalgo/landing
+ls /root/tikalgo/public-landing/index.html /root/tikalgo/public-landing/assets/
 ```
 
 ## 4. Back up first
@@ -119,14 +111,14 @@ unzip -o tikalgo-landing.zip -d /root/agent-kit/docs/tikalgo/landing
 TS=$(date +%Y%m%d-%H%M); B=/root/backups/landing-$TS; mkdir -p $B
 cp -a /etc/nginx/sites-available $B/nginx-sites-available
 [ -d /var/www/tikalgo-landing ] && cp -a /var/www/tikalgo-landing $B/
-cd /root/tikalgo && git status --short > $B/git-status.txt && git rev-parse HEAD > $B/git-head.txt
+tar --exclude=node_modules --exclude=venv --exclude=.venv --exclude=public-landing -czf $B/tikalgo-src.tgz -C /root tikalgo   # full project backup
 echo "Backup: $B"
 ```
 
 ## 5. Deploy the static landing
 ```bash
 sudo mkdir -p /var/www/tikalgo-landing
-SRC=/root/tikalgo/public-landing          # from the zip (§0); or /root/agent-kit/docs/tikalgo/landing
+SRC=/root/tikalgo/public-landing          # unpacked zip (§0)
 sudo rsync -a --delete "$SRC/index.html" "$SRC/assets" /var/www/tikalgo-landing/
 sudo chown -R www-data:www-data /var/www/tikalgo-landing
 ls -R /var/www/tikalgo-landing | head -50
@@ -297,13 +289,15 @@ sudo cp -a $B/nginx-sites-available/* /etc/nginx/sites-available/
 [ -d $B/tikalgo-landing ] && sudo rsync -a --delete $B/tikalgo-landing/ /var/www/tikalgo-landing/
 sudo rm -f /etc/nginx/conf.d/tikalgo-ratelimit.conf
 sudo nginx -t && sudo systemctl reload nginx
-cd /root/tikalgo && git stash   # or revert the backend commit; run the migration down only after review
+# backend: restore the project files from the backup (run the migration down first, only after review)
+# cd /root && tar -xzf $B/tikalgo-src.tgz
 ```
 
 ## 9. One-paste prompt for an AI agent on the server (Claude Code or Gemini CLI)
 Run the agent from `/root/tikalgo`, then paste:
 ```text
-The deployment package /root/tikalgo-landing.zip is on the server (if it is not, download it as described in §0).
+You are running on my private server 135.181.122.117. Do not use GitHub and do not clone or download anything.
+The deployment package /root/tikalgo-landing.zip was uploaded by me (scp).
 Verify it with sha256sum -c /root/tikalgo-landing.zip.sha256 and unpack it into /root/tikalgo/public-landing/.
 Then read /root/tikalgo/public-landing/DEPLOY_GUIDE_EN.md and /root/tikalgo/public-landing/INSTALL.md.
 Apply and deploy the TIKALGO public landing page to https://www.tikalgoai.com exactly as the guide describes:
@@ -317,5 +311,7 @@ Rules:
 - Never print or commit secrets.
 - Ask before destructive commands.
 - Stop after each section, show the evidence (commands and outputs), and wait for my "OK".
-- Report to me in Persian, and commit the backend changes in /root/tikalgo with clear messages.
+- Back up every file before you change it (/root/backups/landing-<timestamp>/).
+  If /root/tikalgo is a local git repository, commit locally with clear messages; never add a remote and never push.
+- Report to me in Persian.
 ```

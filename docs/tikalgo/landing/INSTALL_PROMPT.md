@@ -8,19 +8,27 @@
 
 هر کدام را جدا در Claude Code بچسبانید.
 
-**پیش‌نیاز:** مخزن agent-kit باید روی سرور باشد:
-```bash
-cd /root && git clone https://github.com/cryptojs7-eng/agent-kit.git
-cd agent-kit && git checkout claude/clever-brahmagupta-hmshh0   # or main after the PR is merged
-```
-یا فایل `tikalgo-landing.zip` را در `/root/agent-kit/docs/tikalgo/landing/` بگذارید.
+**پیش‌نیاز:** فقط سرور شخصی شما `135.181.122.117`. نه GitHub و نه `git clone` لازم است.
+1. فایل‌های `tikalgo-landing.zip` و `tikalgo-landing.zip.sha256` را از کامپیوتر خودتان آپلود کنید:
+   ```bash
+   scp tikalgo-landing.zip tikalgo-landing.zip.sha256 root@135.181.122.117:/root/
+   ```
+   (یا با WinSCP یا FileZilla: SFTP، پورت 22، کاربر root، پوشهٔ `/root/`)
+2. روی سرور (`ssh root@135.181.122.117`):
+   ```bash
+   cd /root && sha256sum -c tikalgo-landing.zip.sha256        # tikalgo-landing.zip: OK
+   mkdir -p /root/tikalgo/public-landing
+   unzip -o /root/tikalgo-landing.zip -d /root/tikalgo/public-landing
+   ```
+همهٔ مسیرهای پایین به `/root/tikalgo/public-landing/` اشاره دارند. راهنمای کامل انگلیسی: `DEPLOY_GUIDE_EN.md`.
 
 ---
 
 ## A. نصب صفحهٔ عمومی + بک‌اند عضویت و دادهٔ بازار
 ```text
-You are working on the TIKALGO project at /root/tikalgo. The new public landing page is in
-/root/agent-kit/docs/tikalgo/landing/ (index.html + assets/). Read its INSTALL.md first, then do the
+You are working on the TIKALGO project at /root/tikalgo on my private server 135.181.122.117.
+Do not use GitHub; do not clone, pull or download anything; never add a git remote or push. The new public landing page is in
+/root/tikalgo/public-landing/ (index.html + assets/). Read its INSTALL.md first, then do the
 following. Report to me in Persian.
 
 Fixed rules (never break):
@@ -81,17 +89,17 @@ Steps:
    - /register returns 404;
    - Lighthouse scores (Performance, Accessibility, SEO);
    - the list of changed files and the backups.
-Commit with a clear message. Do not push secrets.
+If /root/tikalgo is a local git repository, commit locally with a clear message (never push). Never store secrets in files you commit.
 ```
 
 ---
 
 ## B. تکمیل بریف v2 (۳۰ آیتم)، مرحله‌به‌مرحله
-بریف کامل و ماتریس وضعیت در [`../prompts/landing/LANDING_V2_SPEC.md`](../prompts/landing/LANDING_V2_SPEC.md) آمده است.
+بریف کامل و ماتریس وضعیت در `LANDING_V2_SPEC.md` (داخل زیپ) آمده است.
 
 ```text
-Read /root/agent-kit/docs/tikalgo/prompts/landing/LANDING_V2_SPEC.md (brief + status matrix + fixed rules)
-and the current landing in /root/agent-kit/docs/tikalgo/landing/. Extend THIS landing (same files,
+Read /root/tikalgo/public-landing/LANDING_V2_SPEC.md (brief + status matrix + fixed rules)
+and the current landing in /root/tikalgo/public-landing/. Extend THIS landing (same files,
 same design system, the self-hosted TIKALGO fonts, and the colors black/graphite/emerald with controlled gold
 details). Do not rebuild it from scratch. Work in the stages L1 → L7 from the spec. Do one stage per run, and at the end of each stage
 show me screenshots (desktop, tablet, mobile; EN/FA/AR) and wait for my OK.
@@ -128,8 +136,10 @@ Report each stage in Persian, with the status matrix updated.
 ---
 
 ## C. فقط به‌روزرسانی فایل‌های صفحه (بعد از تغییرات بعدی)
+زیپ جدید را مثل پیش‌نیاز با `scp` به `/root/` آپلود کنید، بعد:
 ```bash
-cd /root/agent-kit && git pull
-sudo rsync -a --delete docs/tikalgo/landing/index.html docs/tikalgo/landing/assets /var/www/tikalgo-landing/
+cd /root && sha256sum -c tikalgo-landing.zip.sha256
+unzip -o /root/tikalgo-landing.zip -d /root/tikalgo/public-landing
+sudo rsync -a --delete /root/tikalgo/public-landing/index.html /root/tikalgo/public-landing/assets /var/www/tikalgo-landing/
 sudo nginx -t && sudo systemctl reload nginx
 ```
