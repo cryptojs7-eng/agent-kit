@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TIKALGO AI health · TIKALGO</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="assets/tikalgo.js"></script>
+  <style>.ring-anim { transition: stroke-dashoffset 1.2s cubic-bezier(.2,.8,.2,1); } @media (prefers-reduced-motion: reduce) { .ring-anim { transition: none; } }</style>
+</head>
+<body class="min-h-screen bg-neutral-50 font-sans text-neutral-900 antialiased">
+  <section class="mx-auto max-w-5xl px-4 py-20">
+    <h2 class="text-lg font-semibold">TIKALGO AI health</h2>
+    <div class="mt-6 grid gap-4 md:grid-cols-3">
+      <!-- Healthy -->
+      <article class="rounded-2xl border border-neutral-200 bg-white p-6">
+        <h3 class="text-sm font-medium">Data health</h3>
+        <div class="relative mx-auto mt-4 size-36">
+          <svg viewBox="0 0 100 100" class="size-full"><circle cx="50" cy="50" r="42" fill="none" stroke-width="8" class="stroke-neutral-100"/>
+            <circle cx="50" cy="50" r="42" fill="none" stroke-width="8" stroke-linecap="round" class="ring ring-anim stroke-brand-dark" data-value="92" transform="rotate(-90 50 50)"/></svg>
+          <div class="absolute inset-0 grid place-content-center text-center"><p class="text-3xl font-medium">92%</p><p class="text-xs text-neutral-500">reliable inputs</p></div>
+        </div>
+        <p class="mt-4 text-sm text-neutral-500">Feeds are fresh and complete.<br>One whale source is marked context-only.</p>
+        <div class="mt-4 flex justify-between border-t border-neutral-100 pt-3 text-xs text-neutral-500"><span>Feeds OK</span><span class="font-mono">46 / 50</span></div>
+      </article>
+      <!-- Needs attention -->
+      <article class="rounded-2xl border border-neutral-200 bg-white p-6">
+        <h3 class="text-sm font-medium">Model calibration</h3>
+        <div class="relative mx-auto mt-4 size-36">
+          <svg viewBox="0 0 100 100" class="size-full"><circle cx="50" cy="50" r="42" fill="none" stroke-width="8" class="stroke-neutral-100"/>
+            <circle cx="50" cy="50" r="42" fill="none" stroke-width="8" stroke-linecap="round" class="ring ring-anim stroke-amber-500" data-value="76" transform="rotate(-90 50 50)"/></svg>
+          <div class="absolute inset-0 grid place-content-center text-center"><p class="text-3xl font-medium">76%</p><p class="text-xs text-neutral-500">calibrated</p></div>
+        </div>
+        <p class="mt-4 text-sm text-neutral-500">Confidence runs slightly high in RANGE.<br>Allocation reduced until recalibrated.</p>
+        <div class="mt-4 flex justify-between border-t border-neutral-100 pt-3 text-xs text-neutral-500"><span>ECE (rolling 50)</span><span class="font-mono">0.092</span></div>
+      </article>
+      <!-- Neutral -->
+      <article class="rounded-2xl border border-neutral-200 bg-white p-6">
+        <h3 class="text-sm font-medium">Decision confidence</h3>
+        <div class="relative mx-auto mt-4 size-36">
+          <svg viewBox="0 0 100 100" class="size-full"><circle cx="50" cy="50" r="42" fill="none" stroke-width="8" class="stroke-neutral-100"/>
+            <circle cx="50" cy="50" r="42" fill="none" stroke-width="8" stroke-linecap="round" class="ring ring-anim stroke-neutral-900" data-value="68" transform="rotate(-90 50 50)"/></svg>
+          <div class="absolute inset-0 grid place-content-center text-center"><p class="text-3xl font-medium">68%</p><p class="text-xs text-neutral-500">mean confidence</p></div>
+        </div>
+        <p class="mt-4 text-sm text-neutral-500">Average over today's approved decisions.<br>WAIT decisions are excluded.</p>
+        <div class="mt-4 flex justify-between border-t border-neutral-100 pt-3 text-xs text-neutral-500"><span>Approved / evaluated</span><span class="font-mono">14 / 52</span></div>
+      </article>
+    </div>
+  </section>
+  <script>
+    document.querySelectorAll('.ring').forEach((ring) => {
+      const c = 2 * Math.PI * ring.r.baseVal.value;
+      const value = Math.max(0, Math.min(100, Number(ring.dataset.value)));
+      ring.style.strokeDasharray = `${c}`;
+      ring.style.strokeDashoffset = `${c}`; // start empty
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        ring.style.strokeDashoffset = `${c * (1 - value / 100)}`;
+      }));
+    });
+  </script>
+</body>
+</html>

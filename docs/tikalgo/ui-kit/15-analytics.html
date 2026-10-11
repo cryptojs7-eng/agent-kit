@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Analytics · TIKALGO</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="assets/tikalgo.js"></script>
+</head>
+<body class="min-h-screen bg-neutral-50 font-sans text-neutral-900 antialiased">
+  <main class="mx-auto max-w-6xl px-4 py-16">
+    <header class="flex flex-wrap items-end justify-between gap-4">
+      <div><h1 class="text-2xl font-semibold">Analytics</h1><p id="subline" class="mt-1 text-sm text-neutral-500"></p></div>
+      <div class="flex items-center gap-2">
+        <div class="flex rounded-lg border border-neutral-200 bg-white p-1 text-sm" role="group" aria-label="Range">
+          <button class="chip rounded-md px-3 py-1" data-r="24h">24h</button><button class="chip rounded-md px-3 py-1" data-r="7d">7d</button>
+          <button class="chip rounded-md px-3 py-1" data-r="30d">30d</button><button class="chip rounded-md px-3 py-1" data-r="90d">90d</button>
+        </div>
+        <button class="rounded-lg border border-neutral-300 bg-white px-3 py-1.5 text-sm font-medium hover:bg-neutral-50">Export</button>
+      </div>
+    </header>
+
+    <div id="cards" class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4"></div>
+
+    <article class="mt-6 rounded-xl border border-neutral-200 bg-white p-6">
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <h2 class="font-medium">Signals vs approved trades</h2>
+        <div class="flex gap-4 text-xs text-neutral-500"><span class="flex items-center gap-1.5"><span class="size-2 rounded-full bg-ink"></span>Signals</span><span class="flex items-center gap-1.5"><span class="size-2 rounded-full bg-brand"></span>Approved</span></div>
+      </div>
+      <svg viewBox="0 0 600 200" class="mt-4 h-56 w-full" preserveAspectRatio="none" aria-label="Area chart" role="img">
+        <g stroke="#f0f0f0" stroke-width="1"><line x1="0" y1="50" x2="600" y2="50"/><line x1="0" y1="100" x2="600" y2="100"/><line x1="0" y1="150" x2="600" y2="150"/></g>
+        <polyline id="s1" fill="none" stroke="#0A1712" stroke-width="2"/>
+        <polyline id="s2" fill="none" stroke="#3DDC2F" stroke-width="2"/>
+      </svg>
+    </article>
+  </main>
+  <script>
+    const R = {
+      '24h': { cmp: 'previous 24 hours', m: [[ 'Signals', 412, 6.1 ], ['Approved', 58, 3.2], ['Net R', 4.2, 12.0], ['Win rate', 54, -1.5]] },
+      '7d':  { cmp: 'previous 7 days',  m: [[ 'Signals', 2930, 4.0 ], ['Approved', 401, -2.4], ['Net R', 21.7, 8.3], ['Win rate', 52, 0.8]] },
+      '30d': { cmp: 'previous 30 days', m: [[ 'Signals', 12410, 8.2 ], ['Approved', 1702, 1.1], ['Net R', 66.4, -4.0], ['Win rate', 51, 1.9]] },
+      '90d': { cmp: 'previous 90 days', m: [[ 'Signals', 35880, 11.5 ], ['Approved', 5090, 6.6], ['Net R', 181.3, 14.2], ['Win rate', 50, -0.4]] },
+    };
+    const fmt = (label, v) => label === 'Net R' ? `${v}R` : label === 'Win rate' ? `${v}%` : new Intl.NumberFormat('en-US').format(v);
+    const rand = (n) => Array.from({ length: n }, () => 20 + Math.random() * 80);
+    function draw(r) {
+      const d = R[r];
+      document.getElementById('subline').textContent = `Last ${r} · compared with the ${d.cmp}`;
+      document.getElementById('cards').innerHTML = d.m.map(([label, v, chg]) => `
+        <article class="rounded-xl border border-neutral-200 bg-white p-5">
+          <p class="text-sm text-neutral-500">${label}</p>
+          <div class="mt-2 flex items-center gap-2"><p class="font-mono text-2xl font-semibold">${fmt(label, v)}</p>
+          <span class="rounded-full px-2 py-0.5 text-xs font-medium ${chg >= 0 ? 'bg-brand-soft text-brand-dark' : 'bg-down-soft text-down'}">${chg >= 0 ? '+' : ''}${chg}%</span></div>
+          <div class="mt-4 flex h-8 items-end gap-1">${rand(12).map((h, i) => `<span class="flex-1 rounded-sm ${i === 11 ? 'bg-ink' : 'bg-neutral-200'}" style="height:${h}%"></span>`).join('')}</div>
+        </article>`).join('');
+      const pts = (vals) => vals.map((v, i) => `${(i / (vals.length - 1)) * 600},${200 - v * 1.8}`).join(' ');
+      const a = rand(20), b = a.map((v) => v * (0.3 + Math.random() * 0.2));
+      document.getElementById('s1').setAttribute('points', pts(a));
+      document.getElementById('s2').setAttribute('points', pts(b));
+      document.querySelectorAll('.chip').forEach((c) => c.className = 'chip rounded-md px-3 py-1 ' + (c.dataset.r === r ? 'bg-ink text-white' : 'text-neutral-600 hover:bg-neutral-100'));
+    }
+    document.querySelectorAll('.chip').forEach((c) => c.addEventListener('click', () => draw(c.dataset.r)));
+    draw('7d');
+  </script>
+</body>
+</html>

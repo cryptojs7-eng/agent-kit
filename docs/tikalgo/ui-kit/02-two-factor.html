@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Two-factor setup · TIKALGO</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="assets/tikalgo.js"></script>
+</head>
+<body class="min-h-screen bg-neutral-100 font-sans text-neutral-900 antialiased">
+  <main class="mx-auto max-w-xl px-4 py-16">
+    <div class="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm sm:p-8">
+      <p class="text-xs font-semibold uppercase tracking-widest text-brand-dark">Security</p>
+      <h1 class="mt-2 text-2xl font-semibold">Turn on two-factor authentication</h1>
+      <p class="mt-2 text-sm text-neutral-500">Use an authenticator app such as Google Authenticator, Microsoft Authenticator, Authy or 1Password.</p>
+
+      <!-- Pairing panel -->
+      <section id="pairing" class="mt-8">
+        <div class="flex flex-col gap-6 sm:flex-row">
+          <div class="shrink-0 rounded-2xl border border-neutral-200 p-3" aria-label="QR code placeholder" role="img">
+            <div id="qr" class="grid size-40 grid-cols-5 gap-1.5"></div>
+          </div>
+          <div class="min-w-0 flex-1">
+            <p class="text-sm font-medium">Can't scan it?</p>
+            <p class="mt-1 text-sm text-neutral-500">Enter this setup key in your app instead.</p>
+            <div class="mt-3 flex items-center gap-2">
+              <code id="setup-key" class="min-w-0 flex-1 truncate rounded-full border border-neutral-200 bg-neutral-50 px-3 py-1.5 font-mono text-sm" dir="ltr">JBSW Y3DP EHPK 3PXP</code>
+              <button id="copy-key" type="button" class="rounded-full border border-neutral-300 px-3 py-1.5 text-sm font-medium hover:bg-neutral-50 focus:outline-none focus-visible:ring-4 focus-visible:ring-brand/30">Copy</button>
+            </div>
+            <label for="confirm" class="mt-6 block text-sm font-medium">Enter the 6-digit code from the app</label>
+            <input id="confirm" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="000000" dir="ltr"
+              class="mt-2 w-full rounded-xl border border-neutral-300 px-4 py-3 text-center font-mono text-xl tracking-[0.5em] outline-none focus:border-ink focus:ring-4 focus:ring-brand/30">
+          </div>
+        </div>
+        <div class="mt-8 flex items-center justify-between border-t border-neutral-100 pt-6">
+          <a href="#" class="text-sm text-neutral-500 hover:text-neutral-900">Cancel</a>
+          <button id="turn-on" type="button" disabled class="rounded-xl bg-ink px-5 py-2.5 text-sm font-semibold text-white hover:bg-ink-700 focus:outline-none focus-visible:ring-4 focus-visible:ring-brand/40 disabled:cursor-not-allowed disabled:bg-neutral-200 disabled:text-neutral-400">Turn on</button>
+        </div>
+      </section>
+
+      <!-- Success panel -->
+      <section id="success" class="mt-8 hidden" aria-live="polite">
+        <div class="flex items-center gap-3 rounded-xl border border-brand/40 bg-brand-soft px-4 py-3 text-sm text-brand-dark">
+          <svg class="size-5 shrink-0" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M16.7 5.3a1 1 0 0 1 0 1.4l-7.5 7.5a1 1 0 0 1-1.4 0L3.3 9.7a1 1 0 1 1 1.4-1.4l3.8 3.8 6.8-6.8a1 1 0 0 1 1.4 0Z" clip-rule="evenodd"/></svg>
+          <span class="font-medium">Two-factor authentication is on.</span>
+        </div>
+        <p class="mt-6 text-sm font-medium">Backup codes</p>
+        <p class="mt-1 text-sm text-neutral-500">Each code works once. Store them somewhere safe; they are shown only now.</p>
+        <ul id="codes" class="mt-4 grid grid-cols-2 gap-2 font-mono text-sm" dir="ltr"></ul>
+        <button id="copy-codes" type="button" class="mt-6 w-full rounded-xl border border-neutral-300 px-4 py-2.5 text-sm font-medium hover:bg-neutral-50 focus:outline-none focus-visible:ring-4 focus-visible:ring-brand/30">Copy all codes</button>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    // QR placeholder: 25 small rounded squares (the real QR comes from the server's otpauth:// URI).
+    const qr = document.getElementById('qr');
+    const pattern = '1110110101100011010111101'.split('');
+    pattern.forEach((v) => {
+      const cell = document.createElement('span');
+      cell.className = 'rounded-[4px] ' + (v === '1' ? 'bg-ink' : 'bg-neutral-100');
+      qr.appendChild(cell);
+    });
+
+    async function copyText(text, button, label) {
+      try { await navigator.clipboard.writeText(text); }
+      catch { const t = document.createElement('textarea'); t.value = text; document.body.appendChild(t); t.select(); document.execCommand('copy'); t.remove(); }
+      button.textContent = 'Copied';
+      setTimeout(() => (button.textContent = label), 1500);
+    }
+
+    const keyBtn = document.getElementById('copy-key');
+    keyBtn.addEventListener('click', () =>
+      copyText(document.getElementById('setup-key').textContent.replace(/\s/g, ''), keyBtn, 'Copy'));
+
+    const confirm = document.getElementById('confirm');
+    const turnOn = document.getElementById('turn-on');
+    confirm.addEventListener('input', () => {
+      confirm.value = confirm.value.replace(/\D/g, '').slice(0, 6);
+      turnOn.disabled = confirm.value.length !== 6;
+    });
+
+    // Demo backup codes; in production they are generated and stored hashed by the server.
+    const codes = ['4f7k-2m9q', '8x3n-6t1w', 'p5r2-9c7d', 'h8v4-3j6z', 'w2e9-5y1u', 'b7s3-4g8k', 'n6q1-7a2m', 'z9t5-2f4r'];
+    document.getElementById('codes').innerHTML = codes
+      .map((c) => `<li class="rounded-lg border border-neutral-200 bg-neutral-50 px-3 py-2 text-center">${c}</li>`).join('');
+
+    turnOn.addEventListener('click', () => {
+      if (turnOn.disabled) return;
+      // Production: verify the TOTP code server-side before enabling 2FA.
+      document.getElementById('pairing').classList.add('hidden');
+      document.getElementById('success').classList.remove('hidden');
+      document.getElementById('copy-codes').focus();
+    });
+
+    const codesBtn = document.getElementById('copy-codes');
+    codesBtn.addEventListener('click', () => copyText(codes.join('\n'), codesBtn, 'Copy all codes'));
+  </script>
+</body>
+</html>

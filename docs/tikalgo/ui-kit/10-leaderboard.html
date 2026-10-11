@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Leaderboard · TIKALGO</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="assets/tikalgo.js"></script>
+</head>
+<body class="min-h-screen bg-neutral-50 font-sans text-neutral-900 antialiased">
+  <section class="mx-auto max-w-2xl px-4 py-20">
+    <article class="overflow-hidden rounded-2xl border border-neutral-200 bg-white">
+      <header class="flex flex-wrap items-center justify-between gap-4 p-5">
+        <div><h2 class="font-semibold">Paper-trading leaderboard</h2><p id="period" class="text-sm text-neutral-500">Oct 5 – Oct 11, 2026 · ranked by net R</p></div>
+        <div class="flex rounded-lg bg-neutral-100 p-1 text-sm" role="tablist">
+          <button class="seg rounded-md bg-white px-3 py-1 font-medium shadow-sm" data-p="week" role="tab" aria-selected="true">This week</button>
+          <button class="seg rounded-md px-3 py-1 text-neutral-500" data-p="all" role="tab" aria-selected="false">All time</button>
+        </div>
+      </header>
+      <ol id="rows" class="divide-y divide-neutral-100 border-t border-neutral-100"></ol>
+      <footer class="flex items-center justify-between bg-neutral-50 px-5 py-3 text-sm">
+        <span class="text-neutral-500">You are <span id="me-rank" class="font-mono font-medium text-neutral-900">#6</span> of <span class="font-mono">1,284</span></span>
+        <a href="#" class="font-medium underline underline-offset-2">Full table</a>
+      </footer>
+    </article>
+  </section>
+  <script>
+    const DATA = {
+      week: [
+        ['Sara M.', 'Momentum desk', 18.4, 2.1, 1], ['Reza K.', 'Trend', 16.9, 1.4, 0], ['Lena V.', 'SMC', 15.2, 0.8, -1],
+        ['Omid T.', 'Breakout', 12.7, 0.5, 2], ['Ana P.', 'Mean reversion', 11.9, -0.3, 0], ['Javad S.', 'TIKALGO AI', 10.8, 1.9, 3],
+        ['Mina H.', 'Order flow', 9.6, -0.6, -2], ['Ali R.', 'Swing', 8.9, 0.2, 0], ['Noah B.', 'Macro', 7.4, -1.1, -1], ['Kian F.', 'Scalping', 6.8, 0.4, 1],
+      ],
+      all: [
+        ['Reza K.', 'Trend', 142.3, 1.4, 0], ['Sara M.', 'Momentum desk', 131.0, 2.1, 0], ['Ana P.', 'Mean reversion', 118.6, -0.3, 1],
+        ['Lena V.', 'SMC', 110.2, 0.8, -1], ['Javad S.', 'TIKALGO AI', 96.5, 1.9, 2], ['Omid T.', 'Breakout', 94.1, 0.5, 0],
+        ['Ali R.', 'Swing', 88.0, 0.2, -2], ['Mina H.', 'Order flow', 85.7, -0.6, 0], ['Noah B.', 'Macro', 79.9, -1.1, 0], ['Kian F.', 'Scalping', 61.2, 0.4, 0],
+      ],
+    };
+    const ME = 'Javad S.';
+    const medal = ['bg-amber-400', 'bg-neutral-400', 'bg-orange-700'];
+    const initials = (n) => n.split(' ').map((p) => p[0]).join('');
+    function render(p) {
+      document.getElementById('rows').innerHTML = DATA[p].map(([name, team, score, delta, move], i) => {
+        const me = name === ME, top = i < 3;
+        const mv = move > 0 ? `<span class="text-brand-dark">▲${move}</span>` : move < 0 ? `<span class="text-down">▼${-move}</span>` : '<span class="text-neutral-300">–</span>';
+        return `<li class="flex items-center gap-3 px-5 py-3 ${top ? 'bg-amber-50/40' : ''} ${me ? 'border-s-4 bg-neutral-50' : ''}" ${me ? 'style="border-inline-start-color:#171717"' : ''}>
+          <span class="flex w-8 items-center gap-1 font-mono text-sm text-neutral-500">${top ? `<span class="size-1.5 rounded-full ${medal[i]}"></span>` : ''}${i + 1}</span>
+          <span class="w-8 text-xs font-medium">${mv}</span>
+          <span class="grid size-8 shrink-0 place-items-center rounded-full bg-ink text-xs font-semibold text-white">${initials(name)}</span>
+          <span class="min-w-0 flex-1"><span class="flex items-center gap-2 font-medium">${name}${me ? '<span class="rounded-full bg-neutral-900 px-1.5 py-0.5 text-[10px] font-semibold text-white">You</span>' : ''}</span><span class="block truncate text-xs text-neutral-500">${team}</span></span>
+          <span class="text-end font-mono"><span class="block text-sm font-medium">${score.toFixed(1)}R</span><span class="block text-[11px] ${delta >= 0 ? 'text-brand-dark' : 'text-down'}">${delta >= 0 ? '+' : ''}${delta.toFixed(1)}</span></span>
+        </li>`;
+      }).join('');
+      document.getElementById('me-rank').textContent = '#' + (DATA[p].findIndex((r) => r[0] === ME) + 1);
+      document.getElementById('period').textContent = p === 'week' ? 'Oct 5 – Oct 11, 2026 · ranked by net R' : 'Since launch · ranked by net R';
+    }
+    document.querySelectorAll('.seg').forEach((b) => b.addEventListener('click', () => {
+      document.querySelectorAll('.seg').forEach((x) => { const on = x === b; x.className = 'seg rounded-md px-3 py-1 ' + (on ? 'bg-white font-medium shadow-sm' : 'text-neutral-500'); x.setAttribute('aria-selected', on); });
+      render(b.dataset.p);
+    }));
+    render('week');
+  </script>
+</body>
+</html>
